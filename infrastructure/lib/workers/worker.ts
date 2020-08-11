@@ -56,7 +56,7 @@ export class Worker extends Construct {
 
         // Add permisssions to role
         worker.addToRolePolicy(new PolicyStatement({
-            actions: [ "eks:DescribeCluster" ],
+            actions: [ "eks:DescribeCluster", "ec2:DescribeVpcs" ],
             resources: [ props.cluster.clusterArn ]
         }));
 

@@ -20,6 +20,8 @@ import * as iam from "@aws-cdk/aws-iam";
 import * as ec2 from "@aws-cdk/aws-ec2";
 import { albPolicyStatement } from "./alb-policy-statement";
 import { NodeGroupConfig } from "./node-group-config";
+import { KubernetesVersion } from "@aws-cdk/aws-eks";
+import { SubnetType } from "@aws-cdk/aws-ec2";
 
 export class GraphPlatForm extends cdk.Construct {
 
@@ -39,29 +41,30 @@ export class GraphPlatForm extends cdk.Construct {
 
         // VPC 
         let vpc: ec2.IVpc;
-        if (vpcId != null) {
-            // Use an existing vpc
-            if (vpcId == GraphPlatForm.DEFAULT_VPC) {
-                vpc = ec2.Vpc.fromLookup(this, "eksClusterVpc", {
-                    isDefault: true
-                });
-            } else {
-                vpc = ec2.Vpc.fromLookup(this, "eksClusterVpc", {
-                    vpcId: vpcId
-                });
-            }
-        } else {
+        // if (vpcId != null) {
+        //     // Use an existing vpc
+        //     if (vpcId == GraphPlatForm.DEFAULT_VPC) {
+        //         vpc = ec2.Vpc.fromLookup(this, "eksClusterVpc", {
+        //             isDefault: true
+        //         });
+        //     } else {
+        //         vpc = ec2.Vpc.fromLookup(this, "eksClusterVpc", {
+        //             vpcId: vpcId
+        //         });
+        //     }
+        // } else {
             // Create one
             // todo allow user to specify vpc properties
             vpc = new ec2.Vpc(this, "KaiVpc");
-        }
+        // }
 
         // Create cluster
         this._eksCluster = new eks.Cluster(this, "EksCluster", {
             kubectlEnabled: true,
             vpc: vpc,
             mastersRole: mastersRole,
-            defaultCapacity: 0
+            defaultCapacity: 0,
+            version: KubernetesVersion.V1_17,
         });
 
         // Create node group
