@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-kai2-dev-112500-authRole",
+            "UnauthRoleArn": "arn:aws:iam::766369843117:role/amplify-kai2-dev-112500-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::766369843117:role/amplify-kai2-dev-112500-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-kai2-dev-112500-deployment",
+            "UnauthRoleName": "amplify-kai2-dev-112500-unauthRole",
+            "StackName": "amplify-kai2-dev-112500",
+            "StackId": "arn:aws:cloudformation:us-east-1:766369843117:stack/amplify-kai2-dev-112500/eb32c8d0-dbbc-11ea-8735-0a1f955da693",
+            "AmplifyAppId": "d1ttinggmhisn1"
+        }
+    }
+}

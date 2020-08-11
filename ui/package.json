@@ -1,9 +1,10 @@
 {
   "name": "ui",
   "version": "0.1.0",
-  "proxy": "https://xsd0apzlve.execute-api.us-east-1.amazonaws.com/prod/",
+  "proxy": "https://lwuttyzlzf.execute-api.us-east-1.amazonaws.com/dev",
   "private": true,
   "dependencies": {
+    "@aws-amplify/ui-react": "^0.2.14",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -12,6 +13,7 @@
     "@types/node": "^12.12.48",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
+    "aws-amplify": "^3.0.23",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "json": "^9.0.6",

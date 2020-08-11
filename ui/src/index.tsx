@@ -5,7 +5,10 @@ import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from 'react-router-dom';
 import {CssBaseline} from '@material-ui/core';
 
-//import './global.scss';
+import Amplify from "aws-amplify";
+import awsExports from "./aws-exports";
+
+Amplify.configure(awsExports);
 
 ReactDOM.render(
     <React.StrictMode>

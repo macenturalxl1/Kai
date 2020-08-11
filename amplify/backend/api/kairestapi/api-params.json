@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/graphs",
+            "lambdaFunction": "getallgraphs",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "kairestapi",
+    "apiName": "kairestapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "getallgraphs"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-kai2-dev-112500-authRole",
+        "unAuthRoleName": "amplify-kai2-dev-112500-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "getallgraphs",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

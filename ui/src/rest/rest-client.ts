@@ -1,17 +1,13 @@
 import { Graph } from '../domain/graph';
+import { API } from 'aws-amplify';
 
 export class RestClient {
 
   public static async getAllGraphs(): Promise<Graph[]> {
-      const response = await fetch('/graphs');
+      const response = await API.get('kairestapi', '/graphs', {});
       console.log(response)
-      const body = await response.json();
-  
-      if (response.status !== 200) {
-        throw Error(body.message) 
-      }
 
-      return body.map((jsonObject: any) => {
+      return response.map((jsonObject: any) => {
         return new Graph(jsonObject.graphId, jsonObject.currentState)
       });
   }
