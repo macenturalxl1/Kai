@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-import * as cdk from "@aws-cdk/core";
+import * as cdk from '@aws-cdk/core';
 import * as sam from "@aws-cdk/aws-sam";
+import * as s3 from '@aws-cdk/aws-s3';
+import * as iam from '@aws-cdk/aws-iam';
+import * as cloudfront from '@aws-cdk/aws-cloudfront';
 import { GraphPlatForm } from "./platform/graph-platform";
 import { KaiRestApi } from "./rest-api/kai-rest-api";
 import { LAMBDA_LAYER_ARN, LAMBDA_LAYER_VERSION, ADD_GRAPH_TIMEOUT, DELETE_GRAPH_TIMEOUT, DELETE_GRAPH_WORKER_BATCH_SIZE, ADD_GRAPH_WORKER_BATCH_SIZE } from "./constants";
@@ -27,8 +30,40 @@ import { GraphDatabaseProps } from "./database/graph-database-props";
 
 // The main stack for Kai
 export class AppStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props: cdk.StackProps) {
+    constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
+
+        // S3 Hosting
+        // const bucket = new s3.Bucket(this, 'MyKaiBucket', {
+        //     bucketName: 'kai-ui',
+        //     websiteIndexDocument: 'index.html', // 1
+        //     blockPublicAccess: new s3.BlockPublicAccess({ restrictPublicBuckets: false }) // 2
+        // });
+
+        // const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'OAI');
+
+        // const distribution = new cloudfront.CloudFrontWebDistribution(this, 'MyDistribution', {
+        //     originConfigs: [
+        //       {
+        //         s3OriginSource: {
+        //           s3BucketSource: bucket,
+        //           originAccessIdentity: cloudFrontOAI,
+        //         },
+        //         behaviors: [{ isDefaultBehavior: true }]
+        //       }
+        //     ]
+        //   })
+
+        // bucket.grantRead(cloudFrontOAI.grantPrincipal);
+
+        // const bucketPolicy = new iam.PolicyStatement({
+        //     actions: ['s3:GetObject'],
+        //     resources: [
+        //       `${bucket.bucketArn}/*`
+        //     ],
+        //     principals: [new iam.Anyone()],
+        // });
+        // bucket.addToResourcePolicy(bucketPolicy); // 4
 
         // User Pool
         new KaiUserPool(this, "KaiUserPool");

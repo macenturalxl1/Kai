@@ -1,7 +1,7 @@
 export class RestClient {
 
     public static async getAllGraphs(): Promise<Array<Object>> {
-        const response = await fetch('/graph');
+        const response = await fetch('/graphs');
         const body = await response.json();
     
         if (response.status !== 200) {
@@ -11,7 +11,7 @@ export class RestClient {
     }
 
     public static async getGraphById(graphId: number): Promise<Object> {
-        const response = await fetch('/graph/' + graphId);
+        const response = await fetch('/graphs/' + graphId);
         const body = await response.json();
     
         if (response.status !== 200) {
