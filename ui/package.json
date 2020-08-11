@@ -4,26 +4,31 @@
   "proxy": "https://xsd0apzlve.execute-api.us-east-1.amazonaws.com/prod/",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "@types/jest": "^24.9.1",
     "@types/node": "^12.12.48",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
-    "babel-jest": "24.9.0",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "json": "^9.0.6",
+    "material-table": "^1.66.0",
     "npm-check-updates": "^7.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "typescript": "^3.7.5"
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1"
   },
   "scripts": {
-    "dev": "node server/middleware.js",
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run client\" \"npm run server\"",
+    "client": "react-scripts start",
+    "server": "node server/middleware.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -42,6 +47,27 @@
     ]
   },
   "devDependencies": {
-    "node-sass": "^4.14.1"
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "@types/body-parser": "^1.19.0",
+    "@types/express": "^4.17.7",
+    "@types/jest": "26.0.5",
+    "@types/react-router-dom": "^5.1.5",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "concurrently": "^5.3.0",
+    "fetch-mock": "^9.10.4",
+    "jest": "^24.9.0",
+    "jest-fetch-mock": "^3.0.3",
+    "node-sass": "^4.14.1",
+    "ts-jest": "26.1.3",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
+  },
+  "jest": {
+    "automock": false,
+    "setupFiles": [
+      "./setupJest.js"
+    ]
   }
 }

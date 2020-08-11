@@ -1,30 +1,95 @@
-import {RestClient} from '../../src/rest/rest-client';
+import { RestClient } from '../../src/rest/rest-client';
+import { Graph } from '../../src/domain/graph';
+import helpers from "../setupTests";
 
-describe('Rest Client', () => {
+beforeEach(() => {
+  fetchMock.resetMocks();
+});
 
-    const restClient = new RestClient('testhost:8080');
+describe('get graph data', () => {
 
-    mock(fetch());
+  it('Successfuly get graphs', async () => {
+    const mockSuccessResponse = [ {
+      graphId: "roadTraffic",
+      currentState: "DEPLOYED"
+    }, {
+      graphId: "basicGraph",
+      currentState: "DELETION_QUEUED"
+    }];
+    fetchMock.mockResponseOnce(JSON.stringify(mockSuccessResponse));
+      
+    const actual: Graph[] = await RestClient.getAllGraphs();
 
-    it('get graphs', ()=>{
-        // Given
+    const expected = [
+      new Graph("roadTraffic","DEPLOYED"),
+      new Graph("basicGraph","DELETION_QUEUED"),
+    ];
+    expect(actual).toEqual(expected);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith('/graphs');
+  });
 
-        // When
-        const actual = restClient.getAllGraphs();
+  it('Handle error', async() => {
+    fetchMock.mockReject(() => Promise.reject('http://bad.url'));
 
-        // Then
-        expect()
-    })
+    const outcome = await helpers.syncify(async () => {
+      return await RestClient.getAllGraphs();
+    });
 
-    it('get graph by id', ()=>{
-        // Given
-        mockReturn =
+    expect(outcome).toThrow();
+  });
+});
 
-        // When
-        const actual = restClient.getGraphById(1);
+describe('get graph data by ID', () => {
+  
+  it('Successfuly get graph ID', async () => {
+    const mockSuccessResponse = {
+        currentState : "DEPLOYED",
+        graphId: "10",
+    };
+    fetchMock.mockResponseOnce(JSON.stringify(mockSuccessResponse));
 
-        // Then
-        expect()
-    })
+    const actual: Graph = await RestClient.getGraphById(10);
 
+    expect(actual).toEqual(new Graph('10', 'DEPLOYED'));
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith('/graphs/10');
+  });
+
+  it('Handle error', async() => {
+    fetchMock.mockReject(() => Promise.reject('http://bad.url'));
+
+    const outcome = await helpers.syncify(async () => {
+      return await RestClient.getGraphById(10);
+    });
+
+    expect(outcome).toThrow();
+  });
+});
+
+describe('Delete graph by ID', () => {
+  
+  const mockSuccessResponse = [{
+    currentState: "DELETION_IN_PROGRESS",
+    graphId: ":10",
+  }];
+ 
+  it('Successfuly delete graph', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(mockSuccessResponse));
+
+    const actual = await RestClient.deleteGraphById(10);
+    
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith('/graphs/10', {"method": "delete"});
+  });
+
+  it('Handle error', async() => {
+    fetchMock.mockReject(() => Promise.reject('http://bad.url'));
+
+    const outcome = await helpers.syncify(async () => {
+      return await RestClient.deleteGraphById(10);
+    });
+
+    expect(outcome).toThrow();
+  });
 });
