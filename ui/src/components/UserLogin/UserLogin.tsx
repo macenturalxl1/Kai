@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, CssBaseline, TextField, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Button, CssBaseline, Grid, TextField, Link } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
@@ -15,6 +15,11 @@ interface IState {
     newPassword: string;
     outcome: AlertType | undefined;
     outcomeMessage: string;
+    userType: UserType;
+}
+
+enum UserType {
+    EXISTING, FIRST_TIME,
 }
 
 export default class UserLogin extends React.Component<{}, IState> {
@@ -28,6 +33,7 @@ export default class UserLogin extends React.Component<{}, IState> {
             newPassword: '',
             outcome: undefined,
             outcomeMessage: '',
+            userType: UserType.EXISTING,
         };
     }
 
@@ -51,9 +57,10 @@ export default class UserLogin extends React.Component<{}, IState> {
                     <NotificationAlert alertType={AlertType.FAILED} message={this.state.outcomeMessage} />
                 )}
                 <Toolbar />
+
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    <div
+                    {this.state.userType === UserType.FIRST_TIME && <div
                         style={{
                             marginTop: '20px',
                             display: 'flex',
@@ -62,94 +69,98 @@ export default class UserLogin extends React.Component<{}, IState> {
                         }}
                     >
                         <Typography component="h1" variant="h5">
-                            Update User Password
+                            Set New Password
                         </Typography>
-                        <form
-                            style={{
-                                width: '100%',
-                                marginTop: '30px',
-                            }}
-                            noValidate
-                        >
-                            <TextField
-                                variant="outlined"
-                                value={this.state.username}
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="username"
-                                label="Username"
-                                name="username"
-                                autoComplete="username"
-                                autoFocus
-                                onChange={(event) => {
-                                    this.setState({
-                                        username: event.target.value,
-                                    });
+                        <Grid item spacing={2}>
+                            <form
+                                style={{
+                                    width: '100%',
+                                    marginTop: '30px',
                                 }}
-                            />
-                            <TextField
-                                variant="outlined"
-                                value={this.state.tempPassword}
-                                margin="normal"
-                                required
-                                fullWidth
-                                name="temp-password"
-                                label="Temp Password"
-                                type="password"
-                                id="temp-password"
-                                autoComplete="current-password"
-                                onChange={(event) => {
-                                    this.setState({
-                                        tempPassword: event.target.value,
-                                    });
-                                }}
-                            />
-                            <TextField
-                                variant="outlined"
-                                value={this.state.newPassword}
-                                margin="normal"
-                                required
-                                fullWidth
-                                name="new-password"
-                                label="New Password"
-                                type="password"
-                                id="new-password"
-                                autoComplete="current-password"
-                                onChange={(event) => {
-                                    this.setState({
-                                        newPassword: event.target.value,
-                                    });
-                                }}
-                            />
-                            <Button
-                                fullWidth
-                                id="update-button"
-                                variant="contained"
-                                color="primary"
-                                style={{ marginTop: '10px' }}
-                                disabled={this.disableUpdateButton()}
-                                onClick={() => {
-                                    const resetPassword = new ResetTempPasswordRepo();
-                                    const { username, tempPassword, newPassword } = this.state;
-                                    const onSuccess = () => {
-                                        this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `Login successful: Hi ${username}`})
-                                    }
-                                    const onError = (errorMessage: string) => {
-                                        this.setState({ outcome: AlertType.FAILED ,outcomeMessage: `Login failed: ${errorMessage}` });
-                                    };
-                                    resetPassword.setNewPassword(username, tempPassword, newPassword, onSuccess, onError);
-                                }}
+                                noValidate
                             >
-                                Update Password
+                                <TextField
+                                    variant="outlined"
+                                    value={this.state.username}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="username"
+                                    label="Username"
+                                    name="username"
+                                    autoComplete="username"
+                                    autoFocus
+                                    onChange={(event) => {
+                                        this.setState({
+                                            username: event.target.value,
+                                        });
+                                    }}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    value={this.state.tempPassword}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="temp-password"
+                                    label="Temp Password"
+                                    type="password"
+                                    id="temp-password"
+                                    autoComplete="current-password"
+                                    onChange={(event) => {
+                                        this.setState({
+                                            tempPassword: event.target.value,
+                                        });
+                                    }}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    value={this.state.newPassword}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="new-password"
+                                    label="New Password"
+                                    type="password"
+                                    id="new-password"
+                                    autoComplete="current-password"
+                                    onChange={(event) => {
+                                        this.setState({
+                                            newPassword: event.target.value,
+                                        });
+                                    }}
+                                />
+                                <Button
+                                    fullWidth
+                                    id="update-button"
+                                    variant="contained"
+                                    color="primary"
+                                    style={{ marginTop: '10px' }}
+                                    disabled={this.disableUpdateButton()}
+                                    onClick={() => {
+                                        const resetPassword = new ResetTempPasswordRepo();
+                                        const { username, tempPassword, newPassword } = this.state;
+                                        const onSuccess = () => {
+                                            this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `Login successful: Hi ${username}` })
+                                        }
+                                        const onError = (errorMessage: string) => {
+                                            this.setState({ outcome: AlertType.FAILED, outcomeMessage: `Login failed: ${errorMessage}` });
+                                        };
+                                        resetPassword.setNewPassword(username, tempPassword, newPassword, onSuccess, onError);
+                                    }}
+                                >
+                                    Set Password And Sign In
                             </Button>
-                        </form>
-                    </div>
+                            </form>
+                            <Link onClick={() => this.setState({ userType: UserType.EXISTING })}>
+                                Existing User?
+                        </Link>
+                        </Grid>
+                    </div>}
                 </Container>
-                <Toolbar />
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    <div
+                    {this.state.userType === UserType.EXISTING && <div
                         style={{
                             marginTop: '20px',
                             display: 'flex',
@@ -160,70 +171,75 @@ export default class UserLogin extends React.Component<{}, IState> {
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <form
-                            style={{
-                                width: '100%',
-                                marginTop: '30px',
-                            }}
-                            noValidate
-                        >
-                            <TextField
-                                variant="outlined"
-                                value={this.state.username2}
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="username2"
-                                label="Username"
-                                name="username2"
-                                autoComplete="username"
-                                autoFocus
-                                onChange={(event) => {
-                                    this.setState({
-                                        username2: event.target.value,
-                                    });
+                        <Grid item spacing={2}>
+                            <form
+                                style={{
+                                    width: '100%',
+                                    marginTop: '30px',
                                 }}
-                            />
-                            <TextField
-                                variant="outlined"
-                                value={this.state.password}
-                                margin="normal"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                onChange={(event) => {
-                                    this.setState({
-                                        password: event.target.value,
-                                    });
-                                }}
-                            />
-                            <Button
-                                fullWidth
-                                id="sign-in-button"
-                                variant="contained"
-                                color="primary"
-                                style={{ marginTop: '10px' }}
-                                disabled={this.disableSignInButton()}
-                                onClick={() => {
-                                    const userLogin = new LoginRepo();
-                                    const { username2, password } = this.state;
-                                    const onSuccess = () => {
-                                        this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `Login successful: Hi ${username2}`})
-                                    }
-                                    const onError = (errorMessage: string) => {
-                                        this.setState({ outcome: AlertType.FAILED ,outcomeMessage: `Login failed: ${errorMessage}` });
-                                    };
-                                    userLogin.login(username2, password, onSuccess, onError);
-                                }}
+                                noValidate
                             >
-                                Sign In
+                                <TextField
+                                    variant="outlined"
+                                    value={this.state.username2}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="username2"
+                                    label="Username"
+                                    name="username2"
+                                    autoComplete="username"
+                                    autoFocus
+                                    onChange={(event) => {
+                                        this.setState({
+                                            username2: event.target.value,
+                                        });
+                                    }}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    value={this.state.password}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    onChange={(event) => {
+                                        this.setState({
+                                            password: event.target.value,
+                                        });
+                                    }}
+                                />
+                                <Button
+                                    fullWidth
+                                    id="sign-in-button"
+                                    variant="contained"
+                                    color="primary"
+                                    style={{ marginTop: '10px' }}
+                                    disabled={this.disableSignInButton()}
+                                    onClick={() => {
+                                        const userLogin = new LoginRepo();
+                                        const { username2, password } = this.state;
+                                        const onSuccess = () => {
+                                            this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `Login successful: Hi ${username2}` })
+                                        }
+                                        const onError = (errorMessage: string) => {
+                                            this.setState({ outcome: AlertType.FAILED, outcomeMessage: `Login failed: ${errorMessage}` });
+                                        };
+                                        userLogin.login(username2, password, onSuccess, onError);
+                                    }}
+                                >
+                                    Sign In
                             </Button>
-                        </form>
-                    </div>
+                            </form>
+                            <Link onClick={() => this.setState({ userType: UserType.FIRST_TIME })}>
+                                First time User with temporary password?
+                            </Link>
+                        </Grid>
+                    </div>}
                 </Container>
             </main>
         );
