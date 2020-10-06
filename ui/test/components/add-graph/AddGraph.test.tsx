@@ -45,15 +45,50 @@ const exampleJSON = {
         },
     },
 };
+const elements = {
+    elements: {
+        edges: {
+            BasicEdge: {
+                source: 'vertex',
+                destination: 'vertex',
+                directed: 'true',
+                properties: {
+                    count: 'count',
+                },
+            },
+        },
+    },
+};
+
+const types = {
+    types: {
+        types: {
+            vertex: { class: 'java.lang.String' },
+            count: {
+                class: 'java.lang.Integer',
+                aggregateFunction: { class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Sum' },
+            },
+            true: {
+                description: 'A simple boolean that must always be true.',
+                class: 'java.lang.Boolean',
+                validateFunctions: [{ class: 'uk.gov.gchq.koryphe.impl.predicate.IsTrue' }],
+            },
+        },
+    },
+};
 
 describe('On Render', () => {
     it('should have a Graph Id text field', () => {
         const textfield = wrapper.find('input');
         expect(textfield.at(0).props().name).toBe('graphName');
     });
-    it('should have a Schema text area', () => {
-        const textfield = wrapper.find('textarea');
-        expect(textfield.props().id).toBe('schema');
+    it('should have an elements text area', () => {
+        const elements = wrapper.find('textarea#schema-elements');
+        expect(elements.props().name).toBe('schema-elements');
+    });
+    it('should have a types text area', () => {
+        const types = wrapper.find('textarea#schema-types');
+        expect(types.props().name).toBe('schema-types');
     });
     it('should have icon button', () => {
         const fileButton = wrapper.find('button').at(0).find('svg');
@@ -69,18 +104,27 @@ describe('Add Graph Button', () => {
         expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
     });
     it('should be disabled when Graph Name field is empty', () => {
-        inputSchema(exampleJSON);
+        inputElements(elements);
+        inputTypes(types);
 
         expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
     });
-    it('should be disabled when the Schema field is empty', () => {
+    it('should be disabled when the elements field is empty', () => {
         inputGraphName('G');
+        inputElements(elements);
 
         expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
     });
-    it('should be enabled when the Graph Name and Schema inputted', () => {
+    it('should be disabled when the types field is empty', () => {
+        inputGraphName('G');
+        inputTypes(types);
+
+        expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
+    });
+    it('should be enabled when the Graph Name, Elements and Types is inputted', () => {
         inputGraphName('My Graph');
-        inputSchema(exampleJSON);
+        inputElements(elements);
+        inputTypes(types);
 
         expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(false);
     });
@@ -108,7 +152,8 @@ describe('Dropzone behaviour', () => {
 describe('Schema validation integration', () => {
     it('should display validation errors as an Alert Notification', () => {
         inputGraphName('OK Graph');
-        inputSchema({ blah: 'blahhhhh' });
+        inputElements({ blah: 'blahhhhh' });
+        inputTypes({ blah: 'blahhhhh' });
 
         clickSubmit();
 
@@ -123,7 +168,8 @@ describe('On Submit Request', () => {
         mockAddGraphRepoWithFunction(() => {});
 
         inputGraphName('OK Graph');
-        inputSchema(exampleJSON);
+        inputElements(elements);
+        inputTypes(types);
 
         clickSubmit();
         await wrapper.update();
@@ -137,7 +183,8 @@ describe('On Submit Request', () => {
         });
 
         inputGraphName('Break Server');
-        inputSchema(exampleJSON);
+        inputElements(elements);
+        inputTypes(types);
 
         clickSubmit();
 
@@ -153,11 +200,18 @@ function inputGraphName(graphName: string): void {
     });
 }
 
-function inputSchema(schema: object): void {
-    wrapper.find('textarea').simulate('change', {
-        target: { value: JSON.stringify(schema) },
+function inputElements(elements: object): void {
+    wrapper.find('textarea#schema-elements').simulate('change', {
+        target: { value: JSON.stringify(elements) },
     });
-    expect(wrapper.find('textarea').props().value).toBe(JSON.stringify(schema));
+    expect(wrapper.find('textarea#schema-elements').props().value).toBe(JSON.stringify(elements));
+}
+
+function inputTypes(types: object): void {
+    wrapper.find('textarea#schema-types').simulate('change', {
+        target: { value: JSON.stringify(types) },
+    });
+    expect(wrapper.find('textarea#schema-types').props().value).toBe(JSON.stringify(types));
 }
 
 function clickAttachFile(wrapper: ReactWrapper): void {
