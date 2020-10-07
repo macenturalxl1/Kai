@@ -23,8 +23,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
-import { Elements } from '../../domain/elements';
-import { TypesSchema } from '../../domain/typesSchema';
+import { ElementsSchema } from '../../domain/elements-schema';
+import { TypesSchema } from '../../domain/types-schema';
 
 interface IState {
     dialogIsOpen: boolean;
@@ -70,7 +70,7 @@ export default class AddGraph extends React.Component<{}, IState> {
     private async submitNewGraph() {
         const { graphName, schemaJson } = this.state.newGraph;
         const schema = new Schema(schemaJson);
-        const elements = new Elements(this.state.elements);
+        const elements = new ElementsSchema(this.state.elements);
         const types = new TypesSchema(this.state.types);
 
         const errors: Notifications = types.validate();

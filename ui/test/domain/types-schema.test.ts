@@ -1,5 +1,4 @@
-import { TypesSchema } from '../../src/domain/typesSchema';
-import { Elements } from '../../src/domain/elements';
+import { TypesSchema } from '../../src/domain/types-schema';
 
 describe('Types Schema Validation', () => {
     it('should return Types Schema is empty when Types is empty', () => {
