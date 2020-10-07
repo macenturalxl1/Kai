@@ -23,6 +23,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
+import { Elements } from '../../domain/elements';
+import { TypesSchema } from '../../domain/typesSchema';
 
 interface IState {
     dialogIsOpen: boolean;
@@ -68,8 +70,11 @@ export default class AddGraph extends React.Component<{}, IState> {
     private async submitNewGraph() {
         const { graphName, schemaJson } = this.state.newGraph;
         const schema = new Schema(schemaJson);
+        const elements = new Elements(this.state.elements);
+        const types = new TypesSchema(this.state.types);
 
-        const errors: Notifications = schema.validate();
+        const errors: Notifications = types.validate();
+
         if (errors.isEmpty()) {
             try {
                 await new CreateGraphRepo().create(graphName, [], schema);
@@ -244,7 +249,7 @@ export default class AddGraph extends React.Component<{}, IState> {
                                             id="schema-elements"
                                             style={{ width: 400 }}
                                             value={this.state.elements}
-                                            label="Schema Elements"
+                                            label="Schema Elements JSON"
                                             required
                                             multiline
                                             rows={5}
@@ -267,7 +272,7 @@ export default class AddGraph extends React.Component<{}, IState> {
                                             style={{ width: 400 }}
                                             value={this.state.types}
                                             name="schema-types"
-                                            label="Schema Types"
+                                            label="Schema Types JSON"
                                             required
                                             multiline
                                             rows={5}

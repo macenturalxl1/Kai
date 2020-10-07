@@ -158,7 +158,7 @@ describe('Schema validation integration', () => {
         clickSubmit();
 
         const expectedMessage =
-            'Error(s): Elements is missing from schema, ' +
+            'Error(s): Elements is missing from schema], ' +
             'Types is missing from schema, ["blah"] are invalid schema root properties';
         expect(wrapper.find('div#notification-alert').text()).toBe(expectedMessage);
     });
