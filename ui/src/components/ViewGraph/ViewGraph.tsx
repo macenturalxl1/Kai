@@ -73,7 +73,7 @@ export default class ViewGraph extends React.Component<{}, IState> {
         const { graphs, errorMessage } = this.state;
 
         return (
-            <main>
+            <main style={{ marginTop: 30 }} >
                 {errorMessage && <NotificationAlert alertType={AlertType.FAILED} message={errorMessage} />}
                 <Toolbar />
                 <Grid container justify="center">

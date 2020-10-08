@@ -3,11 +3,16 @@ $base-color: #f3f3f3;
 body {
     font-family: 'Lucida Sans', Verdana, sans-serif;
 }
+
 main {
     width: 100%;
-    margin-top: 30px;
 }
 
+a {
+    &:hover {
+        cursor: pointer;
+    }
+}
 .MuiAppBar-colorPrimary {
     background-color: #607D8B;
     box-shadow: none;  
@@ -28,5 +33,11 @@ main {
     border-radius: 0;
     width: 100%;
 }
+
+.MuiDialogContent-root {
+    #notification-alert {
+       position: unset;
+    }
+} 
 
 

@@ -4,12 +4,12 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
 import Toolbar from '@material-ui/core/Toolbar';
-import { LoginRepo } from '../../rest/repositories/login-repo';
-
+import { ResetTempPasswordRepo } from '../../rest/repositories/reset-temp-password-repo';
 
 interface IState {
-    username2: string;
-    password: string;
+    username: string;
+    tempPassword: string;
+    newPassword: string;
     outcome: AlertType | undefined;
     outcomeMessage: string;
     userType: UserType;
@@ -19,33 +19,35 @@ enum UserType {
     EXISTING, FIRST_TIME,
 }
 
-export default class UserLogin extends React.Component<{}, IState> {
+export default class UpdatePassword extends React.Component<{}, IState> {
     constructor(props: object) {
         super(props);
         this.state = {
-            username2: '',
-            password: '',
+            username: '',
+            tempPassword: '',
+            newPassword: '',
             outcome: undefined,
             outcomeMessage: '',
             userType: UserType.EXISTING,
         };
     }
-
-    private disableSignInButton(): boolean {
-        const username2 = this.state.username2;
-        const password = this.state.password;
-        return !username2 || !password;
+    
+    private disableUpdateButton(): boolean {
+        const username = this.state.username;
+        const tempPassword = this.state.tempPassword;
+        const newPassword = this.state.newPassword;
+        return !username || !tempPassword || !newPassword;
     }
 
     public render() {
         return (
             <main>
-                <Container component="main" maxWidth="xs">
-                {this.state.outcome && (
+                    <Container component="main" maxWidth="xs">
+                    {this.state.outcome && (
                         <NotificationAlert alertType={AlertType.FAILED} message={this.state.outcomeMessage} />
                     )}
                     <CssBaseline />
-                    {this.state.userType === UserType.EXISTING && <div
+                    {this.state.userType === UserType.FIRST_TIME && <div
                         style={{
                             marginTop: '20px',
                             display: 'flex',
@@ -53,81 +55,100 @@ export default class UserLogin extends React.Component<{}, IState> {
                             alignItems: 'center',
                         }}
                     >
+                            
                         <Typography component="h1" variant="h5">
-                            Sign in
+                            Set New Password
                         </Typography>
                         <Grid item>
                             <form
                                 style={{
                                     width: '100%',
-                                }} 
+                                }}
                                 noValidate
                             >
                                 <TextField
                                     variant="outlined"
-                                    value={this.state.username2}
+                                    value={this.state.username}
                                     margin="normal"
                                     required
                                     fullWidth
-                                    id="username2"
+                                    id="username"
                                     label="Username"
-                                    name="username2"
+                                    name="username"
                                     autoComplete="username"
                                     autoFocus
                                     onChange={(event) => {
                                         this.setState({
-                                            username2: event.target.value,
+                                            username: event.target.value,
                                         });
                                     }}
                                 />
                                 <TextField
                                     variant="outlined"
-                                    value={this.state.password}
+                                    value={this.state.tempPassword}
                                     margin="normal"
                                     required
                                     fullWidth
-                                    name="password"
-                                    label="Password"
+                                    name="temp-password"
+                                    label="Temp Password"
                                     type="password"
-                                    id="password"
+                                    id="temp-password"
                                     autoComplete="current-password"
                                     onChange={(event) => {
                                         this.setState({
-                                            password: event.target.value,
+                                            tempPassword: event.target.value,
+                                        });
+                                    }}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    value={this.state.newPassword}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="new-password"
+                                    label="New Password"
+                                    type="password"
+                                    id="new-password"
+                                    autoComplete="current-password"
+                                    onChange={(event) => {
+                                        this.setState({
+                                            newPassword: event.target.value,
                                         });
                                     }}
                                 />
                                 <Button
                                     fullWidth
-                                    id="sign-in-button"
+                                    id="update-button"
                                     variant="contained"
                                     color="primary"
-                                    style={{ marginTop: '20px'}}
-                                    disabled={this.disableSignInButton()}
+                                    style={{ marginTop: '20px' }}
+                                    disabled={this.disableUpdateButton()}
                                     onClick={() => {
-                                        const userLogin = new LoginRepo();
-                                        const { username2, password } = this.state;
+                                        const resetPassword = new ResetTempPasswordRepo();
+                                        const { username, tempPassword, newPassword } = this.state;
                                         const onSuccess = () => {
-                                            this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `Login successful: Hi ${username2}` })
+                                            this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `Login successful: Hi ${username}` })
                                         }
                                         const onError = (errorMessage: string) => {
                                             this.setState({ outcome: AlertType.FAILED, outcomeMessage: `Login failed: ${errorMessage}` });
                                         };
-                                        userLogin.login(username2, password, onSuccess, onError);
+                                        resetPassword.setNewPassword(username, tempPassword, newPassword, onSuccess, onError);
                                     }}
                                 >
-                                    Sign In
+                                    Set Password And Sign In
                             </Button>
                             </form>
-                            <Typography style={{marginTop: 20}}>
-                                First time user ? <br/>
-                                Please click <Link onClick={() => this.setState({ userType: UserType.FIRST_TIME })}>
-                                Here</Link> to update new Password 
+                            <Typography style={{marginTop: 20}}> 
+                                Existing User? <br/>
+                                Please click   <Link onClick={() => this.setState({ userType: UserType.EXISTING })}>
+                                Here 
+                                </Link> to Sign in
                             </Typography>
                         </Grid>
                     </div>}
                 </Container>
-            </main>  
+            </main>
         );
     }
 }
