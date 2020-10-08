@@ -1,4 +1,5 @@
 import { Notifications } from './notifications';
+import { type } from 'os';
 
 export class ElementsSchema {
     private elements: any;
@@ -69,6 +70,56 @@ export class ElementsSchema {
     private validateEdges(notes: Notifications): void {
         if (this.elements.edges === undefined) {
             notes.addError('Elements Schema does not contain property edges');
+            return;
+        }
+        if (typeof this.elements.edges !== 'object') {
+            notes.addError(`Edges is type ${typeof this.elements.edges} and not an object of Edges objects`);
+            return;
+        }
+
+        Object.keys(this.elements.edges).filter((edgeName: string) => {
+            if (edgeName !== 'groupBy') {
+                const edge: IEdge = this.elements.edges[edgeName];
+                let missingProps: Array<string> = [];
+                if (edge.description === undefined) {
+                    missingProps.push('"description"');
+                }
+                if (edge.source === undefined) {
+                    missingProps.push('"source"');
+                }
+                if (edge.destination === undefined) {
+                    missingProps.push('"destination"');
+                }
+                if (edge.directed === undefined) {
+                    missingProps.push('"directed"');
+                }
+                if (edge.properties === undefined) {
+                    missingProps.push('"properties"');
+                }
+                if (missingProps.length > 0) {
+                    notes.addError(`${edgeName} edge is missing [${missingProps.join(', ')}]`);
+                }
+            }
+        });
+        if (this.elements.edges.groupBy === undefined) {
+            notes.addError('edges is missing groupBy');
+            return;
+        }
+        if (!Array.isArray(this.elements.edges.groupBy)) {
+            notes.addError(
+                `groupBy is type ${typeof this.elements.edges.groupBy} and not an Array of strings in edges`
+            );
+            return;
+        }
+        for (var i = 0; i < this.elements.edges.groupBy.length; i++) {
+            if (typeof this.elements.edges.groupBy[i] !== 'string') {
+                notes.addError(
+                    `item ${this.elements.edges.groupBy[i]} is a ${typeof this.elements.edges.groupBy[
+                        i
+                    ]}, each item in the groupBy array needs to be a string, in edges`
+                );
+                return;
+            }
         }
     }
 
@@ -93,4 +144,12 @@ interface IEntity {
     vertex: string;
     properties: object;
     groupBy: Array<string>;
+}
+
+interface IEdge {
+    description: string;
+    source: string;
+    destination: string;
+    directed: string;
+    properties: string;
 }
