@@ -161,9 +161,7 @@ describe('Types Schema Validation', () => {
 
         const notifications = new TypesSchema(rawSchema).validate();
 
-        expect(notifications.errorMessage()).toBe(
-            'validateFunctions in  date.latest type doesnt have a class property'
-        );
+        expect(notifications.errorMessage()).toBe('validateFunctions in date.latest type doesnt have class');
     });
     it('should return an error if a type has a validateFunctions array, and one of the items is not an object ', () => {
         const rawSchema = JSON.stringify({
@@ -187,7 +185,32 @@ describe('Types Schema Validation', () => {
         const notifications = new TypesSchema(rawSchema).validate();
 
         expect(notifications.errorMessage()).toBe(
-            'validateFunctions in  date.latest type, has the item test, which is not an object'
+            'test in validateFunctions in date.latest type is a string. validateFunctions is an array of objects'
+        );
+    });
+    it('should return an error if an object in validateFunctions array has a property that isnt class ', () => {
+        const rawSchema = JSON.stringify({
+            types: {
+                'date.latest': {
+                    description: 'A Date that when aggregated together will be the latest date.',
+                    class: 'java.util.Date',
+                    validateFunctions: [
+                        {
+                            class: 'uk.gov.gchq.koryphe.impl.predicate.Exists',
+                            test: 'test',
+                        },
+                    ],
+                    aggregateFunction: {
+                        class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Max',
+                    },
+                },
+            },
+        });
+
+        const notifications = new TypesSchema(rawSchema).validate();
+
+        expect(notifications.errorMessage()).toBe(
+            'test in validateFunctions in date.latest type is not a valid property, it should only have a class property'
         );
     });
     it('should return an error if a type has a validateFunctions array, and class is not a type string ', () => {
@@ -211,7 +234,7 @@ describe('Types Schema Validation', () => {
         const notifications = new TypesSchema(rawSchema).validate();
 
         expect(notifications.errorMessage()).toBe(
-            'class in validateFunctions in  date.latest type, is an object, it needs to be a string '
+            'class in validateFunctions in date.latest is object. Should be string'
         );
     });
     it('should return an error if a type has a aggregateFunction property and its not an object ', () => {
@@ -254,7 +277,7 @@ describe('Types Schema Validation', () => {
 
         const notifications = new TypesSchema(rawSchema).validate();
 
-        expect(notifications.errorMessage()).toBe('aggregateFunction in  date.latest type doesnt have class');
+        expect(notifications.errorMessage()).toBe('aggregateFunction in date.latest type doesnt have class');
     });
     it('should return an error if a type has an aggregateFunction property and class is not type string ', () => {
         const rawSchema = JSON.stringify({
@@ -277,7 +300,7 @@ describe('Types Schema Validation', () => {
         const notifications = new TypesSchema(rawSchema).validate();
 
         expect(notifications.errorMessage()).toBe(
-            'class in aggregateFunctions in  date.latest type, is a object. It needs to be a string.'
+            'class in aggregateFunction in date.latest type is object should be string'
         );
     });
     it('should return an error if a type has a serialiser property and its not an object ', () => {
@@ -319,17 +342,14 @@ describe('Types Schema Validation', () => {
                     aggregateFunction: {
                         class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Max',
                     },
-                    serialiser: {
-                        class:
-                            'uk.gov.gchq.gaffer.sketches.clearspring.cardinality.serialisation.HyperLogLogPlusSerialiser',
-                    },
+                    serialiser: {},
                 },
             },
         });
 
         const notifications = new TypesSchema(rawSchema).validate();
 
-        expect(notifications.errorMessage()).toBe('serialiser in  date.latest type doesnt have a class');
+        expect(notifications.errorMessage()).toBe('serialiser in date.latest type doesnt have class');
     });
     it('should return an error if a type has a serialiser property and the class is not a string ', () => {
         const rawSchema = JSON.stringify({
@@ -355,7 +375,7 @@ describe('Types Schema Validation', () => {
         const notifications = new TypesSchema(rawSchema).validate();
 
         expect(notifications.errorMessage()).toBe(
-            'class in serialiser in  date.latest type is a object.It needs to be a string'
+            'class in serialiser in date.latest type is a object, should be a string'
         );
     });
 });

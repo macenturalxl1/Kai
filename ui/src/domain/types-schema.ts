@@ -58,18 +58,69 @@ export class TypesSchema {
                     );
                     return;
                 }
+                for (var i = 0; i < type.validateFunctions.length; i++) {
+                    if (typeof type.validateFunctions[i] !== 'object') {
+                        notes.addError(
+                            `${type.validateFunctions[i]} in validateFunctions in ${typeName} type is a ${typeof type
+                                .validateFunctions[i]}. validateFunctions is an array of objects`
+                        );
+                        return;
+                    }
+                    if (type.validateFunctions[i].class === undefined) {
+                        notes.addError(`validateFunctions in ${typeName} type doesnt have class`);
+                        return;
+                    }
+
+                    if (typeof type.validateFunctions[i].class !== 'string') {
+                        notes.addError(
+                            `class in validateFunctions in ${typeName} is ${typeof type.validateFunctions[i]
+                                .class}. Should be string`
+                        );
+                        return;
+                    }
+                    for (var property in type.validateFunctions[i]) {
+                        if (property !== 'class') {
+                            notes.addError(
+                                `${property} in validateFunctions in ${typeName} type is not a valid property, it should only have a class property`
+                            );
+                            return;
+                        }
+                    }
+                }
             }
             if (type.aggregateFunction !== undefined) {
                 if (typeof type.aggregateFunction !== 'object') {
                     notes.addError(
                         `aggregateFunction in ${typeName} type is a ${typeof type.aggregateFunction}, it needs to be an object`
                     );
+                    return;
+                }
+                if (type.aggregateFunction.class === undefined) {
+                    notes.addError(`aggregateFunction in ${typeName} type doesnt have class`);
+                    return;
+                }
+                if (typeof type.aggregateFunction.class !== 'string') {
+                    notes.addError(
+                        `class in aggregateFunction in ${typeName} type is ${typeof type.aggregateFunction
+                            .class} should be string`
+                    );
+                    return;
                 }
             }
             if (type.serialiser !== undefined) {
                 if (typeof type.serialiser !== 'object') {
                     notes.addError(
                         `serialiser in ${typeName} type is a ${typeof type.serialiser}, it needs to be an object`
+                    );
+                    return;
+                }
+                if (type.serialiser.class === undefined) {
+                    notes.addError(`serialiser in ${typeName} type doesnt have class`);
+                    return;
+                }
+                if (typeof type.serialiser.class !== 'string') {
+                    notes.addError(
+                        `class in serialiser in ${typeName} type is a ${typeof type.serialiser}, should be a string`
                     );
                 }
             }
@@ -91,11 +142,14 @@ export interface ITypesSchema {
 interface IType {
     description: string;
     class: string;
-    validateFunctions: Array<Object>;
+    validateFunctions: Array<IValidateFunction>;
     aggregateFunction: {
         class: string;
     };
     serialiser: {
         class: string;
     };
+}
+interface IValidateFunction {
+    class: string;
 }
