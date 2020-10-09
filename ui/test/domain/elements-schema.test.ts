@@ -27,8 +27,8 @@ describe('Elements Validation', () => {
                         count: 'count.long',
                         countByVehicleType: 'counts.freqmap',
                     },
+                    groupBy: ['startDate', 'endDate'],
                 },
-                groupBy: ['startDate', 'endDate'],
             },
         });
 
@@ -83,8 +83,8 @@ describe('Elements Validation', () => {
                         count: 'count.long',
                         countByVehicleType: 'counts.freqmap',
                     },
+                    groupBy: ['startDate', 'endDate'],
                 },
-                groupBy: ['startDate', 'endDate'],
             },
         });
 
@@ -120,8 +120,8 @@ describe('Elements Validation', () => {
                         count: 'count.long',
                         countByVehicleType: 'counts.freqmap',
                     },
+                    groupBy: ['startDate', 'endDate'],
                 },
-                groupBy: ['startDate', 'endDate'],
             },
         });
 
@@ -160,8 +160,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -184,8 +184,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -218,8 +218,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -253,8 +253,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -284,8 +284,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -319,8 +319,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -345,8 +345,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -385,8 +385,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -442,8 +442,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -477,8 +477,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
@@ -512,8 +512,8 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
             const notifications = new ElementsSchema(rawSchema).validate();
@@ -546,78 +546,14 @@ describe('Elements Validation', () => {
                             count: 'count.long',
                             countByVehicleType: 'counts.freqmap',
                         },
+                        groupBy: ['startDate', 'endDate'],
                     },
-                    groupBy: ['startDate', 'endDate'],
                 },
             });
 
             const notifications = new ElementsSchema(rawSchema).validate();
 
             expect(notifications.errorMessage()).toBe('RoadUse edge is missing ["directed"]');
-        });
-        it('should return properties is missing error if Edges doesnt have properties', () => {
-            const rawSchema = JSON.stringify({
-                entities: {
-                    Cardinality: {
-                        description:
-                            'An entity that is added to every vertex representing the connectivity of the vertex.',
-                        vertex: 'anyVertex',
-                        properties: {
-                            edgeGroup: 'set',
-                            hllp: 'hllp',
-                            count: 'count.long',
-                        },
-                        groupBy: ['edgeGroup'],
-                    },
-                },
-                edges: {
-                    RoadUse: {
-                        description: 'A directed edge representing vehicles moving from junction A to junction B.',
-                        source: 'junction',
-                        destination: 'junction',
-                        directed: 'true',
-                    },
-                    groupBy: ['startDate', 'endDate'],
-                },
-            });
-
-            const notifications = new ElementsSchema(rawSchema).validate();
-
-            expect(notifications.errorMessage()).toBe('RoadUse edge is missing ["properties"]');
-        });
-        it('should return groupBy is missing error if Edges doesnt have groupBy', () => {
-            const rawSchema = JSON.stringify({
-                entities: {
-                    Cardinality: {
-                        description:
-                            'An entity that is added to every vertex representing the connectivity of the vertex.',
-                        vertex: 'anyVertex',
-                        properties: {
-                            edgeGroup: 'set',
-                            hllp: 'hllp',
-                            count: 'count.long',
-                        },
-                        groupBy: ['edgeGroup'],
-                    },
-                },
-                edges: {
-                    RoadUse: {
-                        description: 'A directed edge representing vehicles moving from junction A to junction B.',
-                        source: 'junction',
-                        destination: 'junction',
-                        directed: 'true',
-                        properties: {
-                            startDate: 'date.earliest',
-                            endDate: 'date.latest',
-                            count: 'count.long',
-                            countByVehicleType: 'counts.freqmap',
-                        },
-                    },
-                },
-            });
-            const notifications = new ElementsSchema(rawSchema).validate();
-
-            expect(notifications.errorMessage()).toBe('edges is missing groupBy');
         });
         it('should return all edges values that are missing in error when edges is empty', () => {
             const rawSchema = JSON.stringify({
@@ -642,81 +578,7 @@ describe('Elements Validation', () => {
             const notifications = new ElementsSchema(rawSchema).validate();
 
             expect(notifications.errorMessage()).toBe(
-                'NumberOfElements edge is missing ["description", "source", "destination", "directed", "properties"], edges is missing groupBy'
-            );
-        });
-        it('should return an error when groupBy is not an array type in edges', () => {
-            const rawSchema = JSON.stringify({
-                entities: {
-                    Cardinality: {
-                        description:
-                            'An entity that is added to every vertex representing the connectivity of the vertex.',
-                        vertex: 'anyVertex',
-                        properties: {
-                            edgeGroup: 'set',
-                            hllp: 'hllp',
-                            count: 'count.long',
-                        },
-                        groupBy: ['edgeGroup'],
-                    },
-                },
-                edges: {
-                    RoadUse: {
-                        description: 'A directed edge representing vehicles moving from junction A to junction B.',
-                        source: 'junction',
-                        destination: 'junction',
-                        directed: 'true',
-                        properties: {
-                            startDate: 'date.earliest',
-                            endDate: 'date.latest',
-                            count: 'count.long',
-                            countByVehicleType: 'counts.freqmap',
-                        },
-                    },
-                    groupBy: 'Not an array',
-                },
-            });
-
-            const notifications = new ElementsSchema(rawSchema).validate();
-
-            expect(notifications.errorMessage()).toBe('groupBy is type string and not an Array of strings in edges');
-        });
-        it('should return an error when an item in groupBy array is not a string in edges', () => {
-            const rawSchema = JSON.stringify({
-                entities: {
-                    Cardinality: {
-                        description:
-                            'An entity that is added to every vertex representing the connectivity of the vertex.',
-                        vertex: 'anyVertex',
-                        properties: {
-                            edgeGroup: 'set',
-                            hllp: 'hllp',
-                            count: 'count.long',
-                        },
-                        groupBy: ['edgeGroup'],
-                    },
-                },
-                edges: {
-                    RoadUse: {
-                        description: 'A directed edge representing vehicles moving from junction A to junction B.',
-                        source: 'junction',
-                        destination: 'junction',
-                        directed: 'true',
-                        properties: {
-                            startDate: 'date.earliest',
-                            endDate: 'date.latest',
-                            count: 'count.long',
-                            countByVehicleType: 'counts.freqmap',
-                        },
-                    },
-                    groupBy: ['test 1', 1],
-                },
-            });
-
-            const notifications = new ElementsSchema(rawSchema).validate();
-
-            expect(notifications.errorMessage()).toBe(
-                'item 1 is a number, each item in the groupBy array needs to be a string, in edges'
+                'NumberOfElements edge is missing ["description", "source", "destination", "directed"]'
             );
         });
     });

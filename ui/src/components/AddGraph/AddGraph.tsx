@@ -25,6 +25,7 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
 import { ElementsSchema } from '../../domain/elements-schema';
 import { TypesSchema } from '../../domain/types-schema';
+import { type } from 'os';
 
 interface IState {
     dialogIsOpen: boolean;
@@ -72,12 +73,12 @@ export default class AddGraph extends React.Component<{}, IState> {
         const schema = new Schema(schemaJson);
         const elements = new ElementsSchema(this.state.elements);
         const types = new TypesSchema(this.state.types);
-
-        const errors: Notifications = types.validate();
+        const errors: Notifications = elements.validate();
+        errors.concat(types.validate());
 
         if (errors.isEmpty()) {
             try {
-                await new CreateGraphRepo().create(graphName, [], schema);
+                await new CreateGraphRepo().create(graphName, [], elements, types);
                 this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `${graphName} was successfully added` });
                 this.resetForm();
             } catch (e) {
@@ -227,24 +228,6 @@ export default class AddGraph extends React.Component<{}, IState> {
                                     </Grid>
 
                                     <Grid item xs={12}>
-                                        {/*<TextField*/}
-                                        {/*    id="schema"*/}
-                                        {/*    style={{ width: 400 }}*/}
-                                        {/*    value={this.state.newGraph.schemaJson}*/}
-                                        {/*    label="Schema"*/}
-                                        {/*    required*/}
-                                        {/*    multiline*/}
-                                        {/*    rows={15}*/}
-                                        {/*    variant="outlined"*/}
-                                        {/*    onChange={(event) => {*/}
-                                        {/*        this.setState({*/}
-                                        {/*            newGraph: {*/}
-                                        {/*                ...this.state.newGraph,*/}
-                                        {/*                schemaJson: event.target.value,*/}
-                                        {/*            },*/}
-                                        {/*        });*/}
-                                        {/*    }}*/}
-                                        {/*/>*/}
                                         <TextField
                                             id="schema-elements"
                                             style={{ width: 400 }}
@@ -257,10 +240,6 @@ export default class AddGraph extends React.Component<{}, IState> {
                                             variant="outlined"
                                             onChange={(event) => {
                                                 this.setState({
-                                                    newGraph: {
-                                                        ...this.state.newGraph,
-                                                        schemaJson: event.target.value,
-                                                    },
                                                     elements: event.target.value,
                                                 });
                                             }}
@@ -279,11 +258,6 @@ export default class AddGraph extends React.Component<{}, IState> {
                                             variant="outlined"
                                             onChange={(event) => {
                                                 this.setState({
-                                                    newGraph: {
-                                                        ...this.state.newGraph,
-                                                        schemaJson:
-                                                            this.state.newGraph.schemaJson + ',' + event.target.value,
-                                                    },
                                                     types: event.target.value,
                                                 });
                                             }}

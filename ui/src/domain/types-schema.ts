@@ -78,14 +78,6 @@ export class TypesSchema {
                         );
                         return;
                     }
-                    for (var property in type.validateFunctions[i]) {
-                        if (property !== 'class') {
-                            notes.addError(
-                                `${property} in validateFunctions in ${typeName} type is not a valid property, it should only have a class property`
-                            );
-                            return;
-                        }
-                    }
                 }
             }
             if (type.aggregateFunction !== undefined) {

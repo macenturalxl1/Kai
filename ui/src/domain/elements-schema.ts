@@ -93,34 +93,11 @@ export class ElementsSchema {
                 if (edge.directed === undefined) {
                     missingProps.push('"directed"');
                 }
-                if (edge.properties === undefined) {
-                    missingProps.push('"properties"');
-                }
                 if (missingProps.length > 0) {
                     notes.addError(`${edgeName} edge is missing [${missingProps.join(', ')}]`);
                 }
             }
         });
-        if (this.elements.edges.groupBy === undefined) {
-            notes.addError('edges is missing groupBy');
-            return;
-        }
-        if (!Array.isArray(this.elements.edges.groupBy)) {
-            notes.addError(
-                `groupBy is type ${typeof this.elements.edges.groupBy} and not an Array of strings in edges`
-            );
-            return;
-        }
-        for (var i = 0; i < this.elements.edges.groupBy.length; i++) {
-            if (typeof this.elements.edges.groupBy[i] !== 'string') {
-                notes.addError(
-                    `item ${this.elements.edges.groupBy[i]} is a ${typeof this.elements.edges.groupBy[
-                        i
-                    ]}, each item in the groupBy array needs to be a string, in edges`
-                );
-                return;
-            }
-        }
     }
 
     private validateInvalidProperties(notes: Notifications): void {

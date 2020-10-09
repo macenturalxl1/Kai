@@ -188,31 +188,6 @@ describe('Types Schema Validation', () => {
             'test in validateFunctions in date.latest type is a string. validateFunctions is an array of objects'
         );
     });
-    it('should return an error if an object in validateFunctions array has a property that isnt class ', () => {
-        const rawSchema = JSON.stringify({
-            types: {
-                'date.latest': {
-                    description: 'A Date that when aggregated together will be the latest date.',
-                    class: 'java.util.Date',
-                    validateFunctions: [
-                        {
-                            class: 'uk.gov.gchq.koryphe.impl.predicate.Exists',
-                            test: 'test',
-                        },
-                    ],
-                    aggregateFunction: {
-                        class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Max',
-                    },
-                },
-            },
-        });
-
-        const notifications = new TypesSchema(rawSchema).validate();
-
-        expect(notifications.errorMessage()).toBe(
-            'test in validateFunctions in date.latest type is not a valid property, it should only have a class property'
-        );
-    });
     it('should return an error if a type has a validateFunctions array, and class is not a type string ', () => {
         const rawSchema = JSON.stringify({
             types: {
@@ -377,5 +352,35 @@ describe('Types Schema Validation', () => {
         expect(notifications.errorMessage()).toBe(
             'class in serialiser in date.latest type is a object, should be a string'
         );
+    });
+    it('should not return any errors if types is correct', () => {
+        const rawSchema = JSON.stringify({
+            types: {
+                'count.long': {
+                    description: 'A long count that must be greater than or equal to 0.',
+                    class: 'java.lang.Long',
+                    validateFunctions: [
+                        {
+                            class: 'uk.gov.gchq.koryphe.impl.predicate.IsMoreThan',
+                            orEqualTo: true,
+                            value: {
+                                'java.lang.Long': 0,
+                            },
+                        },
+                    ],
+                    aggregateFunction: {
+                        class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Sum',
+                    },
+                    serialiser: {
+                        class:
+                            'uk.gov.gchq.gaffer.sketches.clearspring.cardinality.serialisation.HyperLogLogPlusSerialiser',
+                    },
+                },
+            },
+        });
+
+        const notifications = new TypesSchema(rawSchema).validate();
+
+        expect(notifications.isEmpty()).toBe(true);
     });
 });

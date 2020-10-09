@@ -46,32 +46,54 @@ const exampleJSON = {
     },
 };
 const elements = {
-    elements: {
-        edges: {
-            BasicEdge: {
-                source: 'vertex',
-                destination: 'vertex',
-                directed: 'true',
-                properties: {
-                    count: 'count',
-                },
+    entities: {
+        Cardinality: {
+            description: 'An entity that is added to every vertex representing the connectivity of the vertex.',
+            vertex: 'anyVertex',
+            properties: {
+                edgeGroup: 'set',
+                hllp: 'hllp',
+                count: 'count.long',
+            },
+            groupBy: ['edgeGroup'],
+        },
+    },
+    edges: {
+        RoadUse: {
+            description: 'A directed edge representing vehicles moving from junction A to junction B.',
+            source: 'junction',
+            destination: 'junction',
+            directed: 'true',
+            properties: {
+                startDate: 'date.earliest',
+                endDate: 'date.latest',
+                count: 'count.long',
+                countByVehicleType: 'counts.freqmap',
             },
         },
+        groupBy: ['startDate', 'endDate'],
     },
 };
 
 const types = {
     types: {
-        types: {
-            vertex: { class: 'java.lang.String' },
-            count: {
-                class: 'java.lang.Integer',
-                aggregateFunction: { class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Sum' },
+        'count.long': {
+            description: 'A long count that must be greater than or equal to 0.',
+            class: 'java.lang.Long',
+            validateFunctions: [
+                {
+                    class: 'uk.gov.gchq.koryphe.impl.predicate.IsMoreThan',
+                    orEqualTo: true,
+                    value: {
+                        'java.lang.Long': 0,
+                    },
+                },
+            ],
+            aggregateFunction: {
+                class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Sum',
             },
-            true: {
-                description: 'A simple boolean that must always be true.',
-                class: 'java.lang.Boolean',
-                validateFunctions: [{ class: 'uk.gov.gchq.koryphe.impl.predicate.IsTrue' }],
+            serialiser: {
+                class: 'uk.gov.gchq.gaffer.sketches.clearspring.cardinality.serialisation.HyperLogLogPlusSerialiser',
             },
         },
     },
@@ -158,8 +180,11 @@ describe('Schema validation integration', () => {
         clickSubmit();
 
         const expectedMessage =
-            'Error(s): Elements is missing from schema], ' +
-            'Types is missing from schema, ["blah"] are invalid schema root properties';
+            'Error(s): Elements Schema does not contain property entities, ' +
+            'Elements Schema does not contain property edges, ' +
+            '["blah"] are invalid Elements schema root properties, ' +
+            'Types Schema does not contain property types, ' +
+            '["blah"] are invalid Types schema root properties';
         expect(wrapper.find('div#notification-alert').text()).toBe(expectedMessage);
     });
 });
