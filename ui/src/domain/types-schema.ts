@@ -127,20 +127,23 @@ export class TypesSchema {
         }
     }
 }
-export interface ITypesSchema {
+
+interface ITypesSchema {
     types: object;
 }
+
 interface IType {
-    description: string;
     class: string;
-    validateFunctions: Array<IValidateFunction>;
-    aggregateFunction: {
+    description?: string;
+    validateFunctions?: Array<IValidateFunction>;
+    aggregateFunction?: {
         class: string;
     };
-    serialiser: {
+    serialiser?: {
         class: string;
     };
 }
+
 interface IValidateFunction {
     class: string;
 }
