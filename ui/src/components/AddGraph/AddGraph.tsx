@@ -13,7 +13,6 @@ import {
     Tooltip,
     Zoom,
 } from '@material-ui/core';
-import { Schema } from '../../domain/schema';
 import { Notifications } from '../../domain/notifications';
 import { CreateGraphRepo } from '../../rest/repositories/create-graph-repo';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
@@ -23,6 +22,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
+import { ElementsSchema } from '../../domain/elements-schema';
+import { TypesSchema } from '../../domain/types-schema';
 
 interface IState {
     dialogIsOpen: boolean;
@@ -35,6 +36,8 @@ interface IState {
     outcome: AlertType | undefined;
     outcomeMessage: string;
     errors: Notifications;
+    elements: string;
+    types: string;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -58,17 +61,21 @@ export default class AddGraph extends React.Component<{}, IState> {
             outcome: undefined,
             outcomeMessage: '',
             errors: new Notifications(),
+            elements: '',
+            types: '',
         };
     }
 
     private async submitNewGraph() {
-        const { graphName, schemaJson } = this.state.newGraph;
-        const schema = new Schema(schemaJson);
+        const { graphName } = this.state.newGraph;
+        const elements = new ElementsSchema(this.state.elements);
+        const types = new TypesSchema(this.state.types);
+        const errors: Notifications = elements.validate();
+        errors.concat(types.validate());
 
-        const errors: Notifications = schema.validate();
         if (errors.isEmpty()) {
             try {
-                await new CreateGraphRepo().create(graphName, [], schema);
+                await new CreateGraphRepo().create(graphName, [], elements, types);
                 this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `${graphName} was successfully added` });
                 this.resetForm();
             } catch (e) {
@@ -89,6 +96,8 @@ export default class AddGraph extends React.Component<{}, IState> {
                 graphName: '',
                 schemaJson: '',
             },
+            elements: '',
+            types: '',
         });
     }
 
@@ -112,8 +121,8 @@ export default class AddGraph extends React.Component<{}, IState> {
     }
 
     private disableSubmitButton(): boolean {
-        const { graphName, schemaJson } = this.state.newGraph;
-        return !graphName || !schemaJson;
+        const { graphName } = this.state.newGraph;
+        return !this.state.elements || !this.state.types || !graphName;
     }
 
     public render() {
@@ -217,20 +226,36 @@ export default class AddGraph extends React.Component<{}, IState> {
 
                                     <Grid item xs={12}>
                                         <TextField
-                                            id="schema"
+                                            id="schema-elements"
                                             style={{ width: 400 }}
-                                            value={this.state.newGraph.schemaJson}
-                                            label="Schema"
+                                            value={this.state.elements}
+                                            label="Schema Elements JSON"
                                             required
                                             multiline
-                                            rows={15}
+                                            rows={5}
+                                            name="schema-elements"
                                             variant="outlined"
                                             onChange={(event) => {
                                                 this.setState({
-                                                    newGraph: {
-                                                        ...this.state.newGraph,
-                                                        schemaJson: event.target.value,
-                                                    },
+                                                    elements: event.target.value,
+                                                });
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="schema-types"
+                                            style={{ width: 400 }}
+                                            value={this.state.types}
+                                            name="schema-types"
+                                            label="Schema Types JSON"
+                                            required
+                                            multiline
+                                            rows={5}
+                                            variant="outlined"
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    types: event.target.value,
                                                 });
                                             }}
                                         />
