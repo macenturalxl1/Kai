@@ -383,4 +383,17 @@ describe('Types Schema Validation', () => {
 
         expect(notifications.isEmpty()).toBe(true);
     });
+    it('should not return any errors when description, functions and serialiser are undefined', () => {
+        const rawSchema = JSON.stringify({
+            types: {
+                'count.long': {
+                    class: 'java.lang.Long',
+                },
+            },
+        });
+
+        const notifications = new TypesSchema(rawSchema).validate();
+
+        expect(notifications.isEmpty()).toBe(true);
+    });
 });

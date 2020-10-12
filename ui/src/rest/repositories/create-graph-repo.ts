@@ -1,6 +1,5 @@
 import { RestClient, IApiResponse } from '../rest-client';
 import { ICreateGraphRequestBody } from '../http-message-interfaces/request-interfaces';
-import { Schema } from '../../domain/schema';
 import { ElementsSchema } from '../../domain/elements-schema';
 import { TypesSchema } from '../../domain/types-schema';
 

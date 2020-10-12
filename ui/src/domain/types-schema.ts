@@ -1,5 +1,4 @@
 import { Notifications } from './notifications';
-import { typeIsOrHasBaseType } from 'tslint/lib/language/typeUtils';
 
 export class TypesSchema {
     private types: any;

@@ -13,7 +13,6 @@ import {
     Tooltip,
     Zoom,
 } from '@material-ui/core';
-import { Schema } from '../../domain/schema';
 import { Notifications } from '../../domain/notifications';
 import { CreateGraphRepo } from '../../rest/repositories/create-graph-repo';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
@@ -25,7 +24,6 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
 import { ElementsSchema } from '../../domain/elements-schema';
 import { TypesSchema } from '../../domain/types-schema';
-import { type } from 'os';
 
 interface IState {
     dialogIsOpen: boolean;
@@ -69,8 +67,7 @@ export default class AddGraph extends React.Component<{}, IState> {
     }
 
     private async submitNewGraph() {
-        const { graphName, schemaJson } = this.state.newGraph;
-        const schema = new Schema(schemaJson);
+        const { graphName } = this.state.newGraph;
         const elements = new ElementsSchema(this.state.elements);
         const types = new TypesSchema(this.state.types);
         const errors: Notifications = elements.validate();
@@ -124,7 +121,7 @@ export default class AddGraph extends React.Component<{}, IState> {
     }
 
     private disableSubmitButton(): boolean {
-        const { graphName, schemaJson } = this.state.newGraph;
+        const { graphName } = this.state.newGraph;
         return !this.state.elements || !this.state.types || !graphName;
     }
 
