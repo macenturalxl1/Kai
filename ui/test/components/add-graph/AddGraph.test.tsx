@@ -45,15 +45,72 @@ const exampleJSON = {
         },
     },
 };
+const elements = {
+    entities: {
+        Cardinality: {
+            description: 'An entity that is added to every vertex representing the connectivity of the vertex.',
+            vertex: 'anyVertex',
+            properties: {
+                edgeGroup: 'set',
+                hllp: 'hllp',
+                count: 'count.long',
+            },
+            groupBy: ['edgeGroup'],
+        },
+    },
+    edges: {
+        RoadUse: {
+            description: 'A directed edge representing vehicles moving from junction A to junction B.',
+            source: 'junction',
+            destination: 'junction',
+            directed: 'true',
+            properties: {
+                startDate: 'date.earliest',
+                endDate: 'date.latest',
+                count: 'count.long',
+                countByVehicleType: 'counts.freqmap',
+            },
+        },
+        groupBy: ['startDate', 'endDate'],
+    },
+};
+
+const types = {
+    types: {
+        'count.long': {
+            description: 'A long count that must be greater than or equal to 0.',
+            class: 'java.lang.Long',
+            validateFunctions: [
+                {
+                    class: 'uk.gov.gchq.koryphe.impl.predicate.IsMoreThan',
+                    orEqualTo: true,
+                    value: {
+                        'java.lang.Long': 0,
+                    },
+                },
+            ],
+            aggregateFunction: {
+                class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Sum',
+            },
+            serialiser: {
+                class: 'uk.gov.gchq.gaffer.sketches.clearspring.cardinality.serialisation.HyperLogLogPlusSerialiser',
+            },
+        },
+    },
+};
 
 describe('On Render', () => {
     it('should have a Graph Id text field', () => {
         const textfield = wrapper.find('input');
         expect(textfield.at(0).props().name).toBe('graphName');
     });
-    it('should have a Schema text area', () => {
-        const textfield = wrapper.find('textarea');
-        expect(textfield.props().id).toBe('schema');
+    it('should have an elements text area', () => {
+        const elements = wrapper.find('textarea#schema-elements');
+        expect(elements.props().name).toBe('schema-elements');
+    });
+    it('should have a types text area', () => {
+        const types = wrapper.find('textarea#schema-types');
+        expect(types.props().name).toBe('schema-types');
     });
     it('should have icon button', () => {
         const fileButton = wrapper.find('button').at(0).find('svg');
@@ -69,18 +126,27 @@ describe('Add Graph Button', () => {
         expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
     });
     it('should be disabled when Graph Name field is empty', () => {
-        inputSchema(exampleJSON);
+        inputElements(elements);
+        inputTypes(types);
 
         expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
     });
-    it('should be disabled when the Schema field is empty', () => {
+    it('should be disabled when the elements field is empty', () => {
         inputGraphName('G');
+        inputElements(elements);
 
         expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
     });
-    it('should be enabled when the Graph Name and Schema inputted', () => {
+    it('should be disabled when the types field is empty', () => {
+        inputGraphName('G');
+        inputTypes(types);
+
+        expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
+    });
+    it('should be enabled when the Graph Name, Elements and Types is inputted', () => {
         inputGraphName('My Graph');
-        inputSchema(exampleJSON);
+        inputElements(elements);
+        inputTypes(types);
 
         expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(false);
     });
@@ -108,13 +174,17 @@ describe('Dropzone behaviour', () => {
 describe('Schema validation integration', () => {
     it('should display validation errors as an Alert Notification', () => {
         inputGraphName('OK Graph');
-        inputSchema({ blah: 'blahhhhh' });
+        inputElements({ blah: 'blahhhhh' });
+        inputTypes({ blah: 'blahhhhh' });
 
         clickSubmit();
 
         const expectedMessage =
-            'Error(s): Elements is missing from schema, ' +
-            'Types is missing from schema, ["blah"] are invalid schema root properties';
+            'Error(s): Elements Schema does not contain property entities, ' +
+            'Elements Schema does not contain property edges, ' +
+            '["blah"] are invalid Elements schema root properties, ' +
+            'Types Schema does not contain property types, ' +
+            '["blah"] are invalid Types schema root properties';
         expect(wrapper.find('div#notification-alert').text()).toBe(expectedMessage);
     });
 });
@@ -123,7 +193,8 @@ describe('On Submit Request', () => {
         mockAddGraphRepoWithFunction(() => {});
 
         inputGraphName('OK Graph');
-        inputSchema(exampleJSON);
+        inputElements(elements);
+        inputTypes(types);
 
         clickSubmit();
         await wrapper.update();
@@ -137,7 +208,8 @@ describe('On Submit Request', () => {
         });
 
         inputGraphName('Break Server');
-        inputSchema(exampleJSON);
+        inputElements(elements);
+        inputTypes(types);
 
         clickSubmit();
 
@@ -153,11 +225,18 @@ function inputGraphName(graphName: string): void {
     });
 }
 
-function inputSchema(schema: object): void {
-    wrapper.find('textarea').simulate('change', {
-        target: { value: JSON.stringify(schema) },
+function inputElements(elements: object): void {
+    wrapper.find('textarea#schema-elements').simulate('change', {
+        target: { value: JSON.stringify(elements) },
     });
-    expect(wrapper.find('textarea').props().value).toBe(JSON.stringify(schema));
+    expect(wrapper.find('textarea#schema-elements').props().value).toBe(JSON.stringify(elements));
+}
+
+function inputTypes(types: object): void {
+    wrapper.find('textarea#schema-types').simulate('change', {
+        target: { value: JSON.stringify(types) },
+    });
+    expect(wrapper.find('textarea#schema-types').props().value).toBe(JSON.stringify(types));
 }
 
 function clickAttachFile(wrapper: ReactWrapper): void {
