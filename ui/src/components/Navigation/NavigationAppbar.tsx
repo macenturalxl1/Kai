@@ -8,10 +8,10 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import PersonIcon from '@material-ui/icons/Person';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import Popup from '../UserLogin/LoginDialog';
-
+import Popup from '../login/login-modal';
 
 const drawerWidth = 240;
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {},

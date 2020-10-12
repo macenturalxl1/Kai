@@ -2,7 +2,6 @@ import ViewGraph from '../ViewGraph/ViewGraph';
 import AddGraph from '../AddGraph/AddGraph';
 import UserGuide from '../UserGuide/UserGuide';
 
-
 const Routes = [
    
     {

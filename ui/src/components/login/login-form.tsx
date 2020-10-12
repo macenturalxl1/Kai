@@ -3,49 +3,46 @@ import { Button, CssBaseline, Grid, TextField, Link } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
-import Toolbar from '@material-ui/core/Toolbar';
 import { LoginRepo } from '../../rest/repositories/login-repo';
+import { FormType } from './login-modal';
 
+interface IProps {
+    onChangeForm(fromType: FormType): void;
+}
 
 interface IState {
-    username2: string;
+    username: string;
     password: string;
     outcome: AlertType | undefined;
     outcomeMessage: string;
-    userType: UserType;
 }
 
-enum UserType {
-    EXISTING, FIRST_TIME,
-}
-
-export default class UserLogin extends React.Component<{}, IState> {
-    constructor(props: object) {
+export default class LoginForm extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
         this.state = {
-            username2: '',
+            username: '',
             password: '',
             outcome: undefined,
             outcomeMessage: '',
-            userType: UserType.EXISTING,
         };
     }
 
     private disableSignInButton(): boolean {
-        const username2 = this.state.username2;
+        const username = this.state.username;
         const password = this.state.password;
-        return !username2 || !password;
+        return !username || !password;
     }
 
     public render() {
         return (
-            <main>
+            <main id='login-form'>
                 <Container component="main" maxWidth="xs">
-                {this.state.outcome && (
+                    {this.state.outcome && (
                         <NotificationAlert alertType={AlertType.FAILED} message={this.state.outcomeMessage} />
                     )}
                     <CssBaseline />
-                    {this.state.userType === UserType.EXISTING && <div
+                    <div
                         style={{
                             marginTop: '20px',
                             display: 'flex',
@@ -60,23 +57,23 @@ export default class UserLogin extends React.Component<{}, IState> {
                             <form
                                 style={{
                                     width: '100%',
-                                }} 
+                                }}
                                 noValidate
                             >
                                 <TextField
+                                    id="username"
                                     variant="outlined"
-                                    value={this.state.username2}
+                                    value={this.state.username}
                                     margin="normal"
                                     required
                                     fullWidth
-                                    id="username2"
                                     label="Username"
-                                    name="username2"
+                                    name="username"
                                     autoComplete="username"
                                     autoFocus
                                     onChange={(event) => {
                                         this.setState({
-                                            username2: event.target.value,
+                                            username: event.target.value,
                                         });
                                     }}
                                 />
@@ -102,32 +99,39 @@ export default class UserLogin extends React.Component<{}, IState> {
                                     id="sign-in-button"
                                     variant="contained"
                                     color="primary"
-                                    style={{ marginTop: '20px'}}
+                                    style={{ marginTop: '20px' }}
                                     disabled={this.disableSignInButton()}
                                     onClick={() => {
                                         const userLogin = new LoginRepo();
-                                        const { username2, password } = this.state;
+                                        const { username, password } = this.state;
                                         const onSuccess = () => {
-                                            this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `Login successful: Hi ${username2}` })
-                                        }
-                                        const onError = (errorMessage: string) => {
-                                            this.setState({ outcome: AlertType.FAILED, outcomeMessage: `Login failed: ${errorMessage}` });
+                                            this.setState({
+                                                outcome: AlertType.SUCCESS,
+                                                outcomeMessage: `Login successful: Hi ${username}`,
+                                            });
                                         };
-                                        userLogin.login(username2, password, onSuccess, onError);
+                                        const onError = (errorMessage: string) => {
+                                            this.setState({
+                                                outcome: AlertType.FAILED,
+                                                outcomeMessage: `Login failed: ${errorMessage}`,
+                                            });
+                                        };
+                                        userLogin.login(username, password, onSuccess, onError);
                                     }}
                                 >
                                     Sign In
-                            </Button>
+                                </Button>
                             </form>
-                            <Typography style={{marginTop: 20}}>
-                                First time user ? <br/>
-                                Please click <Link onClick={() => this.setState({ userType: UserType.FIRST_TIME })}>
-                                Here</Link> to update new Password 
+                            <Typography style={{ marginTop: 20 }}>
+                                First time user ? <br />
+                                Please click{' '}
+                                <Link id='temp-password-form-link' onClick={() => this.props.onChangeForm(FormType.TEMP_PASSWORD_LOGIN)}>Here</Link> to
+                                update new Password
                             </Typography>
                         </Grid>
-                    </div>}
+                    </div>
                 </Container>
-            </main>  
+            </main>
         );
     }
 }

@@ -1,4 +1,3 @@
-import { ISchema } from '../../domain/schema';
 import { IElements } from '../../domain/elements-schema';
 import { ITypesSchema } from '../../domain/types-schema';
 
