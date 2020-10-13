@@ -27,8 +27,10 @@ import { TypesSchema } from '../../domain/types-schema';
 
 interface IState {
     dialogIsOpen: boolean;
-    files: Array<File>;
-    schemaFieldDisable: boolean;
+    elementsFiles: Array<File>;
+    typesFiles: Array<File>;
+    typesFieldDisabled: boolean;
+    elementsFieldDisabled: boolean;
     newGraph: {
         graphName: string;
         schemaJson: string;
@@ -52,8 +54,10 @@ export default class AddGraph extends React.Component<{}, IState> {
         super(props);
         this.state = {
             dialogIsOpen: false,
-            schemaFieldDisable: false,
-            files: [],
+            elementsFieldDisabled: false,
+            typesFieldDisabled: false,
+            elementsFiles: [],
+            typesFiles: [],
             newGraph: {
                 graphName: '',
                 schemaJson: '',
@@ -91,7 +95,8 @@ export default class AddGraph extends React.Component<{}, IState> {
 
     private resetForm() {
         this.setState({
-            files: [],
+            elementsFiles: [],
+            typesFiles: [],
             newGraph: {
                 graphName: '',
                 schemaJson: '',
@@ -101,25 +106,35 @@ export default class AddGraph extends React.Component<{}, IState> {
         });
     }
 
-    private async uploadFiles(files: File[]) {
-        this.setState({ files: files });
-        if (files.length > 0) {
-            const schemaFromFile = await files[0].text();
-
+    private async uploadElementsFiles(elementsFiles: File[]) {
+        this.setState({ elementsFiles: elementsFiles });
+        if (elementsFiles.length > 0) {
+            const elementsSchemaFiles = await elementsFiles[0].text();
             this.setState({
-                schemaFieldDisable: true,
-                newGraph: {
-                    ...this.state.newGraph,
-                    schemaJson: schemaFromFile,
-                },
+                elementsFieldDisabled: true,
+                elements: elementsSchemaFiles,
             });
         } else {
             this.setState({
-                schemaFieldDisable: false,
+                elementsFieldDisabled: false,
             });
         }
     }
 
+    private async uploadTypesFiles(typesFiles: File[]) {
+        this.setState({ typesFiles: typesFiles });
+        if (typesFiles.length > 0) {
+            const typesSchemaFiles = await typesFiles[0].text();
+            this.setState({
+                typesFieldDisabled: true,
+                types: typesSchemaFiles,
+            });
+        } else {
+            this.setState({
+                typesFieldDisabled: false,
+            });
+        }
+    }
     private disableSubmitButton(): boolean {
         const { graphName } = this.state.newGraph;
         return !this.state.elements || !this.state.types || !graphName;
@@ -134,7 +149,7 @@ export default class AddGraph extends React.Component<{}, IState> {
         };
 
         return (
-            <main style={{ marginTop: 30 }} >
+            <main style={{ marginTop: 30 }}>
                 {this.state.outcome && (
                     <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
                 )}
@@ -207,19 +222,46 @@ export default class AddGraph extends React.Component<{}, IState> {
                                                     <ClearIcon />
                                                 </IconButton>
                                             </Grid>
+
                                             <DialogContent>
-                                                <DropzoneArea
-                                                    showPreviews={true}
-                                                    onChange={async (files) => this.uploadFiles(files)}
-                                                    showPreviewsInDropzone={false}
-                                                    useChipsForPreview
-                                                    previewGridProps={{ container: { spacing: 1, direction: 'row' } }}
-                                                    previewChipProps={{ classes: { root: this.classes.previewChip } }}
-                                                    previewText="Selected files"
-                                                    clearOnUnmount={true}
-                                                    acceptedFiles={['application/json']}
-                                                    filesLimit={1}
-                                                />
+                                                <Grid id="elements-drop-zone">
+                                                    <DropzoneArea
+                                                        showPreviews={true}
+                                                        onChange={async (files) => this.uploadElementsFiles(files)}
+                                                        showPreviewsInDropzone={false}
+                                                        dropzoneText="Drag and drop elements.JSON"
+                                                        useChipsForPreview
+                                                        previewGridProps={{
+                                                            container: { spacing: 1, direction: 'row' },
+                                                        }}
+                                                        previewChipProps={{
+                                                            classes: { root: this.classes.previewChip },
+                                                        }}
+                                                        previewText="Selected files"
+                                                        clearOnUnmount={true}
+                                                        acceptedFiles={['application/json']}
+                                                        filesLimit={1}
+                                                    />
+                                                </Grid>
+                                                <Grid id="types-drop-zone">
+                                                    <DropzoneArea
+                                                        showPreviews={true}
+                                                        onChange={async (files) => this.uploadTypesFiles(files)}
+                                                        showPreviewsInDropzone={false}
+                                                        dropzoneText="Drag and drop types.JSON"
+                                                        useChipsForPreview
+                                                        previewGridProps={{
+                                                            container: { spacing: 1, direction: 'row' },
+                                                        }}
+                                                        previewChipProps={{
+                                                            classes: { root: this.classes.previewChip },
+                                                        }}
+                                                        previewText="Selected files"
+                                                        clearOnUnmount={true}
+                                                        acceptedFiles={['application/json']}
+                                                        filesLimit={1}
+                                                    />
+                                                </Grid>
                                             </DialogContent>
                                         </Dialog>
                                     </Grid>
@@ -230,6 +272,7 @@ export default class AddGraph extends React.Component<{}, IState> {
                                             style={{ width: 400 }}
                                             value={this.state.elements}
                                             label="Schema Elements JSON"
+                                            disabled={this.state.elementsFieldDisabled}
                                             required
                                             multiline
                                             rows={5}
@@ -247,6 +290,7 @@ export default class AddGraph extends React.Component<{}, IState> {
                                             id="schema-types"
                                             style={{ width: 400 }}
                                             value={this.state.types}
+                                            disabled={this.state.typesFieldDisabled}
                                             name="schema-types"
                                             label="Schema Types JSON"
                                             required
