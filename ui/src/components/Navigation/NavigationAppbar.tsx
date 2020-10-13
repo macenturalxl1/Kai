@@ -1,15 +1,17 @@
-import React from 'react';
+import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, ListItemText, Drawer, Divider, ListItem, List, ListItemIcon, Avatar, ListItemAvatar, CssBaseline } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, ListItemText, Drawer, Divider, ListItem, List, ListItemIcon, Avatar, ListItemAvatar, CssBaseline, Button } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import PersonIcon from '@material-ui/icons/Person';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import Popup from '../login/login-modal';
 
 const drawerWidth = 240;
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {},
@@ -18,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             marginRight: 20,
+            flexGrow: 1,
         },
         drawer: {
             width: drawerWidth,
@@ -70,6 +73,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const NavigationAppbar: React.FC = (props: any) => {
     const classes = useStyles();
 
+    const [openPopup, setOpenPopup] = React.useState(false);
+
     const activeRoute = (routeName: any) => {
         return props.location.pathname === routeName;
     }
@@ -81,9 +86,7 @@ const NavigationAppbar: React.FC = (props: any) => {
             case 'View Graphs':
                 return <VisibilityIcon />;
             case 'User Guide':
-                return <LocalLibraryIcon />;
-            case 'Sign In':
-                return <LockOpenIcon />;   
+                return <LocalLibraryIcon />; 
             default:
                 return null;
         }
@@ -96,9 +99,12 @@ const NavigationAppbar: React.FC = (props: any) => {
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Kai: Graph As A Service
+                        Kai: Graph As A Service 
                     </Typography>
+                    
+                    <Button color="inherit" onClick= {()=> setOpenPopup(true)}><LockOpenIcon /> Sign in</Button>
                 </Toolbar>
+               
             </AppBar>
 
             <nav className={classes.drawer}>
@@ -143,6 +149,10 @@ const NavigationAppbar: React.FC = (props: any) => {
                     </div>
                 </Drawer>
             </nav>
+            <Popup openPopup = {openPopup} 
+                   setOpenPopup = {setOpenPopup}
+            />
+            
         </div>
     );
 };

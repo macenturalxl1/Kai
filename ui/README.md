@@ -48,7 +48,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ## AWS Integration
 
-The .env file must be configured for the following values for the deployed API and it's User Pool that you want to interface with:
+For production mode and build, a .env file must be configured for the following key/values to integrated with the deployed API and it's User Pool that you want to interface with:
 
 ```
 REACT_APP_KAI_REST_API_HOST=https://my-example-api-gateway.amazonaws.com 
