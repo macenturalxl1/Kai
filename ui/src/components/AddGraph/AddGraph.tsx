@@ -106,25 +106,6 @@ export default class AddGraph extends React.Component<{}, IState> {
         });
     }
 
-    // private async uploadFiles(files: File[]) {
-    //     this.setState({ files: files });
-    //     if (files.length > 0) {
-    //         const schemaFromFile = await files[0].text();
-    //
-    //         this.setState({
-    //             schemaFieldDisable: true,
-    //             newGraph: {
-    //                 ...this.state.newGraph,
-    //                 schemaJson: schemaFromFile,
-    //             },
-    //         });
-    //     } else {
-    //         this.setState({
-    //             schemaFieldDisable: false,
-    //         });
-    //     }
-    // }
-
     private async uploadElementsFiles(elementsFiles: File[]) {
         this.setState({ elementsFiles: elementsFiles });
         if (elementsFiles.length > 0) {
@@ -168,7 +149,7 @@ export default class AddGraph extends React.Component<{}, IState> {
         };
 
         return (
-            <main style={{ marginTop: 30 }} >
+            <main style={{ marginTop: 30 }}>
                 {this.state.outcome && (
                     <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
                 )}
