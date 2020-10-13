@@ -152,8 +152,13 @@ describe('Add Graph Button', () => {
     });
 });
 describe('Dropzone behaviour', () => {
-    it('should have an input that accepts JSON files', () => {
-        const dropZone = wrapper.find('input').at(1);
+    it('should have an elements drop zone that accepts JSON files', () => {
+        const dropZone = wrapper.find('div#elements-drop-zone').find('input');
+        expect(dropZone.props().type).toBe('file');
+        expect(dropZone.props().accept).toBe('application/json');
+    });
+    it('should have a types drop zone that accepts JSON files', () => {
+        const dropZone = wrapper.find('div#types-drop-zone').find('input');
         expect(dropZone.props().type).toBe('file');
         expect(dropZone.props().accept).toBe('application/json');
     });

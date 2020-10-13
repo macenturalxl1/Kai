@@ -128,7 +128,7 @@ export class TypesSchema {
     }
 }
 
-interface ITypesSchema {
+export interface ITypesSchema {
     types: object;
 }
 
