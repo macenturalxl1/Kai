@@ -4,15 +4,16 @@ import {
     Button,
     Container,
     Grid,
-   IconButton, Table,
+    IconButton,
+    Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-
     Toolbar,
-   Tooltip, Zoom,
+    Tooltip,
+    Zoom,
 } from '@material-ui/core';
 import { Graph } from '../../domain/graph';
 import { GetAllGraphsRepo } from '../../rest/repositories/get-all-graphs-repo';
@@ -73,7 +74,7 @@ export default class ViewGraph extends React.Component<{}, IState> {
         const { graphs, errorMessage } = this.state;
 
         return (
-            <main style={{ marginTop: 30 }} >
+            <main style={{ marginTop: 30 }}>
                 {errorMessage && <NotificationAlert alertType={AlertType.FAILED} message={errorMessage} />}
                 <Toolbar />
                 <Grid container justify="center">
@@ -99,11 +100,9 @@ export default class ViewGraph extends React.Component<{}, IState> {
                                                 <Tooltip TransitionComponent={Zoom} title={`Delete ${graph.getId()}`}>
                                                     <IconButton
                                                         id={'view-graphs-delete-button-' + index}
-                                                        onClick={
-                                                            async () => {
-                                                                await this.deleteGraph(graph.getId());
-                                                            }
-                                                        }
+                                                        onClick={async () => {
+                                                            await this.deleteGraph(graph.getId());
+                                                        }}
                                                     >
                                                         <DeleteOutlineOutlinedIcon />
                                                     </IconButton>
