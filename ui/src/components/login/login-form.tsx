@@ -39,7 +39,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
             <main id='login-form'>
                 <Container component="main" maxWidth="xs">
                     {this.state.outcome && (
-                        <NotificationAlert alertType={AlertType.FAILED} message={this.state.outcomeMessage} />
+                        <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
                     )}
                     <CssBaseline />
                     <div

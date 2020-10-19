@@ -42,7 +42,7 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
             <main id='temp-password-login-form'>
                 <Container component="main" maxWidth="xs">
                     {this.state.outcome && (
-                        <NotificationAlert alertType={AlertType.FAILED} message={this.state.outcomeMessage} />
+                        <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
                     )}
                     <CssBaseline />
                     <div
