@@ -34,6 +34,24 @@ export default class LoginForm extends React.Component<IProps, IState> {
         return !username || !password;
     }
 
+    private logIn() {
+        const userLogin = new LoginRepo();
+        const { username, password } = this.state;
+        const onSuccess = () => {
+            this.setState({
+                outcome: AlertType.SUCCESS,
+                outcomeMessage: `Login successful: Hi ${username}`,
+            });
+        };
+        const onError = (errorMessage: string) => {
+            this.setState({
+                outcome: AlertType.FAILED,
+                outcomeMessage: `Login failed: ${errorMessage}`,
+            });
+        };
+        userLogin.login(username, password, onSuccess, onError);
+    }
+
     public render() {
         return (
             <main id='login-form'> 
@@ -76,6 +94,13 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                             username: event.target.value,
                                         });
                                     }}
+                                    onKeyPress={(ev) => {
+                                        if (ev.key === 'Enter') {
+                                            this.logIn();
+
+                                            ev.preventDefault();
+                                        }
+                                    }}
                                 />
                                 <TextField
                                     variant="outlined"
@@ -93,6 +118,13 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                             password: event.target.value,
                                         });
                                     }}
+                                    onKeyPress={(ev) => {
+                                        if (ev.key === 'Enter') {
+                                            this.logIn();
+
+                                            ev.preventDefault();
+                                        }
+                                    }}
                                 />
                                 <Button
                                     fullWidth
@@ -102,21 +134,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                     style={{ marginTop: '20px' }}
                                     disabled={this.disableSignInButton()}
                                     onClick={() => {
-                                        const userLogin = new LoginRepo();
-                                        const { username, password } = this.state;
-                                        const onSuccess = () => {
-                                            this.setState({
-                                                outcome: AlertType.SUCCESS,
-                                                outcomeMessage: `Login successful: Hi ${username}`,
-                                            });
-                                        };
-                                        const onError = (errorMessage: string) => {
-                                            this.setState({
-                                                outcome: AlertType.FAILED,
-                                                outcomeMessage: `Login failed: ${errorMessage}`,
-                                            });
-                                        };
-                                        userLogin.login(username, password, onSuccess, onError);
+                                        this.logIn();
                                     }}
                                 >
                                     Sign In
@@ -125,8 +143,13 @@ export default class LoginForm extends React.Component<IProps, IState> {
                             <Typography style={{ marginTop: '20px'}}>
                                 First time user ? <br />
                                 Please click{' '}
-                                <Link id='temp-password-form-link' onClick={() => this.props.onChangeForm(FormType.TEMP_PASSWORD_LOGIN)}>Here</Link> to
-                                update new Password
+                                <Link
+                                    id="temp-password-form-link"
+                                    onClick={() => this.props.onChangeForm(FormType.TEMP_PASSWORD_LOGIN)}
+                                >
+                                    Here
+                                </Link>{' '}
+                                to update new Password
                             </Typography>
                         </Grid>
                     </div>
