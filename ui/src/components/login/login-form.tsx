@@ -54,11 +54,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
 
     public render() {
         return (
-<<<<<<< HEAD
-            <main id='login-form'> 
-=======
             <main id="login-form">
->>>>>>> gh-07-key-press
                 <Container component="main" maxWidth="xs">
                     {this.state.outcome && (
                         <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
@@ -144,7 +140,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                     Sign In
                                 </Button>
                             </form>
-                            <Typography style={{ marginTop: '20px'}}>
+                            <Typography style={{ marginTop: '20px' }}>
                                 First time user ? <br />
                                 Please click{' '}
                                 <Link
