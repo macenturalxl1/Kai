@@ -23,6 +23,11 @@ def handler(event, context):
     if graph_name is None:
         return {
             "statusCode": 400,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             "body": "graphName is a required field"
         }
 
@@ -32,11 +37,21 @@ def handler(event, context):
         if requesting_user and not requesting_user in graph_record["administrators"]:
             return {
                 "statusCode": 403,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                },
                 "body": "User: {} is not authorized to delete graph: {}".format(requesting_user, graph_name)
             }
     except:
         return {
             "statusCode": 400,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             "body": "Graph " + graph_name + " does not exist. It may have already been deleted"
         }
 
@@ -49,11 +64,21 @@ def handler(event, context):
         if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
             return {
                 "statusCode": 400,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                },
                 "body": "Graph " + graph_name + " does not exist. It may have already been deleted"
             }
         else:
             return {
                 "statusCode": 500,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                },
                 "body": json.dumps(e.response["Error"])
             }
 
@@ -68,5 +93,10 @@ def handler(event, context):
     sqs.send_message(QueueUrl=queue_url, MessageBody=json.dumps(message))
 
     return {
-        "statusCode": 202
+        "statusCode": 202,
+        "headers": {
+            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        }
     }

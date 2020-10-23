@@ -23,11 +23,21 @@ def handler(event, context):
     if "graphName" not in request_body or not is_graph_name_valid(request_body["graphName"]):
         return {
             "statusCode": 400,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             "body": "graphName is a required field which must made up of alphanumeric characters"
         }
     if "schema" not in request_body or request_body["schema"] is None:
         return {
             "statusCode": 400,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             "body": "schema is a required field"
         }
 
@@ -53,6 +63,11 @@ def handler(event, context):
     if not user.valid_cognito_users(administrators):
         return {
             "statusCode": 400,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             "body": "Not all of the supplied administrators are valid Cognito users: {}".format(str(administrators))
         }
 
@@ -62,11 +77,21 @@ def handler(event, context):
         if e.response['Error']['Code']=='ConditionalCheckFailedException': 
             return {
                 "statusCode": 400,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+                },
                 "body": "Graph release name " + release_name + " already exists as the lowercase conversion of " + graph_name + ". Graph names must be unique"
             }
         else:
             return {
                 "statusCode": 500,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+                },
                 "body": json.dumps(e.response["Error"])
             }
 
@@ -82,5 +107,10 @@ def handler(event, context):
     sqs.send_message(QueueUrl=queue_url, MessageBody=json.dumps(message))
 
     return {
-        "statusCode": 201
+        "statusCode": 201,
+        "headers": {
+            "Access-Control-Allow-Origin": "*",
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        }
     }
