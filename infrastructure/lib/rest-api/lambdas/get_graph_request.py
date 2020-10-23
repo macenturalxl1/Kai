@@ -26,6 +26,11 @@ def handler(event, context):
     if return_all:
         return {
             "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             "body": json.dumps(graph.get_all_graphs(requesting_user))
         }
     else:
@@ -34,15 +39,30 @@ def handler(event, context):
             if requesting_user and not requesting_user in graph_record["administrators"]:
                 return {
                     "statusCode": 403,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "Content-Type",
+                        "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                    },
                     "body": "User: {} is not authorized to retrieve graph: {}".format(requesting_user, graph_name)
                 }
 
             return {
                 "statusCode": 200,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                },
                 "body": json.dumps(graph_record)
             }
         except Exception as e:
             return {
                 "statusCode": 404,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                },
                 "body": graph_name + " was not found"
             }
