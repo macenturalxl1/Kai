@@ -148,7 +148,7 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                     Set Password And Sign In
                                 </Button>
                             </form>
-                            <Typography style={{ marginTop: 20 }}>
+                            <Typography style={{ marginTop: '20px'}}>
                                 Existing User? <br />
                                 Please click{' '}
                                 <Link id='login-form-link' onClick={() => this.props.onChangeForm(FormType.EXISTING_USER_LOGIN)}>Here</Link> to

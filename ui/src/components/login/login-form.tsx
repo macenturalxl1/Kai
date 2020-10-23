@@ -36,7 +36,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
 
     public render() {
         return (
-            <main id='login-form'>
+            <main id='login-form'> 
                 <Container component="main" maxWidth="xs">
                     {this.state.outcome && (
                         <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
@@ -122,7 +122,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                     Sign In
                                 </Button>
                             </form>
-                            <Typography style={{ marginTop: 20 }}>
+                            <Typography style={{ marginTop: '20px'}}>
                                 First time user ? <br />
                                 Please click{' '}
                                 <Link id='temp-password-form-link' onClick={() => this.props.onChangeForm(FormType.TEMP_PASSWORD_LOGIN)}>Here</Link> to

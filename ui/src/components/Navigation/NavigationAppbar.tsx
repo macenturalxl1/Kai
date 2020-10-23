@@ -2,13 +2,14 @@ import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, ListItemText, Drawer, Divider, ListItem, List, ListItemIcon, Avatar, ListItemAvatar, CssBaseline, Button } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, ListItemText, Drawer, Divider, ListItem, List, ListItemIcon, Avatar, ListItemAvatar, CssBaseline, Button, IconButton, Menu, MenuItem } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import PersonIcon from '@material-ui/icons/Person';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Popup from '../login/login-modal';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const drawerWidth = 240;
 
@@ -67,6 +68,9 @@ const useStyles = makeStyles((theme: Theme) =>
                 fontSize: '20px',
             },
         },
+        button: {
+            textTransform: "none",
+          },
     })
 );
 
@@ -92,9 +96,12 @@ const NavigationAppbar: React.FC = (props: any) => {
         }
     };
 
+
+
     return (
         <div className={classes.root}>
             <CssBaseline />
+            
 
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
@@ -102,9 +109,8 @@ const NavigationAppbar: React.FC = (props: any) => {
                         Kai: Graph As A Service 
                     </Typography>
                     
-                    <Button color="inherit" onClick= {()=> setOpenPopup(true)}><LockOpenIcon /> Sign in</Button>
+                    <Button color="inherit" onClick= {()=> setOpenPopup(true)} className={classes.button}><LockOpenIcon /> Sign in</Button>
                 </Toolbar>
-               
             </AppBar>
 
             <nav className={classes.drawer}>
