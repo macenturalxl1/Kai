@@ -28,6 +28,7 @@ export class KaiRestApi extends cdk.Construct {
     private readonly _addGraphQueue: sqs.Queue;
     private readonly _deleteGraphQueue: sqs.Queue;
     private readonly _getGraphsLambda: lambda.Function;
+    private readonly _optionsPreflightLambda: lambda.Function;
     private readonly _deleteGraphLambda: lambda.Function;
 
     constructor(scope: cdk.Construct, readonly id: string, props: KaiRestApiProps) {
@@ -93,6 +94,20 @@ export class KaiRestApi extends cdk.Construct {
         props.graphTable.grantReadWriteData(this._deleteGraphLambda);
         this.deleteGraphQueue.grantSendMessages(this._deleteGraphLambda);
         graph.addMethod("DELETE", new api.LambdaIntegration(this._deleteGraphLambda), methodOptions);
+
+        // OPTIONS handlers
+        this._optionsPreflightLambda = new lambda.Function(this, "OptionsPreflightHandler", {
+            runtime: lambda.Runtime.PYTHON_3_7,
+            code: lambdas,
+            handler: "options_preflight_request.handler",
+            timeout: lambdaTimeout,
+            environment: {
+                graph_table_name: props.graphTable.tableName,
+                user_pool_id: props.userPoolId
+            }
+        });
+        const optionsIntegration = new api.LambdaIntegration(this._optionsPreflightLambda);
+        graphsResource.addMethod("OPTIONS", optionsIntegration);
 
         // GET handlers
         this._getGraphsLambda = new lambda.Function(this, "GetGraphsHandler", {
