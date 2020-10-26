@@ -31,15 +31,30 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
     }
 
     private disableUpdateButton(): boolean {
-        const username = this.state.username;
-        const tempPassword = this.state.tempPassword;
-        const newPassword = this.state.newPassword;
+        const { username, tempPassword, newPassword } = this.state;
         return !username || !tempPassword || !newPassword;
+    }
+
+    private resetPassword() {
+        const { username, tempPassword, newPassword } = this.state;
+        const onSuccess = () => {
+            this.setState({
+                outcome: AlertType.SUCCESS,
+                outcomeMessage: `Login successful: Hi ${username}`,
+            });
+        };
+        const onError = (errorMessage: string) => {
+            this.setState({
+                outcome: AlertType.FAILED,
+                outcomeMessage: `Login failed: ${errorMessage}`,
+            });
+        };
+        CognitoClient.loginAndSetNewPassword(username, tempPassword, newPassword, onSuccess, onError);
     }
 
     public render() {
         return (
-            <main id='temp-password-login-form'>
+            <main id="temp-password-login-form">
                 <Container component="main" maxWidth="xs">
                     {this.state.outcome && (
                         <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
@@ -79,6 +94,12 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                             username: event.target.value,
                                         });
                                     }}
+                                    onKeyPress={(ev) => {
+                                        if (ev.key === 'Enter') {
+                                            this.resetPassword();
+                                            ev.preventDefault();
+                                        }
+                                    }}
                                 />
                                 <TextField
                                     variant="outlined"
@@ -95,6 +116,12 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                         this.setState({
                                             tempPassword: event.target.value,
                                         });
+                                    }}
+                                    onKeyPress={(ev) => {
+                                        if (ev.key === 'Enter') {
+                                            this.resetPassword();
+                                            ev.preventDefault();
+                                        }
                                     }}
                                 />
                                 <TextField
@@ -113,6 +140,13 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                             newPassword: event.target.value,
                                         });
                                     }}
+                                    onKeyPress={(ev) => {
+                                        if (ev.key === 'Enter') {
+                                            this.resetPassword();
+
+                                            ev.preventDefault();
+                                        }
+                                    }}
                                 />
                                 <Button
                                     fullWidth
@@ -122,36 +156,22 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                     style={{ marginTop: '20px' }}
                                     disabled={this.disableUpdateButton()}
                                     onClick={() => {
-                                        const { username, tempPassword, newPassword } = this.state;
-                                        const onSuccess = () => {
-                                            this.setState({
-                                                outcome: AlertType.SUCCESS,
-                                                outcomeMessage: `Login successful: Hi ${username}`,
-                                            });
-                                        };
-                                        const onError = (errorMessage: string) => {
-                                            this.setState({
-                                                outcome: AlertType.FAILED,
-                                                outcomeMessage: `Login failed: ${errorMessage}`,
-                                            });
-                                        };
-                                        CognitoClient.loginAndSetNewPassword(
-                                            username,
-                                            tempPassword,
-                                            newPassword,
-                                            onSuccess,
-                                            onError
-                                        );
+                                        this.resetPassword();
                                     }}
                                 >
                                     Set Password And Sign In
                                 </Button>
                             </form>
-                            <Typography style={{ marginTop: 20 }}>
+                            <Typography style={{ marginTop: '20px' }}>
                                 Existing User? <br />
                                 Please click{' '}
-                                <Link id='login-form-link' onClick={() => this.props.onChangeForm(FormType.EXISTING_USER_LOGIN)}>Here</Link> to
-                                Sign in
+                                <Link
+                                    id="login-form-link"
+                                    onClick={() => this.props.onChangeForm(FormType.EXISTING_USER_LOGIN)}
+                                >
+                                    Here
+                                </Link>{' '}
+                                to Sign in
                             </Typography>
                         </Grid>
                     </div>

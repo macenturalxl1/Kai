@@ -1,4 +1,4 @@
-$base-color: #f3f3f3;
+$base-color: #607D8B;
 
 body {
     font-family: 'Lucida Sans', Verdana, sans-serif;
@@ -6,7 +6,15 @@ body {
 
 main {
     width: 100%;
-}
+    margin-top: 30px;
+    }
+
+#login-form, #temp-password-login-form {
+    margin-top: 0px;
+    main {
+        margin-top: 0px;
+        }
+}    
 
 a {
     &:hover {
@@ -14,12 +22,12 @@ a {
     }
 }
 .MuiAppBar-colorPrimary {
-    background-color: #607D8B;
+    background-color: $base-color;
     box-shadow: none;  
 }
 
 .MuiButton-contained {
-    background-color: #607D8B;
+    background-color: $base-color;
     box-shadow: none;
     &:hover {
         background-color: #49606b;

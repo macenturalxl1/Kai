@@ -1,7 +1,10 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import TempPasswordLoginForm from '../../../src/components/login/temp-password-login-form';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import ReactTestUtils from 'react-dom/test-utils';
 
+var ReactTestUtils = require('react-dom/test-utils');
 let component: ReactWrapper;
 
 beforeEach(() => (component = mount(<TempPasswordLoginForm onChangeForm={() => {}} />)));
@@ -22,6 +25,17 @@ describe('On Render', () => {
     });
     it('should render Update Password button', () => {
         expect(component.find('button#update-button')).toHaveLength(1);
+    });
+
+    it('should submit the form if all 3 textfields have text and the enter key is pressed ', () => {
+        //given that i have inputted my details in the text field
+        //when I press the enter key
+        //the form should submit
+    });
+    it('should submit the form if all 3 textfields have text and the submit button is clicked ', () => {
+        //given that i have inputted my details in the text field
+        //when I click the submit button
+        //the form should submit
     });
 });
 
