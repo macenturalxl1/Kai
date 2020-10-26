@@ -410,7 +410,7 @@ test("should allow AddGraphLambda to write messages to queue, list Cognito users
     }));
 });
 
-test("All Rest API Methods should be configured with the KaiRestAuthorizer", () => {
+test("Create, Get 1, Get All & Delete Graph Rest API Methods should be configured with the KaiRestAuthorizer", () => {
     // Given
     const stack = new cdk.Stack();
 
@@ -418,16 +418,10 @@ test("All Rest API Methods should be configured with the KaiRestAuthorizer", () 
     createRestAPI(stack);
 
     // Then
-    const apiGatewayMethodCount = stack.node.findAll().filter(isApiGatewayMethod).length;
-
-    expectCDK(stack).to(countResourcesLike("AWS::ApiGateway::Method", apiGatewayMethodCount, {
+    expectCDK(stack).to(countResourcesLike("AWS::ApiGateway::Method", 4, {
         AuthorizationType: "COGNITO_USER_POOLS",
         AuthorizerId: {
             Ref: "TestKaiRestApiAuthorizerB0CFBC9B"
         }
     }));
 });
-
-function isApiGatewayMethod(construct: cdk.IConstruct): boolean {
-    return (construct instanceof api.Method);
-}

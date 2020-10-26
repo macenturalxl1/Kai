@@ -164,7 +164,7 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                     Set Password And Sign In
                                 </Button>
                             </form>
-                            <Typography style={{ marginTop: 20 }}>
+                            <Typography style={{ marginTop: '20px'}}>
                                 Existing User? <br />
                                 Please click{' '}
                                 <Link

@@ -149,7 +149,7 @@ export default class AddGraph extends React.Component<{}, IState> {
         };
 
         return (
-            <main style={{ marginTop: 30 }}>
+            <main>
                 {this.state.outcome && (
                     <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
                 )}

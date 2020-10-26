@@ -140,7 +140,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                     Sign In
                                 </Button>
                             </form>
-                            <Typography style={{ marginTop: 20 }}>
+                            <Typography style={{ marginTop: '20px' }}>
                                 First time user ? <br />
                                 Please click{' '}
                                 <Link
