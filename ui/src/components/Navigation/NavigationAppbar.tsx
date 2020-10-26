@@ -1,8 +1,26 @@
 import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
+import { SignOutRepo } from '../../rest/repositories/sign-out-repo';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, ListItemText, Drawer, Divider, ListItem, List, ListItemIcon, Avatar, ListItemAvatar, CssBaseline, Button, IconButton, Menu, MenuItem } from '@material-ui/core';
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    ListItemText,
+    Drawer,
+    Divider,
+    ListItem,
+    List,
+    ListItemIcon,
+    Avatar,
+    ListItemAvatar,
+    CssBaseline,
+    Button,
+    IconButton,
+    Menu,
+    MenuItem,
+} from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
@@ -69,8 +87,8 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         button: {
-            textTransform: "none",
-          },
+            textTransform: 'none',
+        },
     })
 );
 
@@ -81,7 +99,7 @@ const NavigationAppbar: React.FC = (props: any) => {
 
     const activeRoute = (routeName: any) => {
         return props.location.pathname === routeName;
-    }
+    };
 
     const getSideNavIcon = (sidebarName: any) => {
         switch (sidebarName) {
@@ -90,26 +108,36 @@ const NavigationAppbar: React.FC = (props: any) => {
             case 'View Graphs':
                 return <VisibilityIcon />;
             case 'User Guide':
-                return <LocalLibraryIcon />; 
+                return <LocalLibraryIcon />;
             default:
                 return null;
         }
     };
 
-
-
     return (
         <div className={classes.root}>
             <CssBaseline />
-            
 
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Kai: Graph As A Service 
+                        Kai: Graph As A Service
                     </Typography>
-                    
-                    <Button color="inherit" onClick= {()=> setOpenPopup(true)} className={classes.button}><LockOpenIcon /> Sign in</Button>
+
+                    <Button color="inherit" onClick={() => setOpenPopup(true)} className={classes.button}>
+                        <LockOpenIcon /> Sign in
+                    </Button>
+                    <Button
+                        color="inherit"
+                        onClick={() => {
+                            const signOut = new SignOutRepo();
+                            signOut.signOut();
+                        }}
+                        className={classes.button}
+                    >
+                        {' '}
+                        Sign Out
+                    </Button>
                 </Toolbar>
             </AppBar>
 
@@ -118,7 +146,8 @@ const NavigationAppbar: React.FC = (props: any) => {
                     variant="permanent"
                     classes={{
                         paper: classes.drawerPaper,
-                    }}>
+                    }}
+                >
                     <Toolbar />
                     <div className={classes.drawerContainer}>
                         <List>
@@ -139,7 +168,8 @@ const NavigationAppbar: React.FC = (props: any) => {
                                     <NavLink
                                         to={prop.path}
                                         style={{ color: 'inherit', textDecoration: 'inherit' }}
-                                        key={key}>
+                                        key={key}
+                                    >
                                         <ListItem className={classes.listItem} selected={activeRoute(prop.path)}>
                                             <ListItemIcon>{getSideNavIcon(prop.sidebarName)}</ListItemIcon>
                                             <ListItemText
@@ -155,10 +185,7 @@ const NavigationAppbar: React.FC = (props: any) => {
                     </div>
                 </Drawer>
             </nav>
-            <Popup openPopup = {openPopup} 
-                   setOpenPopup = {setOpenPopup}
-            />
-            
+            <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
         </div>
     );
 };
