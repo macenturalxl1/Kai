@@ -3,8 +3,8 @@ import { Button, CssBaseline, Grid, TextField, Link } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
-import { LoginRepo } from '../../rest/repositories/login-repo';
 import { FormType } from './login-modal';
+import { CognitoClient } from '../../rest/cognito-client';
 
 interface IProps {
     onChangeForm(fromType: FormType): void;
@@ -102,7 +102,6 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                     style={{ marginTop: '20px' }}
                                     disabled={this.disableSignInButton()}
                                     onClick={() => {
-                                        const userLogin = new LoginRepo();
                                         const { username, password } = this.state;
                                         const onSuccess = () => {
                                             this.setState({
@@ -116,7 +115,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                                 outcomeMessage: `Login failed: ${errorMessage}`,
                                             });
                                         };
-                                        userLogin.login(username, password, onSuccess, onError);
+                                        CognitoClient.login(username, password, onSuccess, onError);
                                     }}
                                 >
                                     Sign In

@@ -3,8 +3,8 @@ import { Button, CssBaseline, Grid, TextField, Link } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
-import { ResetTempPasswordRepo } from '../../rest/repositories/reset-temp-password-repo';
 import { FormType } from './login-modal';
+import { CognitoClient } from '../../rest/cognito-client';
 
 interface IProps {
     onChangeForm(fromType: FormType): void;
@@ -122,7 +122,6 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                     style={{ marginTop: '20px' }}
                                     disabled={this.disableUpdateButton()}
                                     onClick={() => {
-                                        const resetPassword = new ResetTempPasswordRepo();
                                         const { username, tempPassword, newPassword } = this.state;
                                         const onSuccess = () => {
                                             this.setState({
@@ -136,7 +135,7 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                                 outcomeMessage: `Login failed: ${errorMessage}`,
                                             });
                                         };
-                                        resetPassword.setNewPassword(
+                                        CognitoClient.loginAndSetNewPassword(
                                             username,
                                             tempPassword,
                                             newPassword,
