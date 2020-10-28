@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
-import { SignOutRepo } from '../../rest/repositories/sign-out-repo';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { CognitoClient } from '../../rest/cognito-client';
 import {
     AppBar,
     Toolbar,
@@ -28,6 +28,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Popup from '../login/login-modal';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import {AlertType} from "../Errors/NotificationAlert";
 
 const drawerWidth = 240;
 
@@ -92,6 +93,11 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+interface IState {
+    outcome: AlertType | undefined;
+    outcomeMessage: string;
+}
+
 const NavigationAppbar: React.FC = (props: any) => {
     const classes = useStyles();
 
@@ -130,8 +136,8 @@ const NavigationAppbar: React.FC = (props: any) => {
                     <Button
                         color="inherit"
                         onClick={() => {
-                            const signOut = new SignOutRepo();
-                            signOut.signOut();
+                            // CognitoClient.signOutCognitoUser(onSuccess,onError);
+                            CognitoClient.signOutCognitoUser()
                         }}
                         className={classes.button}
                     >

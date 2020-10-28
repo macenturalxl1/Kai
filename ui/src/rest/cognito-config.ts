@@ -3,7 +3,7 @@
 // The following config details can be found at:
 export const poolData = {
     // Cognito > User Pools > KaiUserPool... > (on homepage) Pool Id: e.g. eu-west-2_aBc123
-    UserPoolId: process.env.REACT_APP_COGNITO_USERPOOLID ?? 'eu-west-2_aBc123',
+    UserPoolId: process.env.REACT_APP_COGNITO_USERPOOLID ?? 'eu-west-2_SHP4oCV3z',
     // Cognito > User Pools > KaiUserPool... > (left nav column) General Settings > App Clients > App client Id
-    ClientId: process.env.REACT_APP_COGNITO_CLIENTID ?? 'aBc123',
+    ClientId: process.env.REACT_APP_COGNITO_CLIENTID ?? '3bh47aq26ercmk4e9u7ocksoji',
 };
