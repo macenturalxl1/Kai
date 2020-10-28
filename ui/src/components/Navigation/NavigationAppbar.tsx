@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
+import { SignOutRepo } from '../../rest/repositories/sign-out-repo';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { CognitoClient } from '../../rest/cognito-client';
 import {
