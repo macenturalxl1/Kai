@@ -103,12 +103,17 @@ const NavigationAppbar: React.FC = (props: any) => {
 
     const [logoutSuccess,setLogoutSuccess] = React.useState(false);
 
+    const [logoutFail,setlogoutFail] = React.useState(false);
+    const [errorMessage, setErrorMessage] =React.useState('')
 
     const onSuccess = () => {
         setLogoutSuccess(true)
     };
 
-
+    const onError = (message: string) => {
+        setlogoutFail(true);
+        setErrorMessage(message)
+    };
 
     const activeRoute = (routeName: any) => {
         return props.location.pathname === routeName;
@@ -142,8 +147,7 @@ const NavigationAppbar: React.FC = (props: any) => {
                     <Button
                         color="inherit"
                         onClick={() => {
-                            // CognitoClient.signOutCognitoUser(onSuccess,onError);
-                            CognitoClient.signOutCognitoUser(onSuccess);
+                            CognitoClient.signOutCognitoUser(onSuccess, onError);
                         }}
                         className={classes.button}
                     >
@@ -216,6 +220,24 @@ const NavigationAppbar: React.FC = (props: any) => {
                         <CloseIcon />
                     </IconButton>
                     <DialogTitle id="alert-dialog-title" style={{padding: 40}}>{"Logout Successful"}</DialogTitle>
+                </Dialog>
+                <Dialog
+                    open={logoutFail}
+                    onClose={() => {
+                        setlogoutFail(false)
+                    }}
+                >
+                    <IconButton
+                        id="close-login-modal"
+                        aria-label="close"
+                        className={classes.closeButton}
+                        onClick={() => {
+                            setlogoutFail(false);
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    <DialogTitle id="alert-dialog-title" style={{padding: 40}}>{`${errorMessage}`}</DialogTitle>
                 </Dialog>
             </main>
 

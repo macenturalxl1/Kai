@@ -74,7 +74,7 @@ export class CognitoClient {
         };
         this.cognitoUser = new CognitoUser(userData);
     }
-    public static signOutCognitoUser(onSuccess: Function) {
+    public static signOutCognitoUser(onSuccess: Function, onError: Function) {
         const currentUser = this.cognitoUser;
         if (currentUser !== null) {
             currentUser.globalSignOut({
@@ -83,7 +83,7 @@ export class CognitoClient {
                     onSuccess();
                 },
                 onFailure: function (err) {
-                    console.log(err);
+                    onError(err);
                 },
             });
         }
