@@ -1,26 +1,22 @@
 import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
-import { SignOutRepo } from '../../rest/repositories/sign-out-repo';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { CognitoClient } from '../../rest/cognito-client';
 import {
     AppBar,
+    Avatar,
+    Button,
+    CssBaseline, Dialog, DialogTitle,
+    Divider,
+    Drawer, IconButton,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemIcon,
+    ListItemText,
     Toolbar,
     Typography,
-    ListItemText,
-    Drawer,
-    Divider,
-    ListItem,
-    List,
-    ListItemIcon,
-    Avatar,
-    ListItemAvatar,
-    CssBaseline,
-    Button,
-    IconButton,
-    Menu,
-    MenuItem,
 } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -28,14 +24,20 @@ import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import PersonIcon from '@material-ui/icons/Person';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Popup from '../login/login-modal';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import {AlertType} from "../Errors/NotificationAlert";
+import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
+import CloseIcon from '@material-ui/icons/Close';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {},
+        closeButton: {
+            position: 'absolute',
+            right: theme.spacing(1),
+            top: theme.spacing(1),
+            color: theme.palette.grey[500],
+        },
         menuButton: {
             marginRight: theme.spacing(2),
         },
@@ -94,15 +96,19 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface IState {
-    outcome: AlertType | undefined;
-    outcomeMessage: string;
-}
-
 const NavigationAppbar: React.FC = (props: any) => {
     const classes = useStyles();
 
     const [openPopup, setOpenPopup] = React.useState(false);
+
+    const [logoutSuccess,setLogoutSuccess] = React.useState(false);
+
+
+    const onSuccess = () => {
+        setLogoutSuccess(true)
+    };
+
+
 
     const activeRoute = (routeName: any) => {
         return props.location.pathname === routeName;
@@ -124,7 +130,6 @@ const NavigationAppbar: React.FC = (props: any) => {
     return (
         <div className={classes.root}>
             <CssBaseline />
-
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
@@ -138,7 +143,7 @@ const NavigationAppbar: React.FC = (props: any) => {
                         color="inherit"
                         onClick={() => {
                             // CognitoClient.signOutCognitoUser(onSuccess,onError);
-                            CognitoClient.signOutCognitoUser()
+                            CognitoClient.signOutCognitoUser(onSuccess);
                         }}
                         className={classes.button}
                     >
@@ -193,6 +198,27 @@ const NavigationAppbar: React.FC = (props: any) => {
                 </Drawer>
             </nav>
             <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
+            <main>
+                <Dialog
+                    open={logoutSuccess}
+                    onClose={() => {
+                        setLogoutSuccess(false)
+                    }}
+                >
+                    <IconButton
+                        id="close-login-modal"
+                        aria-label="close"
+                        className={classes.closeButton}
+                        onClick={() => {
+                            setLogoutSuccess(false);
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    <DialogTitle id="alert-dialog-title" style={{padding: 40}}>{"Logout Successful"}</DialogTitle>
+                </Dialog>
+            </main>
+
         </div>
     );
 };
