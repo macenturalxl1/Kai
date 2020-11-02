@@ -1,19 +1,32 @@
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import NavigationAppbar from '../../../src/components/Navigation/NavigationAppbar';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-
+// const wrapper = mount(
+//     <MemoryRouter>
+//         <NavigationAppbar />
+//     </MemoryRouter>
+// );
+let wrapper: ReactWrapper;
+beforeEach(
+    () =>
+        (wrapper = mount(
+            <MemoryRouter>
+                <NavigationAppbar />
+            </MemoryRouter>
+        ))
+);
+afterEach(() => wrapper.unmount());
 describe('Navigation Appbar Component', () => {
-    const wrapper = mount(
-        <MemoryRouter>
-            <NavigationAppbar />
-        </MemoryRouter>
-    );
-
     it('should display appbar ', () => {
         const appbar = wrapper.find('h6');
         expect(appbar).toHaveLength(1);
         expect(appbar.text()).toEqual('Kai: Graph As A Service');
+    });
+
+    it('should display a signout button in the appbar', () => {
+        const signOut = wrapper.find('button#sign-out-button');
+        expect(signOut.text()).toEqual('Sign Out');
     });
 
     it('should show user id and email in Navbar', () => {
@@ -46,3 +59,4 @@ describe('Navigation Appbar Component', () => {
         });
     });
 });
+

@@ -7,9 +7,12 @@ import {
     AppBar,
     Avatar,
     Button,
-    CssBaseline, Dialog, DialogTitle,
+    CssBaseline,
+    Dialog,
+    DialogTitle,
     Divider,
-    Drawer, IconButton,
+    Drawer,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
@@ -101,18 +104,18 @@ const NavigationAppbar: React.FC = (props: any) => {
 
     const [openPopup, setOpenPopup] = React.useState(false);
 
-    const [logoutSuccess,setLogoutSuccess] = React.useState(false);
+    const [logoutSuccess, setLogoutSuccess] = React.useState(false);
 
-    const [logoutFail,setlogoutFail] = React.useState(false);
-    const [errorMessage, setErrorMessage] =React.useState('')
+    const [logoutFail, setlogoutFail] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState('');
 
     const onSuccess = () => {
-        setLogoutSuccess(true)
+        setLogoutSuccess(true);
     };
 
     const onError = (message: string) => {
         setlogoutFail(true);
-        setErrorMessage(message)
+        setErrorMessage(message);
     };
 
     const activeRoute = (routeName: any) => {
@@ -145,13 +148,13 @@ const NavigationAppbar: React.FC = (props: any) => {
                         <LockOpenIcon /> Sign in
                     </Button>
                     <Button
+                        id="sign-out-button"
                         color="inherit"
                         onClick={() => {
                             CognitoClient.signOutCognitoUser(onSuccess, onError);
                         }}
                         className={classes.button}
                     >
-                        {' '}
                         Sign Out
                     </Button>
                 </Toolbar>
@@ -204,9 +207,10 @@ const NavigationAppbar: React.FC = (props: any) => {
             <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
             <main>
                 <Dialog
+                    id="sign-out-success-dialog"
                     open={logoutSuccess}
                     onClose={() => {
-                        setLogoutSuccess(false)
+                        setLogoutSuccess(false);
                     }}
                 >
                     <IconButton
@@ -219,12 +223,15 @@ const NavigationAppbar: React.FC = (props: any) => {
                     >
                         <CloseIcon />
                     </IconButton>
-                    <DialogTitle id="alert-dialog-title" style={{padding: 40}}>{"Logout Successful"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title" style={{ padding: 40 }}>
+                        {'Logout Successful'}
+                    </DialogTitle>
                 </Dialog>
                 <Dialog
+                    id="sign-out-fail-dialog"
                     open={logoutFail}
                     onClose={() => {
-                        setlogoutFail(false)
+                        setlogoutFail(false);
                     }}
                 >
                     <IconButton
@@ -237,10 +244,9 @@ const NavigationAppbar: React.FC = (props: any) => {
                     >
                         <CloseIcon />
                     </IconButton>
-                    <DialogTitle id="alert-dialog-title" style={{padding: 40}}>{`${errorMessage}`}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title" style={{ padding: 40 }}>{`${errorMessage}`}</DialogTitle>
                 </Dialog>
             </main>
-
         </div>
     );
 };
