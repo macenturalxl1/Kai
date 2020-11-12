@@ -79,7 +79,6 @@ export class CognitoClient {
         if (currentUser !== undefined) {
             currentUser.globalSignOut({
                 onSuccess: function (msg) {
-                    console.log(msg);
                     onSuccess();
                 },
                 onFailure: function (err) {

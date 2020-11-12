@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import ViewGraph from '../../../src/components/ViewGraph/ViewGraph';
 import { GetAllGraphsRepo } from '../../../src/rest/repositories/get-all-graphs-repo';
 import { Graph } from '../../../src/domain/graph';
-import { DeleteGraphRepo } from '../../../src/rest/repositories/delete-graph-repo'
+import { DeleteGraphRepo } from '../../../src/rest/repositories/delete-graph-repo';
 
 jest.mock('../../../src/rest/repositories/get-all-graphs-repo');
 jest.mock('../../../src/rest/repositories/delete-graph-repo');
@@ -31,6 +31,7 @@ describe('When ExampleTable mounts', () => {
         expect(component.find('caption').text()).toBe('No Graphs.');
     });
     it('should display Error Message in AlertNotification when GetGraphs request fails', () => {
+        // @ts-ignore
         GetAllGraphsRepo.mockImplementationOnce(() => {
             return {
                 getAll: () => {
@@ -113,7 +114,9 @@ describe('When ExampleTable mounts', () => {
 
         // Only call GetGraphsRepo on mount and not 2nd time when delete graph is unsuccessful
         expect(GetAllGraphsRepo).toBeCalledTimes(1);
-        expect(component.find('div#notification-alert').text()).toBe('Failed to delete graph "bananas": 500 Server Error');
+        expect(component.find('div#notification-alert').text()).toBe(
+            'Failed to delete graph "bananas": 500 Server Error'
+        );
     });
     it('should change the current status of the graph when the delete button is clicked', async () => {
         DeleteGraphRepo.prototype.delete = jest.fn();
@@ -131,10 +134,11 @@ describe('When ExampleTable mounts', () => {
         await component.update();
 
         expect(component.find('tbody').text()).toBe('applesACTIVEpearsDELETION IN PROGRESS');
-    })
+    });
 });
 
 function mockDeleteGraphRepoToThrowError(errorMessage: string) {
+    // @ts-ignore
     DeleteGraphRepo.mockImplementationOnce(() => {
         return {
             delete: () => {
@@ -145,12 +149,13 @@ function mockDeleteGraphRepoToThrowError(errorMessage: string) {
 }
 
 function mockGetGraphsToReturn(graphs: Graph[]): void {
+    // @ts-ignore
     GetAllGraphsRepo.mockImplementationOnce(() => {
         return {
             getAll: () => {
                 return new Promise((resolve, reject) => {
                     resolve(graphs);
-                })
+                });
             },
         };
     });

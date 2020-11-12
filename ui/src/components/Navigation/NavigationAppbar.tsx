@@ -2,17 +2,12 @@ import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { CognitoClient } from '../../rest/cognito-client';
 import {
     AppBar,
     Avatar,
-    Button,
     CssBaseline,
-    Dialog,
-    DialogTitle,
     Divider,
     Drawer,
-    IconButton,
     List,
     ListItem,
     ListItemAvatar,
@@ -25,10 +20,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import PersonIcon from '@material-ui/icons/Person';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import Popup from '../login/login-modal';
-import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
-import CloseIcon from '@material-ui/icons/Close';
+import LoginModal from '../login/login-modal';
 
 const drawerWidth = 240;
 
@@ -143,20 +135,7 @@ const NavigationAppbar: React.FC = (props: any) => {
                     <Typography variant="h6" className={classes.title}>
                         Kai: Graph As A Service
                     </Typography>
-
-                    <Button color="inherit" onClick={() => setOpenPopup(true)} className={classes.button}>
-                        <LockOpenIcon /> Sign in
-                    </Button>
-                    <Button
-                        id="sign-out-button"
-                        color="inherit"
-                        onClick={() => {
-                            CognitoClient.signOutCognitoUser(onSuccess, onError);
-                        }}
-                        className={classes.button}
-                    >
-                        Sign Out
-                    </Button>
+                    <LoginModal />
                 </Toolbar>
             </AppBar>
 
@@ -204,49 +183,6 @@ const NavigationAppbar: React.FC = (props: any) => {
                     </div>
                 </Drawer>
             </nav>
-            <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
-            <main>
-                <Dialog
-                    id="sign-out-success-dialog"
-                    open={logoutSuccess}
-                    onClose={() => {
-                        setLogoutSuccess(false);
-                    }}
-                >
-                    <IconButton
-                        id="close-login-modal"
-                        aria-label="close"
-                        className={classes.closeButton}
-                        onClick={() => {
-                            setLogoutSuccess(false);
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                    <DialogTitle id="alert-dialog-title" style={{ padding: 40 }}>
-                        {'Logout Successful'}
-                    </DialogTitle>
-                </Dialog>
-                <Dialog
-                    id="sign-out-fail-dialog"
-                    open={logoutFail}
-                    onClose={() => {
-                        setlogoutFail(false);
-                    }}
-                >
-                    <IconButton
-                        id="close-login-modal"
-                        aria-label="close"
-                        className={classes.closeButton}
-                        onClick={() => {
-                            setlogoutFail(false);
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                    <DialogTitle id="alert-dialog-title" style={{ padding: 40 }}>{`${errorMessage}`}</DialogTitle>
-                </Dialog>
-            </main>
         </div>
     );
 };

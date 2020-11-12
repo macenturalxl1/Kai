@@ -2,35 +2,34 @@ import { mount, ReactWrapper } from 'enzyme';
 import NavigationAppbar from '../../../src/components/Navigation/NavigationAppbar';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-// const wrapper = mount(
-//     <MemoryRouter>
-//         <NavigationAppbar />
-//     </MemoryRouter>
-// );
-let wrapper: ReactWrapper;
-beforeEach(
-    () =>
-        (wrapper = mount(
-            <MemoryRouter>
-                <NavigationAppbar />
-            </MemoryRouter>
-        ))
-);
-afterEach(() => wrapper.unmount());
+
+let component: ReactWrapper;
+
+beforeEach(() => {
+    component = mount(
+        <MemoryRouter>
+            <NavigationAppbar />
+        </MemoryRouter>
+    );
+});
+afterEach(() => component.unmount());
+
 describe('Navigation Appbar Component', () => {
-    it('should display appbar ', () => {
-        const appbar = wrapper.find('h6');
+    it('should display appbar', () => {
+        const appbar = component.find('h6');
+
         expect(appbar).toHaveLength(1);
         expect(appbar.text()).toEqual('Kai: Graph As A Service');
     });
 
-    it('should display a signout button in the appbar', () => {
-        const signOut = wrapper.find('button#sign-out-button');
-        expect(signOut.text()).toEqual('Sign Out');
+    it('should display a Sign in button in the appbar', () => {
+        const signInButton = component.find('button#sign-in-button');
+
+        expect(signInButton.text()).toEqual('Sign in');
     });
 
     it('should show user id and email in Navbar', () => {
-        const NavUl = wrapper.find('ul').at(0);
+        const NavUl = component.find('ul').at(0);
         const UserIcon = NavUl.find('svg');
 
         expect(NavUl.find('span').text()).toEqual('User');
@@ -40,7 +39,8 @@ describe('Navigation Appbar Component', () => {
 
     it('should display menu in Navbar', () => {
         const cols = [{ name: 'Add Graph' }, { name: 'View Graphs' }, { name: 'User Guide' }];
-        const NavLi = wrapper.find('li').at(1);
+        const NavLi = component.find('li').at(1);
+
         NavLi.forEach((li, idx) => {
             const NavIcon = li.find('svg');
             expect(li.text()).toEqual(cols[idx].name);
@@ -50,7 +50,7 @@ describe('Navigation Appbar Component', () => {
 
     it('should have navigation link in each list item', () => {
         const Target = [{ href: '/AddGraph' }, { href: '/ViewGraph' }, { href: '/UserGuide' }];
-        const NavUl = wrapper.find('ul').at(1);
+        const NavUl = component.find('ul').at(1);
 
         NavUl.forEach((NavUl, idx) => {
             const anchor = NavUl.find('a').at(idx);
@@ -59,4 +59,3 @@ describe('Navigation Appbar Component', () => {
         });
     });
 });
-

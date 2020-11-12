@@ -8,6 +8,7 @@ import { CognitoClient } from '../../rest/cognito-client';
 
 interface IProps {
     onChangeForm(fromType: FormType): void;
+    onSuccess(): void;
 }
 
 interface IState {
@@ -42,6 +43,7 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                 outcome: AlertType.SUCCESS,
                 outcomeMessage: `Login successful: Hi ${username}`,
             });
+            this.props.onSuccess();
         };
         const onError = (errorMessage: string) => {
             this.setState({
@@ -150,7 +152,7 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                 />
                                 <Button
                                     fullWidth
-                                    id="update-button"
+                                    id="submit-sign-in-button"
                                     variant="contained"
                                     color="primary"
                                     style={{ marginTop: '20px' }}

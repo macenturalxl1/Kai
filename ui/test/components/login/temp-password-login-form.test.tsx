@@ -1,13 +1,14 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import TempPasswordLoginForm from '../../../src/components/login/temp-password-login-form';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import ReactTestUtils from 'react-dom/test-utils';
+import { CognitoClient } from '../../../src/rest/cognito-client';
 
-var ReactTestUtils = require('react-dom/test-utils');
+jest.mock('../../../src/rest/cognito-client');
+
 let component: ReactWrapper;
+const onSuccessCallBack = jest.fn();
 
-beforeEach(() => (component = mount(<TempPasswordLoginForm onChangeForm={() => {}} />)));
+beforeEach(() => (component = mount(<TempPasswordLoginForm onChangeForm={() => {}} onSuccess={onSuccessCallBack} />)));
 afterEach(() => component.unmount());
 
 describe('On Render', () => {
@@ -24,7 +25,7 @@ describe('On Render', () => {
         expect(inputField.length).toBe(1);
     });
     it('should render Update Password button', () => {
-        expect(component.find('button#update-button')).toHaveLength(1);
+        expect(component.find('button#submit-sign-in-button')).toHaveLength(1);
     });
 
     it('should submit the form if all 3 textfields have text and the enter key is pressed ', () => {
@@ -41,32 +42,53 @@ describe('On Render', () => {
 
 describe('Disable Form', () => {
     it('should be disabled when the Username, Temp Password and New Password fields are empty', () => {
-        expect(component.find('button#update-button').props().disabled).toBe(true);
+        expect(component.find('button#submit-sign-in-button').props().disabled).toBe(true);
     });
     it('should be disabled when the Username field is empty', () => {
         inputTempPassword('testTempPassword');
         inputNewPassword('testNewPassword');
 
-        expect(component.find('button#update-button').props().disabled).toBe(true);
+        expect(component.find('button#submit-sign-in-button').props().disabled).toBe(true);
     });
     it('should be disabled when the Temp password field is empty', () => {
         inputUsername('testUsername');
         inputNewPassword('testNewPassword');
 
-        expect(component.find('button#update-button').props().disabled).toBe(true);
+        expect(component.find('button#submit-sign-in-button').props().disabled).toBe(true);
     });
     it('should be disabled when the New password field is empty', () => {
         inputUsername('testUsername');
         inputTempPassword('testTempPassword');
 
-        expect(component.find('button#update-button').props().disabled).toBe(true);
+        expect(component.find('button#submit-sign-in-button').props().disabled).toBe(true);
     });
     it('should be enabled when Username, Temp Password and New Password is inputted', () => {
         inputUsername('testUsername');
         inputTempPassword('testTempPassword');
         inputNewPassword('testNewPassword');
 
-        expect(component.find('button#update-button').props().disabled).toBe(false);
+        expect(component.find('button#submit-sign-in-button').props().disabled).toBe(false);
+    });
+    it('should display welcome message and call onSuccess call back when sign in is successful', () => {
+        mockCognitoClientNewUserLogin();
+
+        inputUsername('BillSmith');
+        inputTempPassword('testTempPassword');
+        inputNewPassword('testNewPassword');
+        clickSubmitSignIn();
+
+        expect(component.find('div#notification-alert').text()).toBe('Login successful: Hi BillSmith');
+        expect(onSuccessCallBack).toHaveBeenCalledTimes(1);
+    });
+    it('should display error message when sign in fails', () => {
+        mockCognitoClientNewUserLoginWithError('Temp password incorrect');
+
+        inputUsername('testUsername');
+        inputTempPassword('testTempPassword');
+        inputNewPassword('testNewPassword');
+        clickSubmitSignIn();
+
+        expect(component.find('div#notification-alert').text()).toBe('Login failed: Temp password incorrect');
     });
 });
 
@@ -76,15 +98,45 @@ function inputUsername(username: string): void {
     });
     expect(component.find('input#username').length).toBe(1);
 }
+
 function inputTempPassword(tempPassword: string): void {
     component.find('input#temp-password').simulate('change', {
         target: { value: tempPassword },
     });
     expect(component.find('input#temp-password').length).toBe(1);
 }
+
 function inputNewPassword(newPassword: string): void {
     component.find('input#new-password').simulate('change', {
         target: { value: newPassword },
     });
     expect(component.find('input#new-password').length).toBe(1);
+}
+
+function clickSubmitSignIn() {
+    component.find('button#submit-sign-in-button').simulate('click');
+}
+
+function mockCognitoClientNewUserLogin() {
+    // @ts-ignore
+    CognitoClient.loginAndSetNewPassword.mockImplementationOnce(
+        (username: string, password: string, tempPassword: string, onSuccess: () => void, onError: () => void) => {
+            onSuccess();
+        }
+    );
+}
+
+function mockCognitoClientNewUserLoginWithError(errorMessage: string) {
+    // @ts-ignore
+    CognitoClient.loginAndSetNewPassword.mockImplementationOnce(
+        (
+            username: string,
+            password: string,
+            tempPassword: string,
+            onSuccess: () => void,
+            onError: (errorMessage: string) => void
+        ) => {
+            onError(errorMessage);
+        }
+    );
 }
