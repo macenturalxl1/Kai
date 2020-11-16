@@ -74,18 +74,15 @@ export class CognitoClient {
         };
         this.cognitoUser = new CognitoUser(userData);
     }
+
     public static signOutCognitoUser(onSuccess: Function, onError: Function) {
-        const currentUser = this.cognitoUser;
-        if (currentUser !== undefined) {
-            currentUser.globalSignOut({
-                onSuccess: function (msg) {
-                    onSuccess();
-                },
-                onFailure: function (err) {
-                    onError(err);
-                },
-            });
-        }
-        onError('No user is logged in');
+        this.cognitoUser.globalSignOut({
+            onSuccess: function () {
+                onSuccess();
+            },
+            onFailure: function (err) {
+                onError(err.message);
+            },
+        });
     }
 }
