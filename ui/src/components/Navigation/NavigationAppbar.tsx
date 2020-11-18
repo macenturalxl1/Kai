@@ -94,27 +94,11 @@ const useStyles = makeStyles((theme: Theme) =>
 const NavigationAppbar: React.FC = (props: any) => {
     const classes = useStyles();
 
-    const [openPopup, setOpenPopup] = React.useState(false);
-
-    const [logoutSuccess, setLogoutSuccess] = React.useState(false);
-
-    const [logoutFail, setlogoutFail] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState('');
-
-    const onSuccess = () => {
-        setLogoutSuccess(true);
-    };
-
-    const onError = (message: string) => {
-        setlogoutFail(true);
-        setErrorMessage(message);
-    };
-
-    const activeRoute = (routeName: any) => {
+    const activeRoute = (routeName: string) => {
         return props.location.pathname === routeName;
     };
 
-    const getSideNavIcon = (sidebarName: any) => {
+    const getSideNavIcon = (sidebarName: string) => {
         switch (sidebarName) {
             case 'Add Graph':
                 return <AddCircleOutlineIcon />;

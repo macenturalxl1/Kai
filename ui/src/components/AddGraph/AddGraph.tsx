@@ -135,9 +135,9 @@ export default class AddGraph extends React.Component<{}, IState> {
             });
         }
     }
+
     private disableSubmitButton(): boolean {
-        const { graphName } = this.state.newGraph;
-        return !this.state.elements || !this.state.types || !graphName;
+        return !this.state.elements || !this.state.types || !this.state.newGraph.graphName;
     }
 
     public render() {
