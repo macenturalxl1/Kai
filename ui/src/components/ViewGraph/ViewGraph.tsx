@@ -45,7 +45,7 @@ export default class ViewGraph extends React.Component<{}, IState> {
     private async getGraphs() {
         try {
             const graphs: Graph[] = await new GetAllGraphsRepo().getAll();
-            this.setState({ graphs });
+            this.setState({ graphs, errorMessage: '' });
         } catch (e) {
             this.setState({ errorMessage: `Failed to get all graphs: ${e.message}` });
         }

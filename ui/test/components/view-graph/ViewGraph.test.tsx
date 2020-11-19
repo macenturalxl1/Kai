@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import ViewGraph from '../../../src/components/ViewGraph/ViewGraph';
 import { GetAllGraphsRepo } from '../../../src/rest/repositories/get-all-graphs-repo';
 import { Graph } from '../../../src/domain/graph';
@@ -8,7 +8,7 @@ import { DeleteGraphRepo } from '../../../src/rest/repositories/delete-graph-rep
 jest.mock('../../../src/rest/repositories/get-all-graphs-repo');
 jest.mock('../../../src/rest/repositories/delete-graph-repo');
 
-beforeEach(() => jest.resetAllMocks());
+afterEach(() => jest.resetAllMocks());
 
 describe('When ExampleTable mounts', () => {
     it('should display Table Headers and Graphs when GetGraphs successful', async () => {
@@ -31,14 +31,7 @@ describe('When ExampleTable mounts', () => {
         expect(component.find('caption').text()).toBe('No Graphs.');
     });
     it('should display Error Message in AlertNotification when GetGraphs request fails', () => {
-        // @ts-ignore
-        GetAllGraphsRepo.mockImplementationOnce(() => {
-            return {
-                getAll: () => {
-                    throw new Error('404 Not Found');
-                },
-            };
-        });
+        mockGetAllGraphsThrowsError('404 Not Found');
 
         const component = mount(<ViewGraph />);
 
@@ -55,6 +48,9 @@ describe('When ExampleTable mounts', () => {
         expect(table.find('tbody').text()).toBe('roadTrafficDEPLOYED');
         expect(component.find('div#notification-alert').length).toBe(0);
     });
+});
+
+describe('Refresh Button', () => {
     it('should call GetGraphs again when refresh button clicked', async () => {
         mockGetGraphsToReturn([new Graph('roadTraffic', 'DEPLOYING')]);
 
@@ -63,11 +59,24 @@ describe('When ExampleTable mounts', () => {
         expect(component.find('tbody').text()).toBe('roadTrafficDEPLOYING');
 
         mockGetGraphsToReturn([new Graph('roadTraffic', 'FINISHED DEPLOYMENT')]);
-        component.find('button#view-graphs-refresh-button').simulate('click');
-        await component.update();
+        await clickRefreshButton(component);
 
         expect(component.find('tbody').text()).toBe('roadTrafficFINISHED DEPLOYMENT');
     });
+    it('should reset an existing error message when refresh button is clicked', async () => {
+        mockGetAllGraphsThrowsError('500 Server Error');
+
+        const component = mount(<ViewGraph />);
+        expect(component.find('div#notification-alert').text()).toBe('Failed to get all graphs: 500 Server Error');
+
+        mockGetGraphsToReturn([new Graph('roadTraffic', 'FINISHED DEPLOYMENT')]);
+        await clickRefreshButton(component);
+
+        expect(component.find('div#notification-alert').length).toBe(0);
+    });
+});
+
+describe('Delete Button', () => {
     it('should send a delete request when the delete button has been clicked', async () => {
         DeleteGraphRepo.prototype.delete = jest.fn();
         mockGetGraphsToReturn([new Graph('peaches', 'ACTIVE')]);
@@ -100,6 +109,23 @@ describe('When ExampleTable mounts', () => {
 
         expect(DeleteGraphRepo.prototype.delete).toHaveBeenLastCalledWith('pears');
     });
+    it('should change the current status of the graph when the delete button is clicked', async () => {
+        DeleteGraphRepo.prototype.delete = jest.fn();
+        mockGetGraphsToReturn([new Graph('apples', 'ACTIVE'), new Graph('pears', 'INACTIVE')]);
+
+        const component = mount(<ViewGraph />);
+        await component.update();
+        await component.update();
+        expect(component.find('tbody').text()).toBe('applesACTIVEpearsINACTIVE');
+
+        mockGetGraphsToReturn([new Graph('apples', 'ACTIVE'), new Graph('pears', 'DELETION IN PROGRESS')]);
+        component.find('tbody').find('button#view-graphs-delete-button-1').simulate('click');
+        await component.update();
+        await component.update();
+        await component.update();
+
+        expect(component.find('tbody').text()).toBe('applesACTIVEpearsDELETION IN PROGRESS');
+    });
     it('should notify error and not refresh graphs when delete request returns server error', async () => {
         mockDeleteGraphRepoToThrowError('500 Server Error');
         mockGetGraphsToReturn([new Graph('bananas', 'INACTIVE')]);
@@ -118,24 +144,13 @@ describe('When ExampleTable mounts', () => {
             'Failed to delete graph "bananas": 500 Server Error'
         );
     });
-    it('should change the current status of the graph when the delete button is clicked', async () => {
-        DeleteGraphRepo.prototype.delete = jest.fn();
-        mockGetGraphsToReturn([new Graph('apples', 'ACTIVE'), new Graph('pears', 'INACTIVE')]);
-
-        const component = mount(<ViewGraph />);
-        await component.update();
-        await component.update();
-        expect(component.find('tbody').text()).toBe('applesACTIVEpearsINACTIVE');
-
-        mockGetGraphsToReturn([new Graph('apples', 'ACTIVE'), new Graph('pears', 'DELETION IN PROGRESS')]);
-        component.find('tbody').find('button#view-graphs-delete-button-1').simulate('click');
-        await component.update();
-        await component.update();
-        await component.update();
-
-        expect(component.find('tbody').text()).toBe('applesACTIVEpearsDELETION IN PROGRESS');
-    });
 });
+
+async function clickRefreshButton(component: ReactWrapper) {
+    component.find('button#view-graphs-refresh-button').simulate('click');
+    await component.update();
+    await component.update();
+}
 
 function mockDeleteGraphRepoToThrowError(errorMessage: string) {
     // @ts-ignore
@@ -156,6 +171,17 @@ function mockGetGraphsToReturn(graphs: Graph[]): void {
                 return new Promise((resolve, reject) => {
                     resolve(graphs);
                 });
+            },
+        };
+    });
+}
+
+function mockGetAllGraphsThrowsError(errorMessage: string): void {
+    // @ts-ignore
+    GetAllGraphsRepo.mockImplementationOnce(() => {
+        return {
+            getAll: () => {
+                throw new Error(errorMessage);
             },
         };
     });
