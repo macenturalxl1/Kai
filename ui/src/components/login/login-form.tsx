@@ -4,7 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
 import { FormType } from './login-modal';
-import { CognitoClient } from '../../rest/cognito-client';
+import { IAuthClient } from '../../rest/authclient';
+import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
 
 interface IProps {
     onChangeForm(fromType: FormType): void;
@@ -28,6 +29,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
             outcomeMessage: '',
         };
     }
+    private readonly authClient: IAuthClient = new AuthClientFactory().create();
 
     private disableSignInButton(): boolean {
         const { username, password } = this.state;
@@ -49,7 +51,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
                 outcomeMessage: `Login failed: ${errorMessage}`,
             });
         };
-        CognitoClient.login(username, password, onSuccess, onError);
+        this.authClient.login(username, password, onSuccess, onError);
     }
 
     public render() {

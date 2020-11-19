@@ -1,6 +1,6 @@
 import { API_HOST } from './api-config';
 import axios, { AxiosResponse } from 'axios';
-import { ApiError } from '../domain/errors/api-error';
+import { ApiError } from '../../domain/errors/api-error';
 
 export class RestClient {
     private static jwtToken: string;

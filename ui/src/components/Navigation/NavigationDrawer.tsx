@@ -7,8 +7,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-        },
         menuButton: {
             marginRight: theme.spacing(2),
         },
@@ -17,13 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawer: {
             width: 240,
-        },
-        drawerHeader: {
-            display: 'flex',
-            alignItems: 'center',
-            padding: theme.spacing(0, 1),
-            ...theme.mixins.toolbar,
-            justifyContent: 'flex-end',
         },
         fullList: {
             width: 'auto',
@@ -35,8 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 duration: theme.transitions.duration.leavingScreen,
             }),
         },
-        listItem: {
-        },
+        listItem: {},
         listItemText: {
             '& span, & svg': {
                 fontSize: '20px',
@@ -60,7 +50,7 @@ const NavigationDrawer: React.FC = (props: any) => {
 
     const activeRoute = (routeName: any) => {
         return props.location.pathname === routeName;
-    }
+    };
 
     return (
         <div>
@@ -93,11 +83,16 @@ const NavigationDrawer: React.FC = (props: any) => {
                     <MenuList>
                         {Routes.map((prop, key) => {
                             return (
-                                <NavLink to={prop.path}
+                                <NavLink
+                                    to={prop.path}
                                     style={{ color: 'inherit', textDecoration: 'inherit' }}
-                                    key={key}>
+                                    key={key}
+                                >
                                     <MenuItem className={classes.listItem} selected={activeRoute(prop.path)}>
-                                        <ListItemText classes={{ primary: classes.listItemText }} primary={prop.sidebarName} />
+                                        <ListItemText
+                                            classes={{ primary: classes.listItemText }}
+                                            primary={prop.sidebarName}
+                                        />
                                     </MenuItem>
                                 </NavLink>
                             );

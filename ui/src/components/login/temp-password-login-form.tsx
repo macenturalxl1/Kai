@@ -4,7 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
 import { FormType } from './login-modal';
-import { CognitoClient } from '../../rest/cognito-client';
+import { IAuthClient } from '../../rest/clients/authclient';
+import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
 
 interface IProps {
     onChangeForm(fromType: FormType): void;
@@ -31,6 +32,8 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
         };
     }
 
+    private readonly authClient: IAuthClient = new AuthClientFactory().create();
+
     private disableUpdateButton(): boolean {
         const { username, tempPassword, newPassword } = this.state;
         return !username || !tempPassword || !newPassword;
@@ -51,7 +54,7 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                 outcomeMessage: `Login failed: ${errorMessage}`,
             });
         };
-        CognitoClient.loginAndSetNewPassword(username, tempPassword, newPassword, onSuccess, onError);
+        this.authClient.setNewPasswordAndLogin(username, tempPassword, newPassword, onSuccess, onError);
     }
 
     public render() {

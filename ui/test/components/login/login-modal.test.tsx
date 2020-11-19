@@ -2,9 +2,9 @@ import { Dialog } from '@material-ui/core';
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import LoginModal from '../../../src/components/login/login-modal';
-import { CognitoClient } from '../../../src/rest/cognito-client';
+import { CognitoClient } from '../../../src/rest/clients/cognito-client';
 
-jest.mock('../../../src/rest/cognito-client');
+jest.mock('../../../src/rest/clients/cognito-client');
 
 let component: ReactWrapper;
 const jestMock = jest.fn();
@@ -193,7 +193,7 @@ function inputPassword(password: string): void {
 
 function mockCognitoClientLogin() {
     // @ts-ignore
-    CognitoClient.login.mockImplementationOnce(
+    CognitoClient.prototype.login.mockImplementationOnce(
         (username: string, password: string, onSuccess: () => void, onError: () => void) => {
             onSuccess();
         }
@@ -202,7 +202,7 @@ function mockCognitoClientLogin() {
 
 function mockCognitoClientNewUserLogin() {
     // @ts-ignore
-    CognitoClient.loginAndSetNewPassword.mockImplementationOnce(
+    CognitoClient.prototype.setNewPasswordAndLogin.mockImplementationOnce(
         (username: string, password: string, tempPassword: string, onSuccess: () => void, onError: () => void) => {
             onSuccess();
         }
@@ -211,14 +211,14 @@ function mockCognitoClientNewUserLogin() {
 
 function mockCognitoClientSuccessfulLogOut() {
     // @ts-ignore
-    CognitoClient.signOutCognitoUser.mockImplementationOnce((onSuccess: () => void, onError: () => void) => {
+    CognitoClient.prototype.signOut.mockImplementationOnce((onSuccess: () => void, onError: () => void) => {
         onSuccess();
     });
 }
 
 function mockCognitoClientFailedLogOut(errorMessage: string) {
     // @ts-ignore
-    CognitoClient.signOutCognitoUser.mockImplementationOnce(
+    CognitoClient.prototype.signOut.mockImplementationOnce(
         (onSuccess: () => void, onError: (errorMessage: string) => void) => {
             onError(errorMessage);
         }

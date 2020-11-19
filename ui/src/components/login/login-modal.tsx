@@ -5,8 +5,8 @@ import TempPasswordLoginForm from './temp-password-login-form';
 import LoginForm from './login-form';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import LockIcon from '@material-ui/icons/Lock';
-import { CognitoClient } from '../../rest/cognito-client';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
+import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
 
 const styles = (theme: any) =>
     createStyles({
@@ -54,6 +54,8 @@ class LoginModal extends React.Component<IProps, IState> {
         };
     }
 
+    private readonly authClient: IAuthClient = new AuthClientFactory().create();
+
     public render() {
         const { classes } = this.props;
         const { formType, status, openSignInForm, openSignOutModal } = this.state;
@@ -90,7 +92,7 @@ class LoginModal extends React.Component<IProps, IState> {
                                     signOutMessage: errorMessage,
                                 });
                             };
-                            CognitoClient.signOutCognitoUser(onSuccess, onError);
+                            this.authClient.signOut(onSuccess, onError);
                         }}
                     >
                         Sign out

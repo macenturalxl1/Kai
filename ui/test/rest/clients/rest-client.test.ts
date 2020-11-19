@@ -1,7 +1,7 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { RestClient } from '../../src/rest/rest-client';
-import { ApiError } from '../../src/domain/errors/api-error';
+import { RestClient } from '../../../src/rest/clients/rest-client';
+import { ApiError } from '../../../src/domain/errors/api-error';
 
 const mock = new MockAdapter(axios);
 

@@ -1,4 +1,4 @@
-import { RestClient, IApiResponse } from '../rest-client';
+import { RestClient, IApiResponse } from '../clients/rest-client';
 import { Graph } from '../../domain/graph';
 import { IGraphByIdResponse } from '../http-message-interfaces/response-interfaces';
 

@@ -1,9 +1,11 @@
 import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
-import { CognitoClient } from '../../src/rest/cognito-client';
-import { RestClient } from '../../src/rest/rest-client';
+import { CognitoClient } from '../../../src/rest/clients/cognito-client';
+import { RestClient } from '../../../src/rest/clients/rest-client';
 
 jest.mock('amazon-cognito-identity-js');
-jest.mock('../../src/rest/rest-client');
+jest.mock('../../../src/rest/clients/rest-client');
+
+const cognitoClient = new CognitoClient();
 
 describe('Existing User Sign In', () => {
     it('should call onSuccess when login is successful', () => {
@@ -14,7 +16,7 @@ describe('Existing User Sign In', () => {
         const onSuccess = jest.fn();
         const onError = jest.fn();
 
-        CognitoClient.login(username, password, onSuccess, onError);
+        cognitoClient.login(username, password, onSuccess, onError);
 
         expect(onSuccess).toHaveBeenCalledTimes(1);
         expect(onError).toHaveBeenCalledTimes(0);
@@ -28,7 +30,7 @@ describe('Existing User Sign In', () => {
         const onSuccess = jest.fn();
         const onError = jest.fn();
 
-        CognitoClient.login(username, password, onSuccess, onError);
+        cognitoClient.login(username, password, onSuccess, onError);
 
         expect(onSuccess).toHaveBeenCalledTimes(0);
         expect(onError).toHaveBeenCalledTimes(1);
@@ -43,7 +45,7 @@ describe('New User Sign In', () => {
         const onSuccess = jest.fn();
         const onError = jest.fn();
 
-        CognitoClient.loginAndSetNewPassword('John Smith', 'P@$$word', 'N3wPassw0rd', onSuccess, onError);
+        cognitoClient.setNewPasswordAndLogin('John Smith', 'P@$$word', 'N3wPassw0rd', onSuccess, onError);
 
         expect(onSuccess).toHaveBeenCalledTimes(1);
         expect(onError).toHaveBeenCalledTimes(0);
@@ -55,7 +57,7 @@ describe('New User Sign In', () => {
         const onSuccess = jest.fn();
         const onError = jest.fn();
 
-        CognitoClient.loginAndSetNewPassword('John Smith', 'P@$$word', 'N3wPassw0rd', onSuccess, onError);
+        cognitoClient.setNewPasswordAndLogin('John Smith', 'P@$$word', 'N3wPassw0rd', onSuccess, onError);
 
         expect(onSuccess).toHaveBeenCalledTimes(0);
         expect(onError).toHaveBeenCalledTimes(1);
@@ -70,7 +72,7 @@ describe('Sign Out', () => {
         const onSuccess = jest.fn();
         const onError = jest.fn();
 
-        CognitoClient.signOutCognitoUser(onSuccess, onError);
+        cognitoClient.signOut(onSuccess, onError);
 
         expect(onSuccess).toHaveBeenCalledTimes(1);
         expect(onError).toHaveBeenCalledTimes(0);
@@ -81,7 +83,7 @@ describe('Sign Out', () => {
         const onSuccess = jest.fn();
         const onError = jest.fn();
 
-        CognitoClient.signOutCognitoUser(onSuccess, onError);
+        cognitoClient.signOut(onSuccess, onError);
 
         expect(onSuccess).toHaveBeenCalledTimes(0);
         expect(onError).toHaveBeenCalledTimes(1);

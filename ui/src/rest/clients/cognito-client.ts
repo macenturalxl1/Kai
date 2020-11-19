@@ -1,15 +1,16 @@
 import { CognitoUserPool, CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
 import { RestClient } from './rest-client';
 import { poolData } from './cognito-config';
+import { IAuthClient } from './authclient';
 
-export class CognitoClient {
+export class CognitoClient implements IAuthClient {
     private static cognitoUser: CognitoUser;
     private static authenticationDetails: AuthenticationDetails;
 
-    public static login(username: string, password: string, onSuccess: Function, onError: Function) {
-        this.initCognitoUser(username, password);
+    public login(username: string, password: string, onSuccess: Function, onError: Function) {
+        CognitoClient.initCognitoUser(username, password);
 
-        this.cognitoUser.authenticateUser(this.authenticationDetails, {
+        CognitoClient.cognitoUser.authenticateUser(CognitoClient.authenticationDetails, {
             onSuccess: function (result) {
                 // Use the idToken for Logins Map when Federating User Pools with identity pools or when
                 // passing through an Authorization Header to an API Gateway Authorizer
@@ -24,18 +25,16 @@ export class CognitoClient {
         });
     }
 
-    public static loginAndSetNewPassword(
+    public setNewPasswordAndLogin(
         username: string,
         tempPassword: string,
         newPassword: string,
         onSuccess: Function,
         onError: Function
     ) {
-        this.initCognitoUser(username, tempPassword);
+        CognitoClient.initCognitoUser(username, tempPassword);
 
-        const cognitoUser = this.cognitoUser;
-
-        cognitoUser.authenticateUser(this.authenticationDetails, {
+        CognitoClient.cognitoUser.authenticateUser(CognitoClient.authenticationDetails, {
             onSuccess: function (result) {
                 // Use the idToken for Logins Map when Federating User Pools with identity pools or when
                 // passing through an Authorization Header to an API Gateway Authorizer
@@ -55,7 +54,7 @@ export class CognitoClient {
                 delete userAttributes.email_verified;
 
                 // Get these details and call
-                cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
+                CognitoClient.cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
             },
         });
     }
@@ -75,8 +74,8 @@ export class CognitoClient {
         this.cognitoUser = new CognitoUser(userData);
     }
 
-    public static signOutCognitoUser(onSuccess: Function, onError: Function) {
-        this.cognitoUser.globalSignOut({
+    public signOut(onSuccess: Function, onError: Function) {
+        CognitoClient.cognitoUser.globalSignOut({
             onSuccess: function () {
                 onSuccess();
             },

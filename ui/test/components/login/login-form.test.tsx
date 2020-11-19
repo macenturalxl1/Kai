@@ -1,9 +1,9 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import LoginForm from '../../../src/components/login/login-form';
-import { CognitoClient } from '../../../src/rest/cognito-client';
+import { CognitoClient } from '../../../src/rest/clients/cognito-client';
 
-jest.mock('../../../src/rest/cognito-client');
+jest.mock('../../../src/rest/clients/cognito-client');
 
 let component: ReactWrapper;
 const onSuccessCallBack = jest.fn();
@@ -88,7 +88,7 @@ function clickSubmitSignIn() {
 
 function mockCognitoClientLogin() {
     // @ts-ignore
-    CognitoClient.login.mockImplementationOnce(
+    CognitoClient.prototype.login.mockImplementationOnce(
         (username: string, password: string, onSuccess: () => void, onError: () => void) => {
             onSuccess();
         }
@@ -97,7 +97,7 @@ function mockCognitoClientLogin() {
 
 function mockCognitoClientNewUserLoginWithError(errorMessage: string) {
     // @ts-ignore
-    CognitoClient.login.mockImplementationOnce(
+    CognitoClient.prototype.login.mockImplementationOnce(
         (username: string, password: string, onSuccess: () => void, onError: (errorMessage: string) => void) => {
             onError(errorMessage);
         }

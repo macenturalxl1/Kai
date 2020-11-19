@@ -1,4 +1,4 @@
-import { RestClient, IApiResponse } from '../rest-client';
+import { RestClient, IApiResponse } from '../clients/rest-client';
 import { ICreateGraphRequestBody } from '../http-message-interfaces/request-interfaces';
 import { ElementsSchema } from '../../domain/elements-schema';
 import { TypesSchema } from '../../domain/types-schema';
