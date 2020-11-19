@@ -7,6 +7,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import LockIcon from '@material-ui/icons/Lock';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
 import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
+import { IAuthClient } from '../../rest/clients/authclient';
 
 const styles = (theme: any) =>
     createStyles({

@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
 import { FormType } from './login-modal';
-import { IAuthClient } from '../../rest/authclient';
+import { IAuthClient } from '../../rest/clients/authclient';
 import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
 
 interface IProps {
