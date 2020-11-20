@@ -108,6 +108,7 @@ export class KaiRestApi extends cdk.Construct {
         });
         const optionsIntegration = new api.LambdaIntegration(this._optionsPreflightLambda);
         graphsResource.addMethod("OPTIONS", optionsIntegration);
+        graph.addMethod("OPTIONS", optionsIntegration);
 
         // GET handlers
         this._getGraphsLambda = new lambda.Function(this, "GetGraphsHandler", {
