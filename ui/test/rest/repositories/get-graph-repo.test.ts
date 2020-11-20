@@ -1,9 +1,8 @@
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 import { GetGraphRepo } from '../../../src/rest/repositories/get-graph-repo';
 import { Graph } from '../../../src/domain/graph';
 import { IGraphByIdResponse } from '../../../src/rest/http-message-interfaces/response-interfaces';
-import MockAdapter from 'axios-mock-adapter';
-import { ApiError } from '../../../src/domain/errors/api-error';
-import axios from 'axios';
 
 const mock = new MockAdapter(axios);
 const repo = new GetGraphRepo();
@@ -25,6 +24,6 @@ describe('Get Graph By Id Repo', () => {
     });
 
     it('should bubble up exception from rest call if graph not found', async () => {
-        await expect(repo.get('notfound-graph')).rejects.toThrow(new ApiError(404, 'Request failed with status code 404'));
+        await expect(repo.get('notfound-graph')).rejects.toThrow(new Error('Request failed with status code 404'));
     });
 });

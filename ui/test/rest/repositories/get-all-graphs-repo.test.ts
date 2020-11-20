@@ -1,9 +1,8 @@
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 import { GetAllGraphsRepo } from '../../../src/rest/repositories/get-all-graphs-repo';
 import { Graph } from '../../../src/domain/graph';
 import { IAllGraphsResponse } from '../../../src/rest/http-message-interfaces/response-interfaces';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import { ApiError } from '../../../src/domain/errors/api-error';
 
 const mock = new MockAdapter(axios);
 const repo = new GetAllGraphsRepo();
@@ -48,8 +47,6 @@ describe('Get All Graphs Repo', () => {
     it('should bubble up exception from rest call', async () => {
         mock.onGet('/graphs').reply(404);
 
-        await expect(repo.getAll()).rejects.toThrow(
-            new ApiError(404, 'Request failed with status code 404')
-        );
+        await expect(repo.getAll()).rejects.toThrow(new Error('Request failed with status code 404'));
     });
 });

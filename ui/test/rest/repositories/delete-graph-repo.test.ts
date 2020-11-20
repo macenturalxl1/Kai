@@ -1,7 +1,6 @@
 import { DeleteGraphRepo } from '../../../src/rest/repositories/delete-graph-repo';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { ApiError } from '../../../src/domain/errors/api-error';
 
 const mock = new MockAdapter(axios);
 const repo = new DeleteGraphRepo();
@@ -26,6 +25,6 @@ describe('Delete Graph Repo', () => {
     it('should reject and throw Graph Not Deleted Error when status is not 202', async () => {
         mock.onDelete('/graphs/graph-2').reply(500);
 
-        await expect(repo.delete('graph-2')).rejects.toEqual(new ApiError(500, 'Request failed with status code 500'));
+        await expect(repo.delete('graph-2')).rejects.toEqual(new Error('Request failed with status code 500'));
     });
 });

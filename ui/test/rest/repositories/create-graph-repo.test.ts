@@ -1,7 +1,6 @@
 import { CreateGraphRepo } from '../../../src/rest/repositories/create-graph-repo';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import { ApiError } from '../../../src/domain/errors/api-error';
 import { TypesSchema } from '../../../src/domain/types-schema';
 import { ElementsSchema } from '../../../src/domain/elements-schema';
 
@@ -34,8 +33,8 @@ describe('Create Graph Repo', () => {
         const elements = new ElementsSchema(JSON.stringify({ entities: {}, edges: {} }));
         const types = new TypesSchema(JSON.stringify({ types: {} }));
 
-        await expect(repo.create('bad', [], elements, types)).rejects.toEqual(
-            new ApiError(400, 'Request failed with status code 400')
+        await expect(() => repo.create('bad', [], elements, types)).rejects.toEqual(
+            new Error('Request failed with status code 400')
         );
     });
 });

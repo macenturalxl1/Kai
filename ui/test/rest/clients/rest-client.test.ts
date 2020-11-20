@@ -1,7 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { RestClient } from '../../../src/rest/clients/rest-client';
-import { ApiError } from '../../../src/domain/errors/api-error';
 
 const mock = new MockAdapter(axios);
 
@@ -74,21 +73,21 @@ describe('RestClient 4** Responses', () => {
     afterAll(() => mock.resetHandlers());
 
     it('should throw 404 Error Message when api returns 404', async () => {
-        await expect(RestClient.get()).rejects.toThrow(new ApiError(404, 'Request failed with status code 404'));
+        await expect(RestClient.get()).rejects.toThrow(new Error('Request failed with status code 404'));
     });
     it('should throw 404 Error Message when api returns 404', async () => {
         await expect(RestClient.get('unfindable-graph')).rejects.toThrow(
-            new ApiError(404, 'Request failed with status code 404')
+            new Error('Request failed with status code 404')
         );
     });
     it('should throw 404 Error Message when api returns 404', async () => {
         await expect(RestClient.post({ request: 'not-found' })).rejects.toThrow(
-            new ApiError(404, 'Request failed with status code 404')
+            new Error('Request failed with status code 404')
         );
     });
     it('should throw 404 Error Message when api returns 404', async () => {
         await expect(RestClient.delete('unfindable-graph')).rejects.toThrow(
-            new ApiError(404, 'Request failed with status code 404')
+            new Error('Request failed with status code 404')
         );
     });
 });
