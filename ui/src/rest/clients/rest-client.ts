@@ -11,21 +11,24 @@ export class RestClient {
     public static async get(pathVariable?: string): Promise<IApiResponse> {
         const path = pathVariable ? `/${pathVariable}` : ``;
 
-        const response: AxiosResponse<any> = await axios.get(`${API_HOST}/graphs${path}`, {
+        const response: AxiosResponse<any> = await axios.get(`/graphs${path}`, {
+            baseURL: API_HOST,
             headers: { Authorization: this.jwtToken },
         });
         return this.convert(response);
     }
 
     public static async post(httpRequestBody: object): Promise<IApiResponse> {
-        const response: AxiosResponse<any> = await axios.post(`${API_HOST}/graphs`, httpRequestBody, {
+        const response: AxiosResponse<any> = await axios.post(`/graphs`, httpRequestBody, {
+            baseURL: API_HOST,
             headers: { Authorization: this.jwtToken },
         });
         return this.convert(response);
     }
 
     public static async delete(urlPathVariable: string): Promise<IApiResponse> {
-        const response: AxiosResponse<any> = await axios.delete(`${API_HOST}/graphs/${urlPathVariable}`, {
+        const response: AxiosResponse<any> = await axios.delete(`/graphs/${urlPathVariable}`, {
+            baseURL: API_HOST,
             headers: { Authorization: this.jwtToken },
         });
         return this.convert(response);

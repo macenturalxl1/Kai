@@ -35,6 +35,16 @@ export class CognitoClient implements IAuthClient {
         CognitoClient.initCognitoUser(username, tempPassword);
 
         CognitoClient.cognitoUser.authenticateUser(CognitoClient.authenticationDetails, {
+            newPasswordRequired: function (userAttributes) {
+                // User was signed up by an admin and must provide new password and required attributes,
+                // if any, to complete authentication.
+                // The api doesn't accept email_verified field back
+                delete userAttributes.email_verified;
+
+                // Get these details and call
+                CognitoClient.cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
+            },
+
             onSuccess: function (result) {
                 // Use the idToken for Logins Map when Federating User Pools with identity pools or when
                 // passing through an Authorization Header to an API Gateway Authorizer
@@ -45,16 +55,6 @@ export class CognitoClient implements IAuthClient {
 
             onFailure: function (error) {
                 onError(error.message);
-            },
-
-            newPasswordRequired: function (userAttributes) {
-                // User was signed up by an admin and must provide new password and required attributes,
-                // if any, to complete authentication.
-                // The api doesn't accept email_verified field back
-                delete userAttributes.email_verified;
-
-                // Get these details and call
-                CognitoClient.cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
             },
         });
     }

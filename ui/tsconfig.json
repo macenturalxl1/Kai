@@ -28,7 +28,7 @@
     "./src/**/*.tsx", 
     "./src/**/*.ts",
     "./test/**/*.tsx",
-    "./test/**/*.ts", "test/setupTests.ts"
+    "./test/**/*.ts", "test/setupTests.ts", "src/setupProxy.js"
   ],
   "exclude": [
     "node_modules",

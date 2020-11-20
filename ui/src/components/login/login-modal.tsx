@@ -1,6 +1,6 @@
+import React from 'react';
 import { Button, Dialog, DialogContent, DialogTitle, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React from 'react';
 import TempPasswordLoginForm from './temp-password-login-form';
 import LoginForm from './login-form';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -25,14 +25,6 @@ const styles = (theme: any) =>
 
 interface IProps extends WithStyles<typeof styles> {}
 
-interface IState {
-    formType: FormType;
-    openSignInForm: boolean;
-    openSignOutModal: boolean;
-    signOutMessage: string;
-    status: UserStatus;
-}
-
 export enum FormType {
     EXISTING_USER_LOGIN,
     TEMP_PASSWORD_LOGIN,
@@ -41,6 +33,14 @@ export enum FormType {
 enum UserStatus {
     SIGNED_IN,
     SIGNED_OUT,
+}
+
+interface IState {
+    formType: FormType;
+    openSignInForm: boolean;
+    openSignOutModal: boolean;
+    signOutMessage: string;
+    status: UserStatus;
 }
 
 class LoginModal extends React.Component<IProps, IState> {
