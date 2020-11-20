@@ -131,6 +131,42 @@ describe('Elements Validation', () => {
             '["unknownProperty", "anotherInvalidProp"] are invalid Elements schema root properties'
         );
     });
+    it('should allow visibilityProperty on root as valid', () => {
+        const rawSchema = JSON.stringify({
+            visibilityProperty: {},
+            entities: {
+                Cardinality: {
+                    description: 'An entity that is added to every vertex representing the connectivity of the vertex.',
+                    vertex: 'anyVertex',
+                    properties: {
+                        edgeGroup: 'set',
+                        hllp: 'hllp',
+                        count: 'count.long',
+                    },
+                    groupBy: ['edgeGroup'],
+                },
+            },
+            edges: {
+                RoadUse: {
+                    description: 'A directed edge representing vehicles moving from junction A to junction B.',
+                    source: 'junction',
+                    destination: 'junction',
+                    directed: 'true',
+                    properties: {
+                        startDate: 'date.earliest',
+                        endDate: 'date.latest',
+                        count: 'count.long',
+                        countByVehicleType: 'counts.freqmap',
+                    },
+                    groupBy: ['startDate', 'endDate'],
+                },
+            },
+        });
+
+        const notifications = new ElementsSchema(rawSchema).validate();
+
+        expect(notifications.isEmpty()).toBe(true);
+    });
 
     describe('Entities validation', () => {
         it('should not return any errors if entities have entity objects and description, vertex, props and groupBy', () => {

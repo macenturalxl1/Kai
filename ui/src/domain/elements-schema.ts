@@ -101,7 +101,9 @@ export class ElementsSchema {
     }
 
     private validateInvalidProperties(notes: Notifications): void {
-        const invalidProperties = Object.keys(this.elements).filter((key) => key !== 'entities' && key !== 'edges');
+        const invalidProperties = Object.keys(this.elements).filter(
+            (key) => key !== 'entities' && key !== 'edges' && key !== 'visibilityProperty'
+        );
 
         if (invalidProperties.length > 0) {
             notes.addError(
