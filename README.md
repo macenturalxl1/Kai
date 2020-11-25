@@ -88,7 +88,8 @@ Alternatively a pre-configured external pool can be referenced using the followi
     }
 }
 ```
-##Running the UI with Docker
+## Running the UI with Docker
+
 To run the UI React app in a docker container, follow the steps below:
 Make sure you are in the UI directory when running the commands.
 
