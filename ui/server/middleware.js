@@ -41,3 +41,7 @@ app.get('/graphs/:graphName', (req, res) => {
 app.delete('/graphs/:graphName', (req, res) => {
     res.status(202).end();
 });
+
+app.post('/auth', (req, res) => {
+    res.status(201).end();
+});

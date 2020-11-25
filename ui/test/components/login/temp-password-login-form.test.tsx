@@ -8,8 +8,10 @@ jest.mock('../../../src/rest/clients/cognito-client');
 let component: ReactWrapper;
 const onSuccessCallBack = jest.fn();
 
+beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_PLATFORM: 'AWS' })));
 beforeEach(() => (component = mount(<TempPasswordLoginForm onChangeForm={() => {}} onSuccess={onSuccessCallBack} />)));
 afterEach(() => component.unmount());
+afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_PLATFORM: '' })));
 
 describe('On Render', () => {
     it('should render username input field', () => {

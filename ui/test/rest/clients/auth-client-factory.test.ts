@@ -1,3 +1,4 @@
+import { AuthApiClient } from '../../../src/rest/clients/auth-api-client';
 import { AuthClientFactory } from '../../../src/rest/clients/auth-client-factory';
 import { IAuthClient } from '../../../src/rest/clients/authclient';
 import { CognitoClient } from '../../../src/rest/clients/cognito-client';
@@ -19,11 +20,11 @@ describe('Auth Factory', () => {
 
         expect(client).toBeInstanceOf(CognitoClient);
     });
-    it('should return by default CognitoClient when REACT_APP_PLATFORM ENV is not a defined type', () => {
+    it('should return by default AuthApiClient when REACT_APP_PLATFORM ENV is not a defined type', () => {
         process.env = Object.assign(process.env, { REACT_APP_PLATFORM: '' });
 
         const client: IAuthClient = new AuthClientFactory().create();
 
-        expect(client).toBeInstanceOf(CognitoClient);
+        expect(client).toBeInstanceOf(AuthApiClient);
     });
 });

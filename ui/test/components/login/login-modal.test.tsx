@@ -9,6 +9,7 @@ jest.mock('../../../src/rest/clients/cognito-client');
 let component: ReactWrapper;
 const jestMock = jest.fn();
 
+beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_PLATFORM: 'AWS' })));
 beforeEach(() => {
     component = mount(<LoginModal />);
 });
@@ -16,6 +17,7 @@ afterEach(() => {
     component.unmount();
     jestMock.mockReset();
 });
+afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_PLATFORM: '' })));
 
 describe('On Render', () => {
     it('should render Sign In Button and not Sign Out', () => {

@@ -1,3 +1,4 @@
+import { AuthApiClient } from './auth-api-client';
 import { IAuthClient } from './authclient';
 import { CognitoClient } from './cognito-client';
 import { RbacClient } from './rbac-client';
@@ -14,7 +15,7 @@ export class AuthClientFactory {
                 return new RbacClient();
             }
             default: {
-                return new CognitoClient();
+                return new AuthApiClient();
             }
         }
     }
