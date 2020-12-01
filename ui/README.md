@@ -13,6 +13,7 @@ Make sure you are in the UI directory when running the commands.
 * `docker build -t kai-ui-image:latest .` builds a production version of Kai as a docker container.
 * `docker run -it -p 80:80 --rm kai-ui-image:latest` runs the UI application on port 80 within the container, which is mapped to port 80 on the host
 * `docker ps` lists the current running docker containers. Copy the CONTAINER ID.
+* `docker stop [CONTAINER ID]` stops the specified running container.
 * `docker logs -f [container ID]` shows a log of the actions happening to the UI container.
 
 Once the process has finished, visit (http://localhost:80), where you will be able to see the UI.
