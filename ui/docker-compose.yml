@@ -2,7 +2,6 @@
 # You can specify other custom .env.* files as args, e.g.: docker-compose --env-file ./config/.env.dev up 
 
 version: "3.8"
-name: "kai-ui"
 services:
   web:
     build: .
