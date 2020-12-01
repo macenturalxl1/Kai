@@ -4,4 +4,4 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package*.json ./
 COPY . ./
 RUN npm install --silent
-CMD ["npm", "start"]
+CMD ["npm", "start"] 
