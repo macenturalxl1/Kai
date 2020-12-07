@@ -10,9 +10,12 @@ To run the UI React app in a docker container, follow the steps below:
 Make sure you are in the UI directory when running the commands.
 
 * `docker -v` to check whether you have docker installed, if not visit: (https://docs.docker.com/get-docker/)
-* `docker build -f Dockerfile.prod -t kai-ui-image:latest .` builds the ui docker container.
+* `docker-compose version` to check whether you have docker-compose installed
+* `docker build -t kai-ui-image:latest .` builds a production version of Kai as a docker container.
 * `docker run -it -p 80:80 --rm kai-ui-image:latest` runs the UI application on port 80 within the container, which is mapped to port 80 on the host
+* `docker-compose up` runs the UI app on port 80 in production mode (by default it uses .env variables - you can also specify other .env files with `--env-file` arg)
 * `docker ps` lists the current running docker containers. Copy the CONTAINER ID.
+* `docker stop [CONTAINER ID]` stops the specified running container.
 * `docker logs -f [container ID]` shows a log of the actions happening to the UI container.
 
 Once the process has finished, visit (http://localhost:80), where you will be able to see the UI.
