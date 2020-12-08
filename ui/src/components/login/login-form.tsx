@@ -29,6 +29,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
             outcomeMessage: '',
         };
     }
+
     private readonly authClient: IAuthClient = new AuthClientFactory().create();
 
     private disableSignInButton(): boolean {
