@@ -143,15 +143,12 @@ export default class LoginForm extends React.Component<IProps, IState> {
                                 </Button>
                             </form>
                             <Typography style={{ marginTop: '20px' }}>
-                                First time user ? <br />
-                                Please click{' '}
                                 <Link
                                     id="temp-password-form-link"
                                     onClick={() => this.props.onChangeForm(FormType.TEMP_PASSWORD_LOGIN)}
                                 >
-                                    Here
-                                </Link>{' '}
-                                to update new Password
+                                    Logging in for the first time with a temporary password?
+                                </Link>
                             </Typography>
                         </Grid>
                     </div>

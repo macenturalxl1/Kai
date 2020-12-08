@@ -23,9 +23,9 @@ describe('Navigation Appbar Component', () => {
     });
 
     it('should display a Sign in button in the appbar', () => {
-        const signInButton = component.find('button#sign-in-button');
+        const signInButton = component.find('button#sign-out-button');
 
-        expect(signInButton.text()).toEqual('Sign in');
+        expect(signInButton.text()).toEqual('Sign out');
     });
 
     it('should show user id and email in Navbar', () => {

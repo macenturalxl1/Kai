@@ -1,16 +1,16 @@
 import React from 'react';
-import { Button, Dialog, DialogContent, DialogTitle, IconButton } from '@material-ui/core';
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import TempPasswordLoginForm from './temp-password-login-form';
 import LoginForm from './login-form';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import LockIcon from '@material-ui/icons/Lock';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
 import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
 import { IAuthClient } from '../../rest/clients/authclient';
+import { Logo } from '../logo';
 
-const styles = (theme: any) =>
-    createStyles({
+function styles(theme: any) {
+    return createStyles({
         root: {
             margin: 0,
             padding: theme.spacing(2),
@@ -21,7 +21,12 @@ const styles = (theme: any) =>
             top: theme.spacing(1),
             color: theme.palette.grey[500],
         },
+        large: {
+            width: theme.spacing(7),
+            height: theme.spacing(7),
+        },
     });
+}
 
 interface IProps extends WithStyles<typeof styles> {}
 
@@ -36,22 +41,20 @@ enum UserStatus {
 }
 
 interface IState {
+    status: UserStatus;
     formType: FormType;
-    openSignInForm: boolean;
     openSignOutModal: boolean;
     signOutMessage: string;
-    status: UserStatus;
 }
 
 class LoginModal extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
+            status: UserStatus.SIGNED_OUT,
             formType: FormType.EXISTING_USER_LOGIN,
-            openSignInForm: false,
             openSignOutModal: false,
             signOutMessage: '',
-            status: UserStatus.SIGNED_OUT,
         };
     }
 
@@ -59,56 +62,30 @@ class LoginModal extends React.Component<IProps, IState> {
 
     public render() {
         const { classes } = this.props;
-        const { formType, status, openSignInForm, openSignOutModal } = this.state;
+        const { formType, status, openSignOutModal } = this.state;
 
         return (
             <div id="login-modal">
-                {status === UserStatus.SIGNED_OUT && (
-                    <Button
-                        id="sign-in-button"
-                        color="inherit"
-                        startIcon={<LockIcon />}
-                        onClick={() => this.setState({ openSignInForm: true })}
-                    >
-                        Sign in
-                    </Button>
-                )}
-                {status === UserStatus.SIGNED_IN && (
-                    <Button
-                        id="sign-out-button"
-                        color="inherit"
-                        startIcon={<ExitToAppIcon />}
-                        onClick={() => {
-                            const onSuccess = () => {
-                                this.setState({
-                                    openSignOutModal: true,
-                                    status: UserStatus.SIGNED_OUT,
-                                    signOutMessage: 'You have successfully sign out',
-                                });
-                            };
-                            const onError = (errorMessage: string) => {
-                                this.setState({
-                                    openSignOutModal: true,
-                                    status: UserStatus.SIGNED_OUT,
-                                    signOutMessage: errorMessage,
-                                });
-                            };
-                            this.authClient.signOut(onSuccess, onError);
-                        }}
-                    >
-                        Sign out
-                    </Button>
-                )}
-                <Dialog id="login-modal" open={openSignInForm}>
-                    <IconButton
-                        id="close-login-modal"
-                        aria-label="close"
-                        className={classes.closeButton}
-                        onClick={() => this.setState({ openSignInForm: false })}
-                    >
-                        <CloseIcon />
-                    </IconButton>
+                <Button
+                    id="sign-out-button"
+                    color="inherit"
+                    startIcon={<ExitToAppIcon />}
+                    onClick={() => {
+                        const onSuccess = () => this.setState({ status: UserStatus.SIGNED_OUT });
+                        const onError = (errorMessage: string) => {
+                            this.setState({
+                                openSignOutModal: true,
+                                signOutMessage: errorMessage,
+                            });
+                        };
+                        this.authClient.signOut(onSuccess, onError);
+                    }}
+                >
+                    Sign out
+                </Button>
+                <Dialog id="login-modal" fullScreen open={status === UserStatus.SIGNED_OUT}>
                     <DialogContent style={{ padding: 30 }}>
+                        <Logo />
                         {formType === FormType.EXISTING_USER_LOGIN && (
                             <LoginForm
                                 onChangeForm={(formType: FormType) => this.setState({ formType })}

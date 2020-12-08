@@ -14,18 +14,18 @@ interface IProps {
 
 interface IState {
     username: string;
-    tempPassword: string;
+    oldPassword: string;
     newPassword: string;
     outcome: AlertType | undefined;
     outcomeMessage: string;
 }
 
-export default class TempPasswordLoginForm extends React.Component<IProps, IState> {
+export default class OldPasswordLoginForm extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
             username: '',
-            tempPassword: '',
+            oldPassword: '',
             newPassword: '',
             outcome: undefined,
             outcomeMessage: '',
@@ -35,12 +35,12 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
     private readonly authClient: IAuthClient = new AuthClientFactory().create();
 
     private disableUpdateButton(): boolean {
-        const { username, tempPassword, newPassword } = this.state;
-        return !username || !tempPassword || !newPassword;
+        const { username, oldPassword, newPassword } = this.state;
+        return !username || !oldPassword || !newPassword;
     }
 
     private resetPassword() {
-        const { username, tempPassword, newPassword } = this.state;
+        const { username, oldPassword, newPassword } = this.state;
         const onSuccess = () => {
             this.setState({
                 outcome: AlertType.SUCCESS,
@@ -54,12 +54,12 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                 outcomeMessage: `Login failed: ${errorMessage}`,
             });
         };
-        this.authClient.setNewPasswordAndLogin(username, tempPassword, newPassword, onSuccess, onError);
+        this.authClient.setNewPasswordAndLogin(username, oldPassword, newPassword, onSuccess, onError);
     }
 
     public render() {
         return (
-            <main id="temp-password-login-form">
+            <main id="old-password-login-form">
                 <Container component="main" maxWidth="xs">
                     {this.state.outcome && (
                         <NotificationAlert alertType={this.state.outcome} message={this.state.outcomeMessage} />
@@ -74,7 +74,7 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                         }}
                     >
                         <Typography component="h1" variant="h5">
-                            Set New Password
+                            Reset Password & Sign In
                         </Typography>
                         <Grid item>
                             <form
@@ -108,18 +108,18 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                 />
                                 <TextField
                                     variant="outlined"
-                                    value={this.state.tempPassword}
+                                    value={this.state.oldPassword}
                                     margin="normal"
                                     required
                                     fullWidth
-                                    name="temp-password"
-                                    label="Temp Password"
+                                    name="old-password"
+                                    label="Old Password"
                                     type="password"
-                                    id="temp-password"
+                                    id="old-password"
                                     autoComplete="current-password"
                                     onChange={(event) => {
                                         this.setState({
-                                            tempPassword: event.target.value,
+                                            oldPassword: event.target.value,
                                         });
                                     }}
                                     onKeyPress={(ev) => {
@@ -148,7 +148,6 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                     onKeyPress={(ev) => {
                                         if (ev.key === 'Enter') {
                                             this.resetPassword();
-
                                             ev.preventDefault();
                                         }
                                     }}
@@ -164,19 +163,16 @@ export default class TempPasswordLoginForm extends React.Component<IProps, IStat
                                         this.resetPassword();
                                     }}
                                 >
-                                    Set Password And Sign In
+                                    Reset Password And Sign In
                                 </Button>
                             </form>
                             <Typography style={{ marginTop: '20px' }}>
-                                Existing User? <br />
-                                Please click{' '}
                                 <Link
                                     id="login-form-link"
                                     onClick={() => this.props.onChangeForm(FormType.EXISTING_USER_LOGIN)}
                                 >
-                                    Here
-                                </Link>{' '}
-                                to Sign in
+                                    Back to sign in
+                                </Link>
                             </Typography>
                         </Grid>
                     </div>

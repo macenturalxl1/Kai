@@ -139,7 +139,6 @@ const NavigationAppbar: React.FC = (props: any) => {
                                         <PersonIcon />
                                     </Avatar>
                                 </ListItemAvatar>
-
                                 <ListItemText primary="User" secondary="someuser@mail.com" />
                             </ListItem>
                         </List>

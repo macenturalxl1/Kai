@@ -19,7 +19,7 @@ describe('On Render', () => {
         expect(inputField.length).toBe(1);
     });
     it('should render temporary password input field', () => {
-        const inputField = component.find('input#temp-password');
+        const inputField = component.find('input#old-password');
         expect(inputField.length).toBe(1);
     });
     it('should render new password input field', () => {
@@ -101,11 +101,11 @@ function inputUsername(username: string): void {
     expect(component.find('input#username').length).toBe(1);
 }
 
-function inputTempPassword(tempPassword: string): void {
-    component.find('input#temp-password').simulate('change', {
-        target: { value: tempPassword },
+function inputTempPassword(oldPassword: string): void {
+    component.find('input#old-password').simulate('change', {
+        target: { value: oldPassword },
     });
-    expect(component.find('input#temp-password').length).toBe(1);
+    expect(component.find('input#old-password').length).toBe(1);
 }
 
 function inputNewPassword(newPassword: string): void {
@@ -122,7 +122,7 @@ function clickSubmitSignIn() {
 function mockCognitoClientNewUserLogin() {
     // @ts-ignore
     CognitoClient.prototype.setNewPasswordAndLogin.mockImplementationOnce(
-        (username: string, password: string, tempPassword: string, onSuccess: () => void, onError: () => void) => {
+        (username: string, password: string, oldPassword: string, onSuccess: () => void, onError: () => void) => {
             onSuccess();
         }
     );
@@ -134,7 +134,7 @@ function mockCognitoClientNewUserLoginWithError(errorMessage: string) {
         (
             username: string,
             password: string,
-            tempPassword: string,
+            oldPassword: string,
             onSuccess: () => void,
             onError: (errorMessage: string) => void
         ) => {

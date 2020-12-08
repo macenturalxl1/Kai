@@ -23,7 +23,7 @@ describe('On Render', () => {
 
         expect(inputField).toHaveLength(1);
     });
-    it('should have a Sign In button', () => {
+    it('should have a Sign Out button', () => {
         expect(component.find('button#submit-sign-in-button')).toHaveLength(1);
     });
 });
