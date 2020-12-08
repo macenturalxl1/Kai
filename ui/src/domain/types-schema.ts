@@ -1,5 +1,25 @@
 import { Notifications } from './notifications';
 
+export interface ITypesSchema {
+    types: object;
+}
+
+interface IType {
+    class: string;
+    description?: string;
+    validateFunctions?: Array<IValidateFunction>;
+    aggregateFunction?: {
+        class: string;
+    };
+    serialiser?: {
+        class: string;
+    };
+}
+
+interface IValidateFunction {
+    class: string;
+}
+
 export class TypesSchema {
     private types: any;
 
@@ -126,24 +146,4 @@ export class TypesSchema {
             );
         }
     }
-}
-
-export interface ITypesSchema {
-    types: object;
-}
-
-interface IType {
-    class: string;
-    description?: string;
-    validateFunctions?: Array<IValidateFunction>;
-    aggregateFunction?: {
-        class: string;
-    };
-    serialiser?: {
-        class: string;
-    };
-}
-
-interface IValidateFunction {
-    class: string;
 }
