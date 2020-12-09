@@ -1,8 +1,8 @@
 
 
-## Available Scripts in UI Directory
+# Kai: Graph as a service
 
-In the project directory, you can run:
+## Deployments
 
 #### Docker
 
@@ -20,6 +20,12 @@ Make sure you are in the UI directory when running the commands.
 * `docker logs -f [container ID]` shows a log of the actions happening to the UI container.
 
 Once the process has finished, visit (http://localhost:80), where you will be able to see the UI.
+
+#### Connecting to a Kubernetes cluster
+
+## Available Scripts in UI Directory
+
+In the project directory, you can run:
 
 #### `npm start`
 
