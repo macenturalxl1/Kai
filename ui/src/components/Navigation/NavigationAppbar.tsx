@@ -92,6 +92,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const NavigationAppbar: React.FC = (props: any) => {
+    // @ts-ignore
     const classes = useStyles();
 
     const activeRoute = (routeName: string) => {
