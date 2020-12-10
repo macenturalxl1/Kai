@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kai-ui-deployment
+​
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: kai-ui
+        image: [Docker registry URL e.g. [ACCOUNT_ID].dkr.ecr.[REGION].amazonaws.com/[REGISTRY_NAME]]
+        ports:
+        - containerPort: 80
+          protocol: TCP
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: kai-ui-service
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: web
+  type: LoadBalancer

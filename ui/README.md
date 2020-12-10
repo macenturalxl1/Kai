@@ -2,9 +2,7 @@
 
 # Kai: Graph as a service
 
-## Deployments
-
-#### Docker
+## Docker
 
 To run the UI React app in a docker container, follow the steps below:
 Make sure you are in the UI directory when running the commands.
@@ -21,7 +19,41 @@ Make sure you are in the UI directory when running the commands.
 
 Once the process has finished, visit (http://localhost:80), where you will be able to see the UI.
 
-#### Connecting to a Kubernetes cluster
+## Deploying To Kubernetes
+
+#### AWS (EKS Cluster)
+
+##### Optional: Push the Docker image to ECR (Elastic Container Registry)
+
+You can push your Docker image to AWS's Docker registry. To create a registry to push your image to:
+
+1. Login to the ECR on your account using the command
+`aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin [ACCOUNT_ID].dkr.ecr.[region].amazonaws.com`
+
+2. Create a repository on ECR
+`aws ecr create-repository \
+    --repository-name [NEW_REGISTRY_NAME] \
+    --image-scanning-configuration scanOnPush=true \
+    --region [REGION]`
+
+3. Push your image to the newly created registry
+`docker push [ACCOUNT_ID].dkr.ecr.[REGION].amazonaws.com/[NEW_REGISTRY_NAME]`
+
+4. You can confirm it has successfully pushed by pulling the image down from the registry url successfully or logging in to the AWS console and manually checking the image in the ECR service
+
+#### Deploying a Docker Image to an EKS Cluster
+
+1. Create a kubernetes cluster in EKS
+
+2. Use the [deployment.yml](./kubernetes/deployment.yml) to tell your EKS cluster how to deploy the Kai UI image to it using the command
+`kubectl apply -f ./kubernetes/deployment.yml`
+**ensure the .yml's image is pointing to the correct registry and `targetPort` matches the same port exposed in the Dockerfile so it is able to forward traffic to the correct Docker container port*
+
+3. Check the images are successfully deployed by checking the pods are running
+`kubectl get pods -o wide`
+
+4. To access your Docker container app, you can get the url with the below command and request the EXTERNAL IP created to get the Kai UI App
+`kubectl get svc -o wide`
 
 ## Available Scripts in UI Directory
 
