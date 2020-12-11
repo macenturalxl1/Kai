@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kai-ui-deployment
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: kai-ui
+        image: 595076097930.dkr.ecr.us-east-1.amazonaws.com/korat/kai-ui:latest
+        ports:
+        - containerPort: 80
+          protocol: TCP
