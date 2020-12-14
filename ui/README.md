@@ -21,7 +21,14 @@ Make sure you are in the UI directory when running the commands.
 
 Once the process has finished, visit (http://localhost:80), where you will be able to see the UI.
 
-#### Connecting to a Kubernetes cluster
+#### Kubernetes
+* `kubectl create -f <file>` - to create objects. E.g. to create the deployment service run the command: `kubectl create -f kai-deployment-service.yml`.
+* `kubectl apply -f <file>` - to update existing objects. E.g. to update the deployment service created earlier, run the command: `kubectl apply -f kai-deployment-service.yml`.
+* `kubectl delete [deployments|services|pods|nodes|etc]/[name_of_object]` -  to delete objects. E.g to delete a deploymnet, run the command `kubectl delete deployments/kai-ui-deployment`. 
+* `kubectl get [deployments|services|pods|nodes|etc]` - to get a list of all the instances of the chosen resource currently ruunning in your cluster.
+* `kubectl descriibe [deployments|services|pods|nodes|etc]` - to get details on the chosen resource currently running in your cluster.
+
+For more commands, visit: (https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
 
 ## Available Scripts in UI Directory
 
