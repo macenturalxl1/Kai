@@ -55,6 +55,15 @@ You can push your Docker image to AWS's Docker registry. To create a registry to
 4. To access your Docker container app, you can get the url with the below command and request the EXTERNAL IP created to get the Kai UI App
 `kubectl get svc -o wide`
 
+#### (Useful Kubernetes Commands)
+* `kubectl create -f <file>` - to create objects. E.g. to create the deployment service run the command: `kubectl create -f kai-deployment-service.yml`.
+* `kubectl apply -f <file>` - to update existing objects. E.g. to update the deployment service created earlier, run the command: `kubectl apply -f kai-deployment-service.yml`.
+* `kubectl delete [deployments|services|pods|nodes|etc]/[name_of_object]` -  to delete objects. E.g to delete a deploymnet, run the command `kubectl delete deployments/kai-ui-deployment`. 
+* `kubectl get [deployments|services|pods|nodes|etc]` - to get a list of all the instances of the chosen resource currently ruunning in your cluster.
+* `kubectl descriibe [deployments|services|pods|nodes|etc]` - to get details on the chosen resource currently running in your cluster.
+
+For more commands, visit: (https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
+
 ## Available Scripts in UI Directory
 
 In the project directory, you can run:
