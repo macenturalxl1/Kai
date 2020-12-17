@@ -5,7 +5,7 @@ const users = require('./users');
 // app
 const app = express();
 const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 app.use(express.json());
 
 // Token
@@ -32,10 +32,16 @@ app.post('/auth/signout', (req, res) => {
 
 // Create Graph
 app.post('/graphs', (req, res) => {
-    if (req.body.graphName === 'fail') {
-        res.status(500).end();
-    } else {
-        res.status(201).end();
+    try {
+        jwt.verify(req.get('Authorization'), jwtSecret, () => {
+            if (req.body.graphName === 'fail') {
+                res.status(500).end();
+            } else {
+                res.status(201).end();
+            }
+        });
+    } catch (e) {
+        res.status(403).end();
     }
 });
 
@@ -83,3 +89,4 @@ app.delete('/graphs/:graphName', (req, res) => {
         res.status(403).end();
     }
 });
+module.exports = server;
