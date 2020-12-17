@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.6",
     "json": "^10.0.0",
+    "jsonwebtoken": "^8.5.1",
     "material-table": "^1.69.2",
     "material-ui-dropzone": "^3.5.0",
     "material-ui-image": "^3.3.0",

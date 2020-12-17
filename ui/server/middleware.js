@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const users = require('./users');
 
 // app
@@ -8,13 +9,15 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 app.use(express.json());
 
 // Token
-const token = Date.now().toString();
+const jwtSecret = 'my-dev-secret';
+let token;
 
 // Sign in
 app.post('/auth', (req, res) => {
     const username = String(req.body.username).toLowerCase();
 
     if (users.has(username) && users.get(username) === req.body.password) {
+        token = jwt.sign({ data: username }, jwtSecret, { expiresIn: '1 week' });
         res.status(200).send(token);
     } else {
         res.status(403).end();
@@ -37,39 +40,45 @@ app.post('/graphs', (req, res) => {
 
 // Get all graphs
 app.get('/graphs', (req, res) => {
-    if (req.get('Authorization') === token) {
-        res.send([
-            {
-                graphName: 'roadTraffic',
-                currentState: 'DEPLOYED',
-            },
-            {
-                graphName: 'basicGraph',
-                currentState: 'DEPLOYED',
-            },
-        ]);
-    } else {
+    try {
+        jwt.verify(req.get('Authorization'), jwtSecret, () => {
+            res.send([
+                {
+                    graphName: 'roadTraffic',
+                    currentState: 'DEPLOYED',
+                },
+                {
+                    graphName: 'basicGraph',
+                    currentState: 'DEPLOYED',
+                },
+            ]);
+        });
+    } catch (e) {
         res.status(403).end();
     }
 });
 
 // Get graph by ID
 app.get('/graphs/:graphName', (req, res) => {
-    if (req.get('Authorization') === token) {
-        res.send({
-            graphName: req.params.graphName,
-            currentState: 'DEPLOYED',
+    try {
+        jwt.verify(req.get('Authorization'), jwtSecret, () => {
+            res.send({
+                graphName: req.params.graphName,
+                currentState: 'DEPLOYED',
+            });
         });
-    } else {
+    } catch (e) {
         res.status(403).end();
     }
 });
 
 // Delete graph by ID
 app.delete('/graphs/:graphName', (req, res) => {
-    if (req.get('Authorization') === token) {
-        res.status(202).end();
-    } else {
+    try {
+        jwt.verify(req.get('Authorization'), jwtSecret, () => {
+            res.status(202).end();
+        });
+    } catch (e) {
         res.status(403).end();
     }
 });
