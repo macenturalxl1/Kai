@@ -26,7 +26,8 @@ app.post('/auth', (req, res) => {
 
 // Sign out
 app.post('/auth/signout', (req, res) => {
-    res.status(201).end();
+    token = '';
+    res.status(204).end();
 });
 
 // Create Graph
@@ -62,7 +63,7 @@ app.get('/graphs', (req, res) => {
 app.get('/graphs/:graphName', (req, res) => {
     try {
         jwt.verify(req.get('Authorization'), jwtSecret, () => {
-            res.send({
+            res.status(200).send({
                 graphName: req.params.graphName,
                 currentState: 'DEPLOYED',
             });
@@ -76,7 +77,7 @@ app.get('/graphs/:graphName', (req, res) => {
 app.delete('/graphs/:graphName', (req, res) => {
     try {
         jwt.verify(req.get('Authorization'), jwtSecret, () => {
-            res.status(202).end();
+            res.status(204).end();
         });
     } catch (e) {
         res.status(403).end();
