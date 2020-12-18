@@ -61,10 +61,49 @@ describe('Graphs', () => {
     it('Should respond with a 500 code when post is called with the graphs path and user is signed in', async () => {
         await request(server)
             .post('/graphs')
+            .set('Authorization', token)
             .send({
                 graphName: 'fail',
                 currentState: 'FAILED',
             })
             .expect(500);
+    });
+    it('Should respond with graphs when GET is called with the graphs path and user is signed in', async () => {
+        await request(server)
+            .get('/graphs')
+            .set('Authorization', token)
+            .then((response) => {
+                expect(response.statusCode).toBe(200);
+                expect(response.body).toStrictEqual([
+                    {
+                        graphName: 'roadTraffic',
+                        currentState: 'DEPLOYED',
+                    },
+                    {
+                        graphName: 'basicGraph',
+                        currentState: 'DEPLOYED',
+                    },
+                ]);
+            });
+    });
+    it('Should respond with a graph when GET is called with the graphs path and user is signed in', async () => {
+        await request(server)
+            .get('/graphs/roadTraffic')
+            .set('Authorization', token)
+            .then((response) => {
+                expect(response.statusCode).toBe(200);
+                expect(response.body).toStrictEqual({
+                    graphName: 'roadTraffic',
+                    currentState: 'DEPLOYED',
+                });
+            });
+    });
+    it('Should respond with a 204 code when GET is called with the graphs path and user is signed in', async () => {
+        await request(server)
+            .delete('/graphs/roadTraffic')
+            .set('Authorization', token)
+            .then((response) => {
+                expect(response.statusCode).toBe(204);
+            });
     });
 });
