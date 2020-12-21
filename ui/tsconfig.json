@@ -22,7 +22,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "typeRoots": ["./typings", "./node_modules/@types"]
+    "typeRoots": ["./typings", "./node_modules/@types"],
+    "noImplicitAny": false
   },
   "include": [
     "./src/**/*.tsx", 
