@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogContent, DialogTitle, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import TempPasswordLoginForm from './temp-password-login-form';
 import LoginForm from './login-form';
