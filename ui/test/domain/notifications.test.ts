@@ -48,12 +48,12 @@ describe('Error Message', () => {
 
         expect(notes1.errorMessage()).toBe('notification 2');
     });
-    it('should be empty when both notes are empty', () =>{
+    it('should be empty when both notes are empty', () => {
         const notes1 = new Notifications();
         const notes2 = new Notifications();
 
         notes1.concat(notes2);
 
         expect(notes1.isEmpty()).toBe(true);
-    })
+    });
 });
