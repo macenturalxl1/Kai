@@ -51,11 +51,10 @@ describe('Navigation Appbar Component', () => {
     it('should have navigation link in each list item', () => {
         const Target = [{ href: '/AddGraph' }, { href: '/ViewGraph' }, { href: '/UserGuide' }];
         const NavUl = component.find('ul').at(1);
-
-        NavUl.forEach((NavUl, idx) => {
-            const anchor = NavUl.find('a').at(idx);
+        for (var index = 0; index < NavUl.length; index += 1) {
+            const anchor = NavUl.find('a').at(index);
             const getAttribute = anchor.getDOMNode().getAttribute('href');
-            expect(getAttribute).toBe(Target[idx].href);
-        });
+            expect(getAttribute).toBe(Target[index].href);
+        }
     });
 });

@@ -105,12 +105,12 @@ describe('On Render', () => {
         expect(textfield.at(0).props().name).toBe('graphName');
     });
     it('should have an elements text area', () => {
-        const elements = wrapper.find('textarea#schema-elements');
-        expect(elements.props().name).toBe('schema-elements');
+        const elementsTextfield = wrapper.find('textarea#schema-elements');
+        expect(elementsTextfield.props().name).toBe('schema-elements');
     });
     it('should have a types text area', () => {
-        const types = wrapper.find('textarea#schema-types');
-        expect(types.props().name).toBe('schema-types');
+        const typesTextfield = wrapper.find('textarea#schema-types');
+        expect(typesTextfield.props().name).toBe('schema-types');
     });
     it('should have icon button', () => {
         const fileButton = wrapper.find('button').at(0).find('svg');
@@ -202,6 +202,7 @@ describe('On Submit Request', () => {
         inputTypes(types);
 
         clickSubmit();
+        //@ts-ignore
         await wrapper.update();
         await wrapper.update();
 
@@ -230,26 +231,26 @@ function inputGraphName(graphName: string): void {
     });
 }
 
-function inputElements(elements: object): void {
+function inputElements(elementsObject: object): void {
     wrapper.find('textarea#schema-elements').simulate('change', {
-        target: { value: JSON.stringify(elements) },
+        target: { value: JSON.stringify(elementsObject) },
     });
-    expect(wrapper.find('textarea#schema-elements').props().value).toBe(JSON.stringify(elements));
+    expect(wrapper.find('textarea#schema-elements').props().value).toBe(JSON.stringify(elementsObject));
 }
 
-function inputTypes(types: object): void {
+function inputTypes(typesObject: object): void {
     wrapper.find('textarea#schema-types').simulate('change', {
-        target: { value: JSON.stringify(types) },
+        target: { value: JSON.stringify(typesObject) },
     });
-    expect(wrapper.find('textarea#schema-types').props().value).toBe(JSON.stringify(types));
+    expect(wrapper.find('textarea#schema-types').props().value).toBe(JSON.stringify(typesObject));
 }
 
-function clickAttachFile(wrapper: ReactWrapper): void {
-    wrapper.find('button#attach-file-button').simulate('click');
+function clickAttachFile(reactWrapper: ReactWrapper): void {
+    reactWrapper.find('button#attach-file-button').simulate('click');
 }
 
-function clickCloseDropzone(wrapper: ReactWrapper): void {
-    wrapper.find('button#close-dropzone-button').simulate('click');
+function clickCloseDropzone(reactWrapper: ReactWrapper): void {
+    reactWrapper.find('button#close-dropzone-button').simulate('click');
 }
 
 function clickSubmit(): void {

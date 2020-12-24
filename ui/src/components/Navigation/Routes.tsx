@@ -3,7 +3,6 @@ import AddGraph from '../AddGraph/AddGraph';
 import UserGuide from '../UserGuide/UserGuide';
 
 const Routes = [
-   
     {
         path: '/AddGraph',
         sidebarName: 'Add Graph',

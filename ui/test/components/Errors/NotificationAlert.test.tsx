@@ -1,6 +1,10 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { INotificationAlertProps, NotificationAlert, AlertType } from '../../../src/components/Errors/NotificationAlert'
+import {
+    INotificationAlertProps,
+    NotificationAlert,
+    AlertType,
+} from '../../../src/components/Errors/NotificationAlert';
 
 describe('Notification Alert', () => {
     it('should render sucess message and M-UI icon from props', () => {

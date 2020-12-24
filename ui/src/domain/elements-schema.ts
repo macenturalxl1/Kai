@@ -1,5 +1,4 @@
 import { Notifications } from './notifications';
-import { type } from 'os';
 
 export class ElementsSchema {
     private elements: any;
@@ -45,7 +44,7 @@ export class ElementsSchema {
             notes.addError(`Entities is type ${typeof this.elements.entities} and not an object of Entity objects`);
             return;
         }
-        Object.keys(this.elements.entities).filter((entityName: string) => {
+        Object.keys(this.elements.entities).forEach((entityName: string) => {
             const entity: IEntity = this.elements.entities[entityName];
 
             let missingProps: Array<string> = [];
@@ -77,7 +76,7 @@ export class ElementsSchema {
             return;
         }
 
-        Object.keys(this.elements.edges).filter((edgeName: string) => {
+        Object.keys(this.elements.edges).forEach((edgeName: string) => {
             if (edgeName !== 'groupBy') {
                 const edge: IEdge = this.elements.edges[edgeName];
                 let missingProps: Array<string> = [];

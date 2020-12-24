@@ -60,7 +60,7 @@ export class TypesSchema {
             notes.addError(`Types is a ${typeof this.types.types} and not an object of types objects`);
             return;
         }
-        Object.keys(this.types.types).filter((typeName: string) => {
+        Object.keys(this.types.types).forEach((typeName: string) => {
             const type: IType = this.types.types[typeName];
             if (type.description !== undefined && typeof type.description !== 'string') {
                 notes.addError(
