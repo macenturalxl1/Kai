@@ -110,6 +110,15 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+### `npm run build-with-env`
+Passes the variables in the .env files as environment variables to the scripts in the buildWithEnv.sh file.
+
+The scripts in the buildWithEnv.sh file do the following:
+* Check whether the `REACT_APP_API_PLATFORM` variable is empty
+* If it is empty, it returns: `REACT_APP_API_PLATFORM is unset`
+* If it is not empty, it runs the `react-scripts build` command, which has the same outcome as the `npm run build` script above
+
+The purpose of this command is to validate whether an API platform has been set for Kai to use.
 ## AWS Integration
 
 For production mode and build, a .env file must be configured for the following key/values to integrated with the deployed API and it's User Pool that you want to interface with:
