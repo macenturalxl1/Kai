@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kai-ui-deployment
-​
 spec:
   replicas: 3
   selector:
@@ -20,7 +19,7 @@ spec:
         - containerPort: 80
           protocol: TCP
 
---- 
+---
 apiVersion: v1
 kind: Service
 metadata:

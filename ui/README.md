@@ -43,11 +43,11 @@ You can push your Docker image to AWS's Docker registry. To create a registry to
 
 #### Deploying a Docker Image to an EKS Cluster
 
-1. Create a kubernetes cluster in EKS
+1. Create a kubernetes cluster in EKS with the `eksctl create cluster` command
 
 2. Use the [deployment.yml](./kubernetes/deployment.yml) to tell your EKS cluster how to deploy the Kai UI image to it using the command
 `kubectl apply -f ./kubernetes/deployment.yml`
-**ensure the .yml's image is pointing to the correct registry and `targetPort` matches the same port exposed in the Dockerfile so it is able to forward traffic to the correct Docker container port*
+**ensure the .yml's Deployment containers image is pointing to the correct registry and `targetPort` matches the same port exposed in the Dockerfile so it is able to forward traffic to the correct Docker container port*
 
 3. Check the images are successfully deployed by checking the pods are running
 `kubectl get pods -o wide`
