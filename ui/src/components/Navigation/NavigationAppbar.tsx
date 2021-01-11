@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -94,6 +94,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const NavigationAppbar: React.FC = (props: any) => {
     // @ts-ignore
     const classes = useStyles();
+    const [username, setUsername] = useState('');
 
     const activeRoute = (routeName: string) => {
         return props.location.pathname === routeName;
@@ -120,7 +121,7 @@ const NavigationAppbar: React.FC = (props: any) => {
                     <Typography variant="h6" className={classes.title}>
                         Kai: Graph As A Service
                     </Typography>
-                    <LoginModal />
+                    <LoginModal onLogin={(username) => setUsername(username)} />
                 </Toolbar>
             </AppBar>
 

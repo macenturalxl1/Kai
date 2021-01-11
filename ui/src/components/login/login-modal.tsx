@@ -28,7 +28,9 @@ function styles(theme: any) {
     });
 }
 
-interface IProps extends WithStyles<typeof styles> {}
+interface IProps extends WithStyles<typeof styles> {
+    onLogin(username: string): void;
+}
 
 export enum FormType {
     EXISTING_USER_LOGIN,
@@ -89,13 +91,19 @@ class LoginModal extends React.Component<IProps, IState> {
                         {formType === FormType.EXISTING_USER_LOGIN && (
                             <LoginForm
                                 onChangeForm={(formType: FormType) => this.setState({ formType })}
-                                onSuccess={() => this.setState({ status: UserStatus.SIGNED_IN })}
+                                onSuccess={(username: string) => {
+                                    this.setState({ status: UserStatus.SIGNED_IN });
+                                    this.props.onLogin(username);
+                                }}
                             />
                         )}
                         {formType === FormType.TEMP_PASSWORD_LOGIN && (
                             <TempPasswordLoginForm
                                 onChangeForm={(formType: FormType) => this.setState({ formType })}
-                                onSuccess={() => this.setState({ status: UserStatus.SIGNED_IN })}
+                                onSuccess={(username: string) => {
+                                    this.setState({ status: UserStatus.SIGNED_IN });
+                                    this.props.onLogin(username);
+                                }}
                             />
                         )}
                     </DialogContent>

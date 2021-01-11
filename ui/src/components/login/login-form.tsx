@@ -9,7 +9,7 @@ import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
 
 interface IProps {
     onChangeForm(fromType: FormType): void;
-    onSuccess(): void;
+    onSuccess(username: string): void;
 }
 
 interface IState {
@@ -40,11 +40,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
     private logIn() {
         const { username, password } = this.state;
         const onSuccess = () => {
-            this.setState({
-                outcome: AlertType.SUCCESS,
-                outcomeMessage: `Login successful: Hi ${username}`,
-            });
-            this.props.onSuccess();
+            this.props.onSuccess(username);
         };
         const onError = (errorMessage: string) => {
             this.setState({
@@ -52,9 +48,10 @@ export default class LoginForm extends React.Component<IProps, IState> {
                 outcomeMessage: `Login failed: ${errorMessage}`,
             });
         };
+        console.log(typeof this.authClient )
         this.authClient.login(username, password, onSuccess, onError);
     }
-
+    
     public render() {
         return (
             <main id="login-form">

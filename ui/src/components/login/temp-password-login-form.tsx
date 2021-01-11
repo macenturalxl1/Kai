@@ -9,7 +9,7 @@ import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
 
 interface IProps {
     onChangeForm(fromType: FormType): void;
-    onSuccess(): void;
+    onSuccess(username: string): void;
 }
 
 interface IState {
@@ -46,7 +46,7 @@ export default class OldPasswordLoginForm extends React.Component<IProps, IState
                 outcome: AlertType.SUCCESS,
                 outcomeMessage: `Login successful: Hi ${username}`,
             });
-            this.props.onSuccess();
+            this.props.onSuccess(username);
         };
         const onError = (errorMessage: string) => {
             this.setState({

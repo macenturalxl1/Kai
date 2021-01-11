@@ -48,15 +48,15 @@ describe('Sign in Button', () => {
 
         expect(component.find('button#submit-sign-in-button').props().disabled).toBe(false);
     });
-    it('should display welcome message and call onSuccess callback when successfully logged in', () => {
+    fit('should display welcome message and call onSuccess callback when successfully logged in', () => {
         mockCognitoClientLogin();
 
         inputUsername('JoVibin');
         inputPassword('testPassword');
         clickSubmitSignIn();
 
-        expect(component.find('div#notification-alert').text()).toBe('Login successful: Hi JoVibin');
         expect(onSuccessCallBack).toHaveBeenCalledTimes(1);
+        expect(onSuccessCallBack).toHaveBeenCalledWith('JoVibin');
     });
     it('should display error message when sign in fails', () => {
         mockCognitoClientNewUserLoginWithError('My login failed');
