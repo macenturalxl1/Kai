@@ -7,10 +7,10 @@ jest.mock('../../../src/rest/clients/cognito-client');
 
 let component: ReactWrapper;
 const onSuccessCallBack = jest.fn();
-beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_PLATFORM: 'AWS' })));
+beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'AWS' })));
 beforeEach(() => (component = mount(<LoginForm onChangeForm={() => {}} onSuccess={onSuccessCallBack} />)));
 afterEach(() => component.unmount());
-afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_PLATFORM: '' })));
+afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: '' })));
 
 describe('On Render', () => {
     it('should have a username input field', () => {
@@ -48,15 +48,15 @@ describe('Sign in Button', () => {
 
         expect(component.find('button#submit-sign-in-button').props().disabled).toBe(false);
     });
-    it('should display welcome message and call onSuccess callback when successfully logged in', () => {
+    it('should call onSuccess callback with Username when successfully logged in', async () => {
         mockCognitoClientLogin();
 
         inputUsername('JoVibin');
         inputPassword('testPassword');
         clickSubmitSignIn();
 
-        expect(component.find('div#notification-alert').text()).toBe('Login successful: Hi JoVibin');
         expect(onSuccessCallBack).toHaveBeenCalledTimes(1);
+        expect(onSuccessCallBack).toHaveBeenCalledWith('JoVibin');
     });
     it('should display error message when sign in fails', () => {
         mockCognitoClientNewUserLoginWithError('My login failed');

@@ -8,16 +8,17 @@ jest.mock('../../../src/rest/clients/cognito-client');
 
 let component: ReactWrapper;
 const jestMock = jest.fn();
+const usernameCallback = jest.fn();
 
-beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_PLATFORM: 'AWS' })));
+beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'AWS' })));
 beforeEach(() => {
-    component = mount(<LoginModal />);
+    component = mount(<LoginModal onLogin={usernameCallback} />);
 });
 afterEach(() => {
     component.unmount();
     jestMock.mockReset();
 });
-afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_PLATFORM: '' })));
+afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: '' })));
 
 describe('On Render', () => {
     it('should render Login form as full screen modal', () => {
@@ -28,6 +29,19 @@ describe('On Render', () => {
 
         expect(signOutButton.length).toBe(1);
         expect(signOutButton.text()).toBe('Sign out');
+    });
+});
+
+describe('onLogin call back', ()=>{
+    it('should call back with Username when a User logs in', ()=>{
+        mockCognitoClientLogin();
+
+        inputUsername('testUsername');
+        inputPassword('testPassword');
+
+        clickSubmitSignIn();
+
+        expect(usernameCallback).toHaveBeenCalledWith('testUsername')
     });
 });
 

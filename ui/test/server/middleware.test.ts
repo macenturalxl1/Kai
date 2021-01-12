@@ -1,10 +1,12 @@
-const request = require('supertest');
-const server = require('../../server/middleware');
+import request from 'supertest';
+import server from '../../server/middleware';
 
 let token: string;
+
 afterEach(function () {
     server.close();
 });
+
 describe('Auth', () => {
     it('Should respond to the POST method with a 200 status code when the username and password is correct', async () => {
         await request(server)
@@ -33,7 +35,8 @@ describe('Auth', () => {
         await request(server).post('/auth/signout').expect(204);
     });
 });
-describe('Graphs', () => {
+
+describe('Graph API', () => {
     beforeAll(async (done) => {
         await request(server)
             .post('/auth')
@@ -41,7 +44,7 @@ describe('Graphs', () => {
                 username: 'user@yahoo.com',
                 password: 'abc123',
             })
-            .end((err, response) => {
+            .then((response) => {
                 token = response.body;
                 done();
             });

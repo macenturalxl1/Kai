@@ -19,7 +19,7 @@ import { Graph } from '../../domain/graph';
 import { GetAllGraphsRepo } from '../../rest/repositories/get-all-graphs-repo';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import RefreshOutlinedIcon from '@material-ui/icons/RefreshOutlined';
-import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
+import { AlertType, NotificationAlert } from '../alerts/notification-alert';
 import { DeleteGraphRepo } from '../../rest/repositories/delete-graph-repo';
 
 interface IState {

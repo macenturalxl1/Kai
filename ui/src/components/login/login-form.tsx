@@ -2,14 +2,14 @@ import React from 'react';
 import { Button, CssBaseline, Grid, TextField, Link } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
+import { AlertType, NotificationAlert } from '../alerts/notification-alert';
 import { FormType } from './login-modal';
 import { IAuthClient } from '../../rest/clients/authclient';
 import { AuthClientFactory } from '../../rest/clients/auth-client-factory';
 
 interface IProps {
     onChangeForm(fromType: FormType): void;
-    onSuccess(): void;
+    onSuccess(username: string): void;
 }
 
 interface IState {
@@ -40,11 +40,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
     private logIn() {
         const { username, password } = this.state;
         const onSuccess = () => {
-            this.setState({
-                outcome: AlertType.SUCCESS,
-                outcomeMessage: `Login successful: Hi ${username}`,
-            });
-            this.props.onSuccess();
+            this.props.onSuccess(username);
         };
         const onError = (errorMessage: string) => {
             this.setState({
@@ -54,7 +50,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
         };
         this.authClient.login(username, password, onSuccess, onError);
     }
-
+    
     public render() {
         return (
             <main id="login-form">

@@ -29,7 +29,6 @@ describe('On Render', () => {
     it('should render Update Password button', () => {
         expect(component.find('button#submit-sign-in-button')).toHaveLength(1);
     });
-
     it('should submit the form if all 3 textfields have text and the enter key is pressed ', () => {
         //given that i have inputted my details in the text field
         //when I press the enter key
@@ -71,7 +70,7 @@ describe('Disable Form', () => {
 
         expect(component.find('button#submit-sign-in-button').props().disabled).toBe(false);
     });
-    it('should display welcome message and call onSuccess call back when sign in is successful', () => {
+    it('should call onSuccess call back with Username when sign in is successful', () => {
         mockCognitoClientNewUserLogin();
 
         inputUsername('BillSmith');
@@ -79,8 +78,8 @@ describe('Disable Form', () => {
         inputNewPassword('testNewPassword');
         clickSubmitSignIn();
 
-        expect(component.find('div#notification-alert').text()).toBe('Login successful: Hi BillSmith');
         expect(onSuccessCallBack).toHaveBeenCalledTimes(1);
+        expect(onSuccessCallBack).toHaveBeenLastCalledWith('BillSmith');
     });
     it('should display error message when sign in fails', () => {
         mockCognitoClientNewUserLoginWithError('Temp password incorrect');

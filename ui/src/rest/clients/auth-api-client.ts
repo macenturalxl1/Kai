@@ -7,7 +7,6 @@ export class AuthApiClient implements IAuthClient {
     private readonly baseUrl = process.env.REACT_APP_AUTH_ENDPOINT;
 
     public async login(username: string, password: string, onSuccess: Function, onError: Function): Promise<void> {
-        // const hashedPassword = bcrypt.hashSync(password, 10);
         try {
             const token: AxiosResponse<string> = await axios.post(`/auth`, {
                 username: username,
@@ -27,7 +26,6 @@ export class AuthApiClient implements IAuthClient {
         onSuccess: Function,
         onError: Function
     ): Promise<void> {
-        // const hashedPassword = bcrypt.hashSync(tempPassword, 10);
         try {
             const token: AxiosResponse<string> = await axios.post(`/auth`, {
                 username: username,

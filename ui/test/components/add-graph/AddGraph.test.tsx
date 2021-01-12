@@ -1,6 +1,6 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
-import AddGraph from '../../../src/components/AddGraph/AddGraph';
+import AddGraph from '../../../src/components/add-graph/AddGraph';
 import { CreateGraphRepo } from '../../../src/rest/repositories/create-graph-repo';
 
 jest.mock('../../../src/rest/repositories/create-graph-repo');

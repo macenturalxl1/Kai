@@ -1,6 +1,6 @@
-import ViewGraph from '../ViewGraph/ViewGraph';
-import AddGraph from '../AddGraph/AddGraph';
-import UserGuide from '../UserGuide/UserGuide';
+import ViewGraph from '../view-graphs/view-graphs';
+import AddGraph from '../add-graph/AddGraph';
+import UserGuide from '../user-guide/user-guide';
 
 const Routes = [
     {

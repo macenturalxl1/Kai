@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import Routes from './Routes';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -94,6 +94,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const NavigationAppbar: React.FC = (props: any) => {
     // @ts-ignore
     const classes = useStyles();
+    const [username, setUsername] = useState('');
 
     const activeRoute = (routeName: string) => {
         return props.location.pathname === routeName;
@@ -112,6 +113,10 @@ const NavigationAppbar: React.FC = (props: any) => {
         }
     };
 
+    const buildUsername = () => {
+        return username.includes('@') ? username.slice(0, username.indexOf('@')) : username;
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -120,7 +125,7 @@ const NavigationAppbar: React.FC = (props: any) => {
                     <Typography variant="h6" className={classes.title}>
                         Kai: Graph As A Service
                     </Typography>
-                    <LoginModal />
+                    <LoginModal onLogin={(username) => setUsername(username)} />
                 </Toolbar>
             </AppBar>
 
@@ -136,11 +141,13 @@ const NavigationAppbar: React.FC = (props: any) => {
                         <List>
                             <ListItem className={classes.listItem}>
                                 <ListItemAvatar>
-                                    <Avatar>
-                                        <PersonIcon />
-                                    </Avatar>
+                                    <Avatar>{username.slice(0, 1)}</Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary="User" secondary="someuser@mail.com" />
+                                <ListItemText
+                                    id="signedin-user-details"
+                                    primary={buildUsername()}
+                                    secondary={username}
+                                />
                             </ListItem>
                         </List>
                         <Divider />
