@@ -19,7 +19,7 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import { DropzoneArea } from 'material-ui-dropzone';
 import { TransitionProps } from '@material-ui/core/transitions';
 import Toolbar from '@material-ui/core/Toolbar';
-import { AlertType, NotificationAlert } from '../Errors/NotificationAlert';
+import { AlertType, NotificationAlert } from '../alerts/notification-alert';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
 import { ElementsSchema } from '../../domain/elements-schema';

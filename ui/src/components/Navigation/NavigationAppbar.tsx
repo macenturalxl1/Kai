@@ -113,6 +113,10 @@ const NavigationAppbar: React.FC = (props: any) => {
         }
     };
 
+    const buildUsername = () => {
+        return username.includes('@') ? username.slice(0, username.indexOf('@')) : username;
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -137,11 +141,13 @@ const NavigationAppbar: React.FC = (props: any) => {
                         <List>
                             <ListItem className={classes.listItem}>
                                 <ListItemAvatar>
-                                    <Avatar>
-                                        <PersonIcon />
-                                    </Avatar>
+                                    <Avatar>{username.slice(0, 1)}</Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary="User" secondary="someuser@mail.com" />
+                                <ListItemText
+                                    id="signedin-user-details"
+                                    primary={buildUsername()}
+                                    secondary={username}
+                                />
                             </ListItem>
                         </List>
                         <Divider />

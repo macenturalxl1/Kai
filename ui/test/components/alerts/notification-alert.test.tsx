@@ -4,7 +4,7 @@ import {
     INotificationAlertProps,
     NotificationAlert,
     AlertType,
-} from '../../../src/components/Errors/NotificationAlert';
+} from '../../../src/components/alerts/notification-alert';
 
 describe('Notification Alert', () => {
     it('should render sucess message and M-UI icon from props', () => {

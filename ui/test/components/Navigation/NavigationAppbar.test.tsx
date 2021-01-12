@@ -1,10 +1,14 @@
 import { mount, ReactWrapper } from 'enzyme';
-import NavigationAppbar from '../../../src/components/Navigation/NavigationAppbar';
+import NavigationAppbar from '../../../src/components/navigation/NavigationAppbar';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
+import { CognitoClient } from '../../../src/rest/clients/cognito-client';
+
+jest.mock('../../../src/rest/clients/cognito-client');
 
 let component: ReactWrapper;
 
+beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'AWS' })));
 beforeEach(() => {
     component = mount(
         <MemoryRouter>
@@ -13,6 +17,7 @@ beforeEach(() => {
     );
 });
 afterEach(() => component.unmount());
+afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: '' })));
 
 describe('Navigation Appbar Component', () => {
     it('should display appbar', () => {
@@ -26,15 +31,6 @@ describe('Navigation Appbar Component', () => {
         const signInButton = component.find('button#sign-out-button');
 
         expect(signInButton.text()).toEqual('Sign out');
-    });
-
-    it('should show user id and email in Navbar', () => {
-        const NavUl = component.find('ul').at(0);
-        const UserIcon = NavUl.find('svg');
-
-        expect(NavUl.find('span').text()).toEqual('User');
-        expect(NavUl.find('p').text()).toEqual('someuser@mail.com');
-        expect(UserIcon).toHaveLength(1);
     });
 
     it('should display menu in Navbar', () => {
@@ -58,3 +54,51 @@ describe('Navigation Appbar Component', () => {
         }
     });
 });
+
+describe('Display Signed In User Details', () => {
+    it('should display the username & email of the User who signed in', () => {
+        mockCognitoClientLogin();
+        inputUsername('Harry@gmail.com');
+        inputPassword('asdfgh');
+
+        clickSubmitSignIn();
+
+        expect(component.find('div#signedin-user-details').text()).toBe('HarryHarry@gmail.com');
+    });
+    it('should display the non-email username of the User who signed in', () => {
+        mockCognitoClientLogin();
+        inputUsername('Batman');
+        inputPassword('zxcvb');
+
+        clickSubmitSignIn();
+
+        expect(component.find('div#signedin-user-details').text()).toBe('BatmanBatman');
+    });
+});
+
+function inputUsername(username: string): void {
+    expect(component.find('input#username').length).toBe(1);
+    component.find('input#username').simulate('change', {
+        target: { value: username },
+    });
+}
+
+function inputPassword(password: string): void {
+    expect(component.find('input#password').length).toBe(1);
+    component.find('input#password').simulate('change', {
+        target: { value: password },
+    });
+}
+
+function clickSubmitSignIn() {
+    component.find('button#submit-sign-in-button').simulate('click');
+}
+
+function mockCognitoClientLogin() {
+    // @ts-ignore
+    CognitoClient.prototype.login.mockImplementationOnce(
+        (username: string, password: string, onSuccess: () => void, onError: () => void) => {
+            onSuccess();
+        }
+    );
+}

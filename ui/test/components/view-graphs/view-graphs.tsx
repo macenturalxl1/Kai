@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
-import ViewGraph from '../../../src/components/ViewGraph/ViewGraph';
+import ViewGraph from '../../../src/components/view-graphs/view-graphs';
 import { GetAllGraphsRepo } from '../../../src/rest/repositories/get-all-graphs-repo';
 import { Graph } from '../../../src/domain/graph';
 import { DeleteGraphRepo } from '../../../src/rest/repositories/delete-graph-repo';
