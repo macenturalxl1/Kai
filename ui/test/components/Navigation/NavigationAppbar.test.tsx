@@ -1,5 +1,5 @@
 import { mount, ReactWrapper } from 'enzyme';
-import NavigationAppbar from '../../../src/components/navigation/NavigationAppbar';
+import NavigationAppbar from '../../../src/components/navigation-bar/NavigationAppbar';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { CognitoClient } from '../../../src/rest/clients/cognito-client';
