@@ -1,6 +1,5 @@
 # STAGE 1 - BUILD UI APP
 FROM node:13.12.0-alpine as build
-
 # specify /app working directory inside the image
 WORKDIR /app
 # add node_modules
@@ -16,8 +15,7 @@ RUN npm run build
 
 
 # STAGE 2 - Build IMAGE & COPY REACT UI BUILD FILES
-FROM nginx:1.17.8-alpine
-
+FROM nginxinc/nginx-unprivileged:1.18-alpine
 # copy build files inside the image to directory where Nginx serves from
 COPY --from=build /app/build /usr/share/nginx/html
 # remove the default Nginx configuration file
@@ -26,5 +24,9 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/nginx.conf /etc/nginx/conf.d
 # expose port 80 for the Nginx server to listen to
 EXPOSE 80
+# comment user directive as master process is run as user in OpenShift
+RUN sed -i.bak 's/^user/#user/' /etc/nginx/nginx.conf
+
+#RUN chgrp -R 0 /some/directory && chmod -R g=u /some/directory
 # run Nginx in foreground and not as daemon
 CMD ["nginx", "-g", "daemon off;"]
