@@ -13,9 +13,10 @@ COPY . /app
 # build app
 RUN npm run build
 
-
 # STAGE 2 - Build IMAGE & COPY REACT UI BUILD FILES
 FROM nginxinc/nginx-unprivileged:1.18-alpine
+# support running as arbitrary user which belogs to the root group
+RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
 # copy build files inside the image to directory where Nginx serves from
 COPY --from=build /app/build /usr/share/nginx/html
 # remove the default Nginx configuration file
@@ -26,7 +27,6 @@ COPY nginx/nginx.conf /etc/nginx/conf.d
 EXPOSE 80
 # comment user directive as master process is run as user in OpenShift
 RUN sed -i.bak 's/^user/#user/' /etc/nginx/nginx.conf
-
 #RUN chgrp -R 0 /some/directory && chmod -R g=u /some/directory
 # run Nginx in foreground and not as daemon
 CMD ["nginx", "-g", "daemon off;"]
