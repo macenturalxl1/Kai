@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"npm run client\" \"npm run server\"",
+    "start": "npm run client",
     "build-with-env": "env-cmd ./buildWithEnv.sh",
     "client": "react-scripts start",
     "server": "node server/middleware.js",
