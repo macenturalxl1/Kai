@@ -16,7 +16,7 @@ spec:
       - name: kai-ui
         image: [Docker registry URL e.g. [ACCOUNT_ID].dkr.ecr.[REGION].amazonaws.com/[REGISTRY_NAME]]
         ports:
-        - containerPort: 80
+        - containerPort: 8081
           protocol: TCP
 
 ---
@@ -26,9 +26,9 @@ metadata:
   name: kai-ui-service
 spec:
   ports:
-  - port: 80
+  - port: 8081
     protocol: TCP
-    targetPort: 80
+    targetPort: 8081
   selector:
     app: web
   type: LoadBalancer
