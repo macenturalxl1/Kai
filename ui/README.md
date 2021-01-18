@@ -30,11 +30,15 @@ You can push your Docker image to AWS's Docker registry. To create a registry to
 1. Login to the ECR on your account using the command
 `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin [ACCOUNT_ID].dkr.ecr.[region].amazonaws.com`
 
-2. Create a repository on ECR
-`aws ecr create-repository \
-    --repository-name [NEW_REGISTRY_NAME] \
+*Optional - if you need to create a repository in ECR, use the following command:
+```
+aws ecr create-repository \
+    --repository-name [REPOSITORY_NAME] \
     --image-scanning-configuration scanOnPush=true \
-    --region [REGION]`
+    --region [REGION]
+```
+
+2. Tag your local built image with your ECR registry location:  `docker tag [IMAGE_ID TAG] [ACCOUNT_ID].dkr.ecr.[REGION].amazonaws.com/[REGISTRY_NAME]`
 
 3. Push your image to the newly created registry
 `docker push [ACCOUNT_ID].dkr.ecr.[REGION].amazonaws.com/[NEW_REGISTRY_NAME]`
@@ -43,7 +47,7 @@ You can push your Docker image to AWS's Docker registry. To create a registry to
 
 #### Deploying a Docker Image to an EKS Cluster
 
-1. Create a kubernetes cluster in EKS with the `eksctl create cluster` command
+1. Create a kubernetes cluster in EKS with the `eksctl create cluster` command (addtional options `-n [CLUSTER_NAME]` `-r [REGION]`)
 
 2. Use the [deployment.yml](./kubernetes/deployment.yml) to tell your EKS cluster how to deploy the Kai UI image to it using the command
 `kubectl apply -f ./kubernetes/deployment.yml`
@@ -60,7 +64,7 @@ You can push your Docker image to AWS's Docker registry. To create a registry to
 * `kubectl apply -f <file>` - to update existing objects. E.g. to update the deployment service created earlier, run the command: `kubectl apply -f kai-deployment-service.yml`.
 * `kubectl delete [deployments|services|pods|nodes|etc]/[name_of_object]` -  to delete objects. E.g to delete a deploymnet, run the command `kubectl delete deployments/kai-ui-deployment`. 
 * `kubectl get [deployments|services|pods|nodes|etc]` - to get a list of all the instances of the chosen resource currently ruunning in your cluster.
-* `kubectl descriibe [deployments|services|pods|nodes|etc]` - to get details on the chosen resource currently running in your cluster.
+* `kubectl describe [deployments|services|pods|nodes|etc]` - to get details on the chosen resource currently running in your cluster.
 
 For more commands, visit: (https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
 
