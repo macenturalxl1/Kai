@@ -4,7 +4,8 @@ import { CognitoClient } from './cognito-client';
 import { RbacClient } from './rbac-client';
 
 export class AuthClientFactory {
-    private readonly platform = process.env.REACT_APP_API_PLATFORM;
+    // @ts-ignore
+    private readonly platform = window._env_.REACT_APP_API_PLATFORM;
 
     public create(): IAuthClient {
         switch (this.platform) {

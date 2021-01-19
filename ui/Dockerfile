@@ -7,6 +7,11 @@ ENV PATH /app/node_modules/.bin:$PATH
 # copy package & package-lock json to app/ inside the image
 COPY ./package*.json /app/
 # install npm dependencies
+# Copy .env file and shell script to container
+COPY ./env.sh .
+COPY .env .
+CMD ["/root/env.sh"]
+
 RUN npm install --silent
 # copy all code to app/ directory inside the image
 COPY . /app
@@ -25,5 +30,7 @@ COPY nginx/nginx.conf /etc/nginx/conf.d
 EXPOSE 8081
 # comment user directive as master process is run as user in OpenShift
 RUN sed -i.bak 's/^user/#user/' /etc/nginx/nginx.conf
+
+
 # run Nginx in foreground and not as daemon
 CMD ["nginx", "-g", "daemon off;"]

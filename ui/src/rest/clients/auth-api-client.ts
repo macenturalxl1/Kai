@@ -4,7 +4,8 @@ import { RestClient } from './rest-client';
 // import bcrypt from 'bcrypt';
 
 export class AuthApiClient implements IAuthClient {
-    private readonly baseUrl = process.env.REACT_APP_AUTH_ENDPOINT;
+    // @ts-ignore
+    private readonly baseUrl = window._env_.REACT_APP_AUTH_ENDPOINT;
 
     public async login(username: string, password: string, onSuccess: Function, onError: Function): Promise<void> {
         try {

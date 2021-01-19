@@ -12,7 +12,8 @@
     "watch": "jest --watchAll",
     "deploy": "aws s3 sync build/ s3://kai-ui",
     "eject": "react-scripts eject",
-    "lint": "eslint './src/**/*.{ts,tsx}' --fix"
+    "lint": "eslint './src/**/*.{ts,tsx}' --fix",
+    "dev": "chmod +x ./env.sh && ./env.sh && cp env-config.js ./public/ && react-scripts start"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
