@@ -2,6 +2,20 @@
 
 # Kai: Graph as a service
 
+## Helm
+
+#### Openshift Deployment
+
+1. Login in to the Openshift account `oc login --token [TOKEN] --server [SERVER]`
+
+2. Create a new project `oc new-project [PROJECT_NAME]`
+
+(Optional: give project a display name or description `--display-name=[DISPLAYNAME] --description=[DESCRIPTION]`)
+
+3. Use the helmchart in ./ui to deploy Kai to Openshift  `helm install [NAME] helmchart`
+
+(Optional: supply overrides with flags [`--set key=value`] or file `-f [FILE_NAME].yaml`)
+
 ## Docker
 
 To run the UI React app in a docker container, follow the steps below:
