@@ -24,7 +24,7 @@ Make sure you are in the UI directory when running the commands.
 * `docker -v` to check whether you have docker installed, if not visit: (https://docs.docker.com/get-docker/)
 * `docker-compose version` to check whether you have docker-compose installed
 * `docker build -t kai-ui-image:latest .` builds a production version of Kai as a docker container.
-* `docker run -it -p 80:80 --rm kai-ui-image:latest` runs the UI application on port 80 within the container, which is mapped to port 80 on the host
+* `docker run -it -p 80:8081 --rm kai-ui-image:latest` runs the UI application on port 8081 within the container, which is mapped to the host's port 80
 * `docker-compose up` runs the UI app on port 80 in production mode (by default it uses .env variables - you can also specify other .env files with `--env-file` arg)
 * `docker ps` lists all running docker containers.
 * `docker images` will show all top level images, their repository and tags, and their size.
