@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
+import { Config } from '../config';
 import { IAuthClient } from './authclient';
 import { RestClient } from './rest-client';
 // import bcrypt from 'bcrypt';
 
 export class AuthApiClient implements IAuthClient {
-    private readonly baseUrl = process.env.REACT_APP_AUTH_ENDPOINT;
+    private readonly baseUrl = Config.REACT_APP_AUTH_ENDPOINT;
 
     public async login(username: string, password: string, onSuccess: Function, onError: Function): Promise<void> {
         try {

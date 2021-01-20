@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: kai-ui
-        image: [Docker registry URL e.g. [ACCOUNT_ID].dkr.ecr.[REGION].amazonaws.com/[REGISTRY_NAME]]
+        image: macenturalxl1/kai-env-exp-1:latest
         ports:
         - containerPort: 8081
           protocol: TCP

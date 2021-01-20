@@ -1,10 +1,11 @@
+import { Config } from '../config';
 import { AuthApiClient } from './auth-api-client';
 import { IAuthClient } from './authclient';
 import { CognitoClient } from './cognito-client';
 import { RbacClient } from './rbac-client';
 
 export class AuthClientFactory {
-    private readonly platform = process.env.REACT_APP_API_PLATFORM;
+    private readonly platform = Config.REACT_APP_API_PLATFORM;
 
     public create(): IAuthClient {
         switch (this.platform) {
