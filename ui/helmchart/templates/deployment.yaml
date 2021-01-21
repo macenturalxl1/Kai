@@ -46,7 +46,7 @@ spec:
           - name: SKIP_PREFLIGHT_CHECK
             value: "true"
           volumeMounts:
-            - mountPath: /usr/share/nginx/html
+            - mountPath: /usr/share/nginx/html/{{ .Values.envConfigFile }}
               name: env-js-config
               subPath: {{ .Values.envConfigFile }}
       volumes:
