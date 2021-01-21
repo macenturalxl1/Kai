@@ -7,7 +7,12 @@ const app = express();
 const port = process.env.PORT || 4000;
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 app.use(express.json());
-
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'OPTIONS,POST,GET');
+    next();
+});
 // Token
 const jwtSecret = 'my-dev-secret';
 let token;
@@ -15,6 +20,7 @@ let token;
 // Sign in
 app.post('/auth', (req, res) => {
     const username = String(req.body.username).toLowerCase();
+    console.log("We're here");
 
     if (users.has(username) && users.get(username) === req.body.password) {
         token = jwt.sign({ data: username }, jwtSecret, { expiresIn: '1 week' });
