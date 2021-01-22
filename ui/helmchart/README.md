@@ -23,5 +23,21 @@ Existing Project: `$ oc project [PROJECT_NAME]`
 
 (Optional: supply overrides with flags [`--set key=value`] or file `-f [FILE_NAME].yaml`)
 
+If you any changes to the values in the helm chart you can run the following command to update the deployment
+
+`$helm upgrade --install [NAME] helmchart`
+
 #### Dev Deployment With Mock Kai API
+
+1. Follow steps 1 through to 3 from the OpenShift production deployment guide.
+
+2. Run the `$ npm run server` script to start the express server
+
+3. Use the helmchart in ./ui directory to deploy Kai to Openshift with development variables enabled:
+
+`$helm install [NAME] helmchart --set envVariables.reactAPIPlatform="test" --set envVariables.kaiRestAPIHost="http://localhost:4000"`
+
+If you make any changes to the values in the helm chart you can run the following command to update the deployment
+
+`$helm upgrade --install [NAME] helmchart --set envVariables.reactAPIPlatform="test" --set envVariables.kaiRestAPIHost="http://localhost:4000"`
 
