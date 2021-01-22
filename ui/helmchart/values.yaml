@@ -7,7 +7,7 @@ replicaCount: 1
 image:
     #Ask about repository setting
     # repository: image-registry.openshift-image-registry.svc:5000/kai-ui-docker-5/kai:latest
-    repository: macenturalxl1/kai-env-exp-2:latest
+    repository: macenturalxl1/kai-ui-image:v4
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ''
@@ -23,3 +23,9 @@ service:
     targetPort: 8081
 
 envConfigFile: "env-config.js"
+
+envVariables:
+    reactAPIPlatform: "AWS"
+    kaiRestAPIHost: "http://localhost:4000"
+    cognitoUserpoolID: "us-east-1_ABC1def2g"
+    cognitoClientID: "apples"
