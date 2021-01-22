@@ -1,5 +1,5 @@
-import { API_HOST } from './api-config';
 import axios, { AxiosResponse } from 'axios';
+import { Config } from './../config';
 
 export class RestClient {
     private static jwtToken: string;
@@ -12,7 +12,7 @@ export class RestClient {
         const path = pathVariable ? `/${pathVariable}` : ``;
 
         const response: AxiosResponse<any> = await axios.get(`/graphs${path}`, {
-            baseURL: API_HOST,
+            baseURL: Config.REACT_APP_KAI_REST_API_HOST,
             headers: { Authorization: this.jwtToken },
         });
         return this.convert(response);
@@ -20,7 +20,7 @@ export class RestClient {
 
     public static async post(httpRequestBody: object): Promise<IApiResponse> {
         const response: AxiosResponse<any> = await axios.post(`/graphs`, httpRequestBody, {
-            baseURL: API_HOST,
+            baseURL: Config.REACT_APP_KAI_REST_API_HOST,
             headers: { Authorization: this.jwtToken },
         });
         return this.convert(response);
@@ -28,7 +28,7 @@ export class RestClient {
 
     public static async delete(urlPathVariable: string): Promise<IApiResponse> {
         const response: AxiosResponse<any> = await axios.delete(`/graphs/${urlPathVariable}`, {
-            baseURL: API_HOST,
+            baseURL: Config.REACT_APP_KAI_REST_API_HOST,
             headers: { Authorization: this.jwtToken },
         });
         return this.convert(response);
