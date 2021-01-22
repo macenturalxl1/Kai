@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const users = require('./users');
+var cors = require('cors')
 
 // app
 const app = express();
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
 const jwtSecret = 'my-dev-secret';
 let token;
 
+app.options('*', cors()) 
 // Sign in
 app.post('/auth', (req, res) => {
     const username = String(req.body.username).toLowerCase();
