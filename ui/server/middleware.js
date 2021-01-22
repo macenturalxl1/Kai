@@ -91,7 +91,7 @@ app.get('/graphs/:graphName', (req, res) => {
 app.delete('/graphs/:graphName', (req, res) => {
     try {
         jwt.verify(req.get('Authorization'), jwtSecret, () => {
-            res.status(204).end();
+            res.status(202).end();
         });
     } catch (e) {
         res.status(403).end();
