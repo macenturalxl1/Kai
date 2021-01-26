@@ -22,7 +22,6 @@ app.options('*', cors())
 // Sign in
 app.post('/auth', (req, res) => {
     const username = String(req.body.username).toLowerCase();
-    console.log("We're here");
 
     if (users.has(username) && users.get(username) === req.body.password) {
         token = jwt.sign({ data: username }, jwtSecret, { expiresIn: '1 week' });
