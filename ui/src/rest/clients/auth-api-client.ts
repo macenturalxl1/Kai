@@ -7,20 +7,20 @@ export class AuthApiClient implements IAuthClient {
     private readonly baseUrl = Config.REACT_APP_AUTH_ENDPOINT;
 
      public async login(username: string, password: string, onSuccess: Function, onError: Function): Promise<void> {
-    //     try {
-    //         const token: AxiosResponse<string> = await axios.post(
-    //             `/auth`,
-    //             {
-    //                 username: username,
-    //                 password: password,
-    //             },
-    //             { baseURL: this.baseUrl }
-    //         );
-    //         RestClient.setJwtToken(token.data);
+        try {
+            const token: AxiosResponse<string> = await axios.post(
+                `/auth`,
+                {
+                    username: username,
+                    password: password,
+                },
+                { baseURL: this.baseUrl }
+            );
+            RestClient.setJwtToken(token.data);
             onSuccess();
-        // } catch (e) {
-        //     onError(e.message);
-        // }
+        } catch (e) {
+            onError(e.message);
+        }
     }
 
     public async setNewPasswordAndLogin(
