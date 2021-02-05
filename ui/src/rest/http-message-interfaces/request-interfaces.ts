@@ -9,3 +9,7 @@ export interface ICreateGraphRequestBody {
         types: ITypesSchema;
     };
 }
+export interface ICreateSimpleGraphRequestBody {
+    graphId: string;
+    graphDescription: string;
+}

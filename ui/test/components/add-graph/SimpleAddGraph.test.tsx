@@ -42,6 +42,20 @@ describe('SimpleAddGraph UI component', ()=> {
         })
 
     })
+    describe('On Submit Request', () => {
+        it('should display success message in the NotificationAlert', async () => {
+
+            inputGraphName('OK Graph');
+            inputGraphDescription('test')
+
+            clickSubmit();
+            //@ts-ignore
+            await wrapper.update();
+            await wrapper.update();
+
+            expect(wrapper.find('div#notification-alert').text()).toBe('OK Graph was successfully added');
+        });
+    })
     function clickSubmit(): void {
         wrapper.find('button#add-new-graph-button').simulate('click');
     }
