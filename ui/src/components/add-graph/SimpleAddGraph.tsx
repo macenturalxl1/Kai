@@ -101,14 +101,14 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
-                                            id="graph-name"
-                                            label="Graph Name"
+                                            id="graph-id"
+                                            label="Graph Id"
                                             variant="outlined"
                                             value={this.state.graphName}
                                             required
                                             fullWidth
-                                            name="graphName"
-                                            autoComplete="graph-name"
+                                            name="graph-id"
+                                            autoComplete="graph-id"
                                             onChange={(event) => {
                                                 this.setState({
                                                     graphName: event.target.value,
@@ -133,13 +133,14 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
 
                                     <Grid item xs={12}>
                                         <TextField
-                                            id="graphDescription"
+                                            id="graph-description"
                                             style={{ width: 400 }}
                                             label="Graph Description"
+                                            value={this.state.graphDescription}
                                             required
                                             multiline
                                             rows={5}
-                                            name="graphDescription"
+                                            name="graph-description"
                                             variant="outlined"
                                             onChange={(event) => {
                                                 this.setState({
