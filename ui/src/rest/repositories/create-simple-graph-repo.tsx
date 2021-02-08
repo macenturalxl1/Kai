@@ -3,12 +3,12 @@ import { ICreateSimpleGraphRequestBody} from "../http-message-interfaces/request
 
 export class CreateSimpleGraphRepo {
     public async create (
-        graphName: string,
+        graphId: string,
         graphDescription: string
     ): Promise<void> {
         const httpRequestBody: ICreateSimpleGraphRequestBody = {
-            graphDescription: graphName,
-            graphId: graphDescription,
+            graphId: graphId,
+            graphDescription: graphDescription,
         };
         const response: IApiResponse<undefined> = await RestClient.post(httpRequestBody);
 

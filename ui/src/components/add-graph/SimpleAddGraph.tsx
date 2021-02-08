@@ -1,24 +1,15 @@
 import React from 'react';
-import {
-    Button,
-    Container,
-    CssBaseline,
-    Grid,
-    makeStyles,
-    Slide,
-    TextField,
-    Tooltip,
-    Zoom,
-} from '@material-ui/core';
+import { Button, Container, CssBaseline, Grid, makeStyles, Slide, TextField, Tooltip, Zoom } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { TransitionProps } from '@material-ui/core/transitions';
 import Toolbar from '@material-ui/core/Toolbar';
 import { AlertType, NotificationAlert } from '../alerts/notification-alert';
-import {Notifications} from "../../domain/notifications";
+import { Notifications } from '../../domain/notifications';
+import { CreateSimpleGraphRepo } from '../../rest/repositories/create-simple-graph-repo';
 
 interface IState {
     dialogIsOpen: boolean;
-    graphName: string;
+    graphId: string;
     graphDescription: string;
     outcome: AlertType | undefined;
     outcomeMessage: string;
@@ -37,7 +28,7 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
         super(props);
         this.state = {
             dialogIsOpen: false,
-            graphName: '',
+            graphId: '',
             graphDescription: '',
             outcome: undefined,
             outcomeMessage: '',
@@ -45,41 +36,39 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
         };
     }
 
-    // private async submitNewGraph() {
-    //     const errors: Notifications =new Notifications();
-    //
-    //
-    //     if (errors.isEmpty()) {
-    //         try {
-    //             await new CreateGraphRepo().create(graphName, [], elements, types);
-    //             this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `${graphName} was successfully added` });
-    //             this.resetForm();
-    //         } catch (e) {
-    //             this.setState({
-    //                 outcome: AlertType.FAILED,
-    //                 outcomeMessage: `Failed to Add '${graphName}' Graph: ${e.message}`,
-    //             });
-    //         }
-    //     } else {
-    //         this.setState({ errors });
-    //     }
-    // }
+    private async submitNewGraph() {
+        const errors: Notifications = new Notifications();
+        const graphId = this.state.graphId;
+        const graphDescription = this.state.graphDescription;
+
+        if (errors.isEmpty()) {
+            try {
+                await new CreateSimpleGraphRepo().create(graphId, graphDescription);
+                this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `${graphId} was successfully added` });
+                this.resetForm();
+            } catch (e) {
+                this.setState({
+                    outcome: AlertType.FAILED,
+                    outcomeMessage: `Failed to Add '${graphId}' Graph: ${e.message}`,
+                });
+            }
+        } else {
+            this.setState({ errors });
+        }
+    }
 
     private resetForm() {
         this.setState({
-            graphName: '',
+            graphId: '',
             graphDescription: '',
         });
     }
 
-
-
     private disableSubmitButton(): boolean {
-        return !this.state.graphName || !this.state.graphDescription;
+        return !this.state.graphId || !this.state.graphDescription;
     }
 
     public render() {
-
         return (
             <main>
                 {this.state.outcome && (
@@ -104,20 +93,19 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
                                             id="graph-id"
                                             label="Graph Id"
                                             variant="outlined"
-                                            value={this.state.graphName}
+                                            value={this.state.graphId}
                                             required
                                             fullWidth
                                             name="graph-id"
                                             autoComplete="graph-id"
                                             onChange={(event) => {
                                                 this.setState({
-                                                    graphName: event.target.value,
+                                                    graphId: event.target.value,
                                                 });
                                             }}
                                         />
                                     </Grid>
                                     <Grid item xs={12} container direction="row" justify="flex-end" alignItems="center">
-
                                         {/*<Tooltip TransitionComponent={Zoom} title="Clear Schema">*/}
                                         {/*    <IconButton*/}
                                         {/*        onClick={() =>*/}
@@ -157,7 +145,7 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
                         <Button
                             id="add-new-graph-button"
                             onClick={() => {
-                                // this.submitNewGraph();
+                                this.submitNewGraph();
                             }}
                             startIcon={<AddCircleOutlineOutlinedIcon />}
                             type="submit"

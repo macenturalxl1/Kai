@@ -42,7 +42,7 @@ app.post('/auth/signout', (req, res) => {
 app.post('/graphs', (req, res) => {
     try {
         jwt.verify(req.get('Authorization'), jwtSecret, () => {
-            if (req.body.graphName === 'fail') {
+            if (req.body.graphId === 'fail') {
                 res.status(500).end();
             } else {
                 res.status(201).end();
