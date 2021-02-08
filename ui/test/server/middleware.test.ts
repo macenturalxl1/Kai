@@ -54,8 +54,8 @@ describe('Graph API', () => {
             .post('/graphs')
             .set('Authorization', token)
             .send({
-                graphName: 'validGraph',
-                currentState: 'CREATING',
+                graphId: 'validGraph',
+                description: 'CREATING',
             })
             .expect(201);
     });
@@ -64,8 +64,8 @@ describe('Graph API', () => {
             .post('/graphs')
             .set('Authorization', token)
             .send({
-                graphName: 'fail',
-                currentState: 'FAILED',
+                graphId: 'fail',
+                description: 'FAILED',
             })
             .expect(500);
     });
@@ -77,12 +77,12 @@ describe('Graph API', () => {
                 expect(response.statusCode).toBe(200);
                 expect(response.body).toStrictEqual([
                     {
-                        graphName: 'roadTraffic',
-                        currentState: 'DEPLOYED',
+                        graphId: 'roadTraffic',
+                        description: 'DEPLOYED',
                     },
                     {
-                        graphName: 'basicGraph',
-                        currentState: 'DEPLOYED',
+                        graphId: 'basicGraph',
+                        description: 'DEPLOYED',
                     },
                 ]);
             });
@@ -94,8 +94,8 @@ describe('Graph API', () => {
             .then((response) => {
                 expect(response.statusCode).toBe(200);
                 expect(response.body).toStrictEqual({
-                    graphName: 'roadTraffic',
-                    currentState: 'DEPLOYED',
+                    graphId: 'roadTraffic',
+                    description: 'DEPLOYED',
                 });
             });
     });

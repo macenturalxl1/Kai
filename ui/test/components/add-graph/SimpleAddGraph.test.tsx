@@ -30,18 +30,18 @@ describe('SimpleAddGraph UI component', () => {
             expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
         });
         it('should be disabled when Graph Description field is empty', () => {
-            inputGraphName('test');
+            inputgraphId('test');
             expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(true);
         });
         it('Should be enabled when Graph Name and Graph Description is not empty', () => {
-            inputGraphName('test');
+            inputgraphId('test');
             inputdescription('test');
             expect(wrapper.find('button#add-new-graph-button').props().disabled).toBe(false);
         });
     });
     describe('On Submit Request', () => {
         it('should display success message in the NotificationAlert', async () => {
-            inputGraphName('OK Graph');
+            inputgraphId('OK Graph');
             inputdescription('test');
 
             clickSubmit();
@@ -55,9 +55,9 @@ describe('SimpleAddGraph UI component', () => {
     function clickSubmit(): void {
         wrapper.find('button#add-new-graph-button').simulate('click');
     }
-    function inputGraphName(graphName: string): void {
+    function inputgraphId(graphId: string): void {
         wrapper.find('input#graph-id').simulate('change', {
-            target: { value: graphName },
+            target: { value: graphId },
         });
     }
     function inputdescription(description: string): void {

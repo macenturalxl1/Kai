@@ -8,9 +8,9 @@ describe('RestClient 2** Responses', () => {
     beforeAll(() =>
         mock
             .onGet('/graphs')
-            .reply(200, [{ graphName: 'any-graph', currentStatus: 'DEPLOYED' }])
+            .reply(200, [{ graphId: 'any-graph', currentStatus: 'DEPLOYED' }])
             .onGet('/graphs/graph-1')
-            .reply(200, { graphName: 'graph-1', currentStatus: 'DELETED' })
+            .reply(200, { graphId: 'graph-1', currentStatus: 'DELETED' })
             .onPost('/graphs', { post: 'this' })
             .reply(201)
             .onDelete('/graphs/redundant-graph')
@@ -25,7 +25,7 @@ describe('RestClient 2** Responses', () => {
             status: 200,
             data: [
                 {
-                    graphName: 'any-graph',
+                    graphId: 'any-graph',
                     currentStatus: 'DEPLOYED',
                 },
             ],
@@ -37,7 +37,7 @@ describe('RestClient 2** Responses', () => {
         expect(actual).toEqual({
             status: 200,
             data: {
-                graphName: 'graph-1',
+                graphId: 'graph-1',
                 currentStatus: 'DELETED',
             },
         });
