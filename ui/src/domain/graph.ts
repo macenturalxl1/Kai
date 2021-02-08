@@ -1,17 +1,17 @@
 export class Graph {
-    private graphName: string;
-    private status: string;
+    private graphId: string;
+    private description: string;
 
-    constructor(graphName: string, status: string) {
-        this.graphName = graphName;
-        this.status = status;
+    constructor(graphId: string, description: string) {
+        this.graphId = graphId;
+        this.description = description;
     }
 
     public getId(): string {
-        return this.graphName;
+        return this.graphId;
     }
 
     public getStatus(): string {
-        return this.status;
+        return this.description;
     }
 }

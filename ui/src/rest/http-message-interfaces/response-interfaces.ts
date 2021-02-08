@@ -1,6 +1,6 @@
 export interface IGraphByIdResponse {
-    graphName: string;
-    currentState: string;
+    graphId: string;
+    description: string;
 }
 
 export interface IAllGraphsResponse extends Array<IGraphByIdResponse> {}
