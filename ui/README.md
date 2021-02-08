@@ -123,6 +123,10 @@ The scripts in the buildWithEnv.sh file do the following:
 * If it is not empty, it runs the `react-scripts build` command, which has the same outcome as the `npm run build` script above
 
 The purpose of this command is to validate whether an API platform has been set for Kai to use.
+## `Using the local server and running locally`
+To run Kai using environment variables locally, go to the `config.ts` file in `Kai/ui/src/rest/config.ts` and comment out the Helm confirugations.
+Uncomment the local configurations and run `npm run build-with-env` 
+
 ## AWS Integration
 
 For production mode and build, a .env file must be configured for the following key/values to integrated with the deployed API and it's User Pool that you want to interface with:
