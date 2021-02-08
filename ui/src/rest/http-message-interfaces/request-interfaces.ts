@@ -11,5 +11,5 @@ export interface ICreateGraphRequestBody {
 }
 export interface ICreateSimpleGraphRequestBody {
     graphId: string;
-    graphDescription: string;
+    description: string;
 }

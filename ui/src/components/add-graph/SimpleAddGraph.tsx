@@ -10,7 +10,7 @@ import { CreateSimpleGraphRepo } from '../../rest/repositories/create-simple-gra
 interface IState {
     dialogIsOpen: boolean;
     graphId: string;
-    graphDescription: string;
+    description: string;
     outcome: AlertType | undefined;
     outcomeMessage: string;
     errors: Notifications;
@@ -29,7 +29,7 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
         this.state = {
             dialogIsOpen: false,
             graphId: '',
-            graphDescription: '',
+            description: '',
             outcome: undefined,
             outcomeMessage: '',
             errors: new Notifications(),
@@ -39,11 +39,11 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
     private async submitNewGraph() {
         const errors: Notifications = new Notifications();
         const graphId = this.state.graphId;
-        const graphDescription = this.state.graphDescription;
+        const description = this.state.description;
 
         if (errors.isEmpty()) {
             try {
-                await new CreateSimpleGraphRepo().create(graphId, graphDescription);
+                await new CreateSimpleGraphRepo().create(graphId, description);
                 this.setState({ outcome: AlertType.SUCCESS, outcomeMessage: `${graphId} was successfully added` });
                 this.resetForm();
             } catch (e) {
@@ -60,12 +60,12 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
     private resetForm() {
         this.setState({
             graphId: '',
-            graphDescription: '',
+            description: '',
         });
     }
 
     private disableSubmitButton(): boolean {
-        return !this.state.graphId || !this.state.graphDescription;
+        return !this.state.graphId || !this.state.description;
     }
 
     public render() {
@@ -110,7 +110,7 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
                                         {/*    <IconButton*/}
                                         {/*        onClick={() =>*/}
                                         {/*            this.setState({*/}
-                                        {/*                    graphDescription: '',*/}
+                                        {/*                    description: '',*/}
                                         {/*            })*/}
                                         {/*        }*/}
                                         {/*    >*/}
@@ -124,7 +124,7 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
                                             id="graph-description"
                                             style={{ width: 400 }}
                                             label="Graph Description"
-                                            value={this.state.graphDescription}
+                                            value={this.state.description}
                                             required
                                             multiline
                                             rows={5}
@@ -132,7 +132,7 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
                                             variant="outlined"
                                             onChange={(event) => {
                                                 this.setState({
-                                                    graphDescription: event.target.value,
+                                                    description: event.target.value,
                                                 });
                                             }}
                                         />
