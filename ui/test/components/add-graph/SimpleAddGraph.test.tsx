@@ -1,7 +1,8 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import SimpleAddGraph from '../../../src/components/add-graph/SimpleAddGraph';
-
+import { CreateSimpleGraphRepo} from '../../../src/rest/repositories/create-simple-graph-repo';
+jest.mock('../../../src/rest/repositories/create-simple-graph-repo');
 let wrapper: ReactWrapper;
 beforeEach(() => (wrapper = mount(<SimpleAddGraph />)));
 afterEach(() => wrapper.unmount());
@@ -41,6 +42,7 @@ describe('SimpleAddGraph UI component', () => {
     });
     describe('On Submit Request', () => {
         it('should display success message in the NotificationAlert', async () => {
+            mockAddGraphRepoWithFunction(() => {});
             inputgraphId('OK Graph');
             inputdescription('test');
 
@@ -65,5 +67,13 @@ describe('SimpleAddGraph UI component', () => {
             target: { value: description },
         });
         expect(wrapper.find('textarea#graph-description').props().value).toBe(description);
+    }
+    function mockAddGraphRepoWithFunction(f: () => void): void {
+        // @ts-ignore
+        CreateSimpleGraphRepo.mockImplementationOnce(() => {
+            return {
+                create: f,
+            };
+        });
     }
 });
