@@ -5,13 +5,13 @@ import { TypesSchema } from '../../domain/types-schema';
 
 export class CreateGraphRepo {
     public async create(
-        graphName: string,
+        graphId: string,
         administrators: Array<string>,
         elementsSchema: ElementsSchema,
         typesSchema: TypesSchema
     ): Promise<void> {
         const httpRequestBody: ICreateGraphRequestBody = {
-            graphName: graphName,
+            graphId: graphId,
             administrators: administrators,
             schema: {
                 elements: elementsSchema.getElements(),
