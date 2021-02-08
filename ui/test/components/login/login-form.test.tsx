@@ -7,7 +7,7 @@ jest.mock('../../../src/rest/clients/auth-api-client');
 
 let component: ReactWrapper;
 const onSuccessCallBack = jest.fn();
-beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'AWS' })));
+beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'TEST' })));
 beforeEach(() => (component = mount(<LoginForm onChangeForm={() => {}} onSuccess={onSuccessCallBack} />)));
 afterEach(() => component.unmount());
 afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: '' })));
