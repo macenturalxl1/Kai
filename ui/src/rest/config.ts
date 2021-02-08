@@ -1,39 +1,17 @@
 const _env = window as any;
 
 export class Config {
-    static REACT_APP_API_PLATFORM = checkAPIPlatform();
-    static REACT_APP_KAI_REST_API_HOST = checkAPIHost();
-    static REACT_APP_COGNITO_USERPOOLID = checkCognitoUserPoolId();
-    static REACT_APP_COGNITO_CLIENTID = checkCognitoClientId();
-    static REACT_APP_AUTH_ENDPOINT = checkAuthEndpoint();
-}
-function checkCognitoClientId(): string | undefined {
-    if(_env.REACT_APP_COGNITO_CLIENTID === undefined){
-        return process.env.REACT_APP_COGNITO_CLIENTID;
-    }
-    return _env.REACT_APP_COGNITO_CLIENTID;
-}
-function checkCognitoUserPoolId(): string | undefined {
-    if(_env.REACT_APP_COGNITO_USERPOOLID === undefined){
-        return process.env.REACT_APP_COGNITO_USERPOOLID;
-    }
-    return _env.REACT_APP_COGNITO_USERPOOLID;
-}
-function checkAPIPlatform(): string | undefined {
-    if(_env.REACT_APP_API_PLATFORM === undefined) {
-        return process.env.REACT_APP_API_PLATFORM;
-    }
-    return _env.REACT_APP_API_PLATFORM;
-}
-function checkAPIHost(): string | undefined {
-    if ( _env.REACT_APP_KAI_REST_API_HOST === undefined) {
-        return process.env.REACT_APP_KAI_REST_API_HOST;
-    }
-    return _env.REACT_APP_KAI_REST_API_HOST
-}
-function checkAuthEndpoint(): string | undefined {
-    if (_env.REACT_APP_AUTH_ENDPOINT === undefined) {
-        return process.env.REACT_APP_AUTH_ENDPOINT;
-    }
-    return _env.REACT_APP_AUTH_ENDPOINT;
+//The config below is passed in through Helm
+static REACT_APP_API_PLATFORM = _env.REACT_APP_API_PLATFORM;
+static REACT_APP_KAI_REST_API_HOST = _env.REACT_APP_KAI_REST_API_HOST;
+static REACT_APP_COGNITO_USERPOOLID = _env.REACT_APP_COGNITO_USERPOOLID;
+static REACT_APP_COGNITO_CLIENTID = _env.REACT_APP_COGNITO_CLIENTID;
+static REACT_APP_AUTH_ENDPOINT = _env.REACT_APP_AUTH_ENDPOINT;
+
+//To use locally, uncomment below and comment out above. The config below uses .env file
+// static REACT_APP_API_PLATFORM = process.env.REACT_APP_API_PLATFORM;
+// static REACT_APP_KAI_REST_API_HOST = process.env.REACT_APP_KAI_REST_API_HOST;
+// static REACT_APP_COGNITO_USERPOOLID = process.env.REACT_APP_COGNITO_USERPOOLID;
+// static REACT_APP_COGNITO_CLIENTID = process.env.REACT_APP_COGNITO_CLIENTID;
+// static REACT_APP_AUTH_ENDPOINT = process.env.REACT_APP_AUTH_ENDPOINT;
 }
