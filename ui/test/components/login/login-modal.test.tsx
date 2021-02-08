@@ -2,9 +2,9 @@ import { Dialog } from '@material-ui/core';
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import LoginModal from '../../../src/components/login/login-modal';
-import { CognitoClient } from '../../../src/rest/clients/cognito-client';
+import { AuthApiClient } from '../../../src/rest/clients/auth-api-client';
 
-jest.mock('../../../src/rest/clients/cognito-client');
+jest.mock('../../../src/rest/clients/auth-api-client');
 
 let component: ReactWrapper;
 const jestMock = jest.fn();
@@ -34,7 +34,7 @@ describe('On Render', () => {
 
 describe('onLogin call back', ()=>{
     it('should call back with Username when a User logs in', ()=>{
-        mockCognitoClientLogin();
+        mockAuthApiClientLogin();
 
         inputUsername('testUsername');
         inputPassword('testPassword');
@@ -61,8 +61,8 @@ describe('Switch Login Form', () => {
 
 describe('Sign Out Outcomes', () => {
     it('should show modal with error message when sign out fails', () => {
-        mockCognitoClientLogin();
-        mockCognitoClientFailedLogOut('Sign out was a failure');
+        mockAuthApiClientLogin();
+        mockAuthApiClientFailedLogOut('Sign out was a failure');
 
         inputUsername('testUsername');
         inputPassword('testPassword');
@@ -100,18 +100,18 @@ function inputPassword(password: string): void {
     });
 }
 
-function mockCognitoClientLogin() {
+function mockAuthApiClientLogin() {
     // @ts-ignore
-    CognitoClient.prototype.login.mockImplementationOnce(
+    AuthApiClient.prototype.login.mockImplementationOnce(
         (username: string, password: string, onSuccess: () => void, onError: () => void) => {
             onSuccess();
         }
     );
 }
 
-function mockCognitoClientFailedLogOut(errorMessage: string) {
+function mockAuthApiClientFailedLogOut(errorMessage: string) {
     // @ts-ignore
-    CognitoClient.prototype.signOut.mockImplementationOnce(
+    AuthApiClient.prototype.signOut.mockImplementationOnce(
         (onSuccess: () => void, onError: (errorMessage: string) => void) => {
             onError(errorMessage);
         }
