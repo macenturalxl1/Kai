@@ -8,7 +8,7 @@ image:
     #Ask about repository setting
     # repository: image-registry.openshift-image-registry.svc:5000/kai-ui-docker-5/kai:latest
     # macenturalxl1/kai-ui-image:v4
-    repository: kitkat520/test:latest
+    repository: kitkat520/ui-api-stuff:latest
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ''
@@ -27,6 +27,6 @@ envConfigFile: "env-config.js"
 
 envVariables:
     reactAPIPlatform: "test"
-    kaiRestAPIHost: "http://springboottest-kai-helm-3.apps.ocp1.purplesky-harmony.co.uk"
+    kaiRestAPIHost: "http://springboottest-kai-helm-3.apps.ocp1.purplesky-harmony.co.uk/"
     cognitoUserpoolID: "us-east-1_ABC1def2g"
     cognitoClientID: "apples"
