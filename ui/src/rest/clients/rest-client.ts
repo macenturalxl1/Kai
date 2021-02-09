@@ -13,7 +13,7 @@ export class RestClient {
 
         const response: AxiosResponse<any> = await axios.get(`/graphs${path}`, {
             baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: this.jwtToken },
+            headers: { Authorization: "Bearer "+this.jwtToken },
         });
         return this.convert(response);
     }
@@ -21,7 +21,7 @@ export class RestClient {
     public static async post(httpRequestBody: object): Promise<IApiResponse> {
         const response: AxiosResponse<any> = await axios.post(`/graphs`, httpRequestBody, {
             baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: this.jwtToken },
+            headers: { Authorization: "Bearer "+this.jwtToken },
         });
         return this.convert(response);
     }
@@ -29,7 +29,7 @@ export class RestClient {
     public static async delete(urlPathVariable: string): Promise<IApiResponse> {
         const response: AxiosResponse<any> = await axios.delete(`/graphs/${urlPathVariable}`, {
             baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: this.jwtToken },
+            headers: { Authorization: "Bearer "+this.jwtToken },
         });
         return this.convert(response);
     }

@@ -8,7 +8,7 @@ image:
     #Ask about repository setting
     # repository: image-registry.openshift-image-registry.svc:5000/kai-ui-docker-5/kai:latest
     # macenturalxl1/kai-ui-image:v4
-    repository: rocky341/kai-ui-image
+    repository: kitkat520/test:latest
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ''
