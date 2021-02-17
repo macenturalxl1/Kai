@@ -2,13 +2,13 @@ import { mount, ReactWrapper } from 'enzyme';
 import NavigationAppbar from '../../../src/components/navigation-bar/NavigationAppbar';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { CognitoClient } from '../../../src/rest/clients/cognito-client';
+import { AuthApiClient } from '../../../src/rest/clients/auth-api-client';
 
-jest.mock('../../../src/rest/clients/cognito-client');
+jest.mock('../../../src/rest/clients/auth-api-client');
 
 let component: ReactWrapper;
 
-beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'AWS' })));
+beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'test' })));
 beforeEach(() => {
     component = mount(
         <MemoryRouter>
@@ -57,7 +57,7 @@ describe('Navigation Appbar Component', () => {
 
 describe('Display Signed In User Details', () => {
     it('should display the username & email of the User who signed in', () => {
-        mockCognitoClientLogin();
+        mockAuthClient();
         inputUsername('Harry@gmail.com');
         inputPassword('asdfgh');
 
@@ -66,7 +66,7 @@ describe('Display Signed In User Details', () => {
         expect(component.find('div#signedin-user-details').text()).toBe('HarryHarry@gmail.com');
     });
     it('should display the non-email username of the User who signed in', () => {
-        mockCognitoClientLogin();
+        mockAuthClient();
         inputUsername('Batman');
         inputPassword('zxcvb');
 
@@ -94,9 +94,9 @@ function clickSubmitSignIn() {
     component.find('button#submit-sign-in-button').simulate('click');
 }
 
-function mockCognitoClientLogin() {
+function mockAuthClient() {
     // @ts-ignore
-    CognitoClient.prototype.login.mockImplementationOnce(
+    AuthApiClient.prototype.login.mockImplementationOnce(
         (username: string, password: string, onSuccess: () => void, onError: () => void) => {
             onSuccess();
         }

@@ -1,13 +1,13 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import LoginForm from '../../../src/components/login/login-form';
-import { CognitoClient } from '../../../src/rest/clients/cognito-client';
+import { AuthApiClient } from '../../../src/rest/clients/auth-api-client';
 
-jest.mock('../../../src/rest/clients/cognito-client');
+jest.mock('../../../src/rest/clients/auth-api-client');
 
 let component: ReactWrapper;
 const onSuccessCallBack = jest.fn();
-beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'AWS' })));
+beforeAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: 'TEST' })));
 beforeEach(() => (component = mount(<LoginForm onChangeForm={() => {}} onSuccess={onSuccessCallBack} />)));
 afterEach(() => component.unmount());
 afterAll(() => (process.env = Object.assign(process.env, { REACT_APP_API_PLATFORM: '' })));
@@ -49,7 +49,7 @@ describe('Sign in Button', () => {
         expect(component.find('button#submit-sign-in-button').props().disabled).toBe(false);
     });
     it('should call onSuccess callback with Username when successfully logged in', async () => {
-        mockCognitoClientLogin();
+        mockAuthApiClientLogin();
 
         inputUsername('JoVibin');
         inputPassword('testPassword');
@@ -59,7 +59,7 @@ describe('Sign in Button', () => {
         expect(onSuccessCallBack).toHaveBeenCalledWith('JoVibin');
     });
     it('should display error message when sign in fails', () => {
-        mockCognitoClientNewUserLoginWithError('My login failed');
+        mockAuthApiClientNewUserLoginWithError('My login failed');
 
         inputUsername('testUsername');
         inputPassword('testTempPassword');
@@ -87,18 +87,18 @@ function clickSubmitSignIn() {
     component.find('button#submit-sign-in-button').simulate('click');
 }
 
-function mockCognitoClientLogin() {
+function mockAuthApiClientLogin() {
     // @ts-ignore
-    CognitoClient.prototype.login.mockImplementationOnce(
+    AuthApiClient.prototype.login.mockImplementationOnce(
         (username: string, password: string, onSuccess: () => void, onError: () => void) => {
             onSuccess();
         }
     );
 }
 
-function mockCognitoClientNewUserLoginWithError(errorMessage: string) {
+function mockAuthApiClientNewUserLoginWithError(errorMessage: string) {
     // @ts-ignore
-    CognitoClient.prototype.login.mockImplementationOnce(
+    AuthApiClient.prototype.login.mockImplementationOnce(
         (username: string, password: string, onSuccess: () => void, onError: (errorMessage: string) => void) => {
             onError(errorMessage);
         }

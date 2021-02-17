@@ -8,7 +8,7 @@ const mock = new MockAdapter(axios);
 const repo = new GetGraphRepo();
 
 beforeAll(() => {
-    const apiResponse: IGraphByIdResponse = { graphName: 'graph-1', currentState: 'DEPLOYED' };
+    const apiResponse: IGraphByIdResponse = { graphId: 'graph-1', description: 'DEPLOYED' };
     mock.onGet('/graphs/graph-1').reply(200, apiResponse);
     mock.onGet('/graphs/notfound-graph').reply(404);
 });

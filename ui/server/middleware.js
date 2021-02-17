@@ -41,7 +41,7 @@ app.post('/auth/signout', (req, res) => {
 app.post('/graphs', (req, res) => {
     try {
         jwt.verify(req.get('Authorization'), jwtSecret, () => {
-            if (req.body.graphName === 'fail') {
+            if (req.body.graphId === 'fail') {
                 res.status(500).end();
             } else {
                 res.status(201).end();
@@ -58,12 +58,12 @@ app.get('/graphs', (req, res) => {
         jwt.verify(req.get('Authorization'), jwtSecret, () => {
             res.send([
                 {
-                    graphName: 'roadTraffic',
-                    currentState: 'DEPLOYED',
+                    graphId: 'roadTraffic',
+                    description: 'DEPLOYED',
                 },
                 {
-                    graphName: 'basicGraph',
-                    currentState: 'DEPLOYED',
+                    graphId: 'basicGraph',
+                    description: 'DEPLOYED',
                 },
             ]);
         });
@@ -73,12 +73,12 @@ app.get('/graphs', (req, res) => {
 });
 
 // Get graph by ID
-app.get('/graphs/:graphName', (req, res) => {
+app.get('/graphs/:graphId', (req, res) => {
     try {
         jwt.verify(req.get('Authorization'), jwtSecret, () => {
             res.status(200).send({
-                graphName: req.params.graphName,
-                currentState: 'DEPLOYED',
+                graphId: req.params.graphId,
+                description: 'DEPLOYED',
             });
         });
     } catch (e) {
@@ -87,7 +87,7 @@ app.get('/graphs/:graphName', (req, res) => {
 });
 
 // Delete graph by ID
-app.delete('/graphs/:graphName', (req, res) => {
+app.delete('/graphs/:graphId', (req, res) => {
     try {
         jwt.verify(req.get('Authorization'), jwtSecret, () => {
             res.status(202).end();

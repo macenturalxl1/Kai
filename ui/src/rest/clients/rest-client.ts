@@ -10,26 +10,29 @@ export class RestClient {
 
     public static async get(pathVariable?: string): Promise<IApiResponse> {
         const path = pathVariable ? `/${pathVariable}` : ``;
+        console.log(this.jwtToken);
 
         const response: AxiosResponse<any> = await axios.get(`/graphs${path}`, {
             baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: this.jwtToken },
+            headers: { Authorization: 'Bearer ' + this.jwtToken },
         });
         return this.convert(response);
     }
 
     public static async post(httpRequestBody: object): Promise<IApiResponse> {
+        console.log(this.jwtToken);
         const response: AxiosResponse<any> = await axios.post(`/graphs`, httpRequestBody, {
             baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: this.jwtToken },
+            headers: { Authorization: 'Bearer ' + this.jwtToken },
         });
         return this.convert(response);
     }
 
     public static async delete(urlPathVariable: string): Promise<IApiResponse> {
+        console.log(this.jwtToken);
         const response: AxiosResponse<any> = await axios.delete(`/graphs/${urlPathVariable}`, {
             baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: this.jwtToken },
+            headers: { Authorization: 'Bearer ' + this.jwtToken },
         });
         return this.convert(response);
     }

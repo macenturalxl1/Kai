@@ -1,12 +1,12 @@
 import ViewGraph from '../view-graphs/view-graphs';
-import AddGraph from '../add-graph/AddGraph';
 import UserGuide from '../user-guide/user-guide';
+import SimpleAddGraph from "../add-graph/SimpleAddGraph";
 
 const Routes = [
     {
         path: '/AddGraph',
         sidebarName: 'Add Graph',
-        component: AddGraph,
+        component: SimpleAddGraph,
     },
     {
         path: '/ViewGraph',

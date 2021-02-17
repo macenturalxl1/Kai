@@ -1,9 +1,9 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import TempPasswordLoginForm from '../../../src/components/login/temp-password-login-form';
-import { CognitoClient } from '../../../src/rest/clients/cognito-client';
+import { AuthApiClient } from '../../../src/rest/clients/auth-api-client';
 
-jest.mock('../../../src/rest/clients/cognito-client');
+jest.mock('../../../src/rest/clients/auth-api-client');
 
 let component: ReactWrapper;
 const onSuccessCallBack = jest.fn();
@@ -71,7 +71,7 @@ describe('Disable Form', () => {
         expect(component.find('button#submit-sign-in-button').props().disabled).toBe(false);
     });
     it('should call onSuccess call back with Username when sign in is successful', () => {
-        mockCognitoClientNewUserLogin();
+        mockAuthApiClientNewUserLogin();
 
         inputUsername('BillSmith');
         inputTempPassword('testTempPassword');
@@ -82,7 +82,7 @@ describe('Disable Form', () => {
         expect(onSuccessCallBack).toHaveBeenLastCalledWith('BillSmith');
     });
     it('should display error message when sign in fails', () => {
-        mockCognitoClientNewUserLoginWithError('Temp password incorrect');
+        mockAuthApiClientNewUserLoginWithError('Temp password incorrect');
 
         inputUsername('testUsername');
         inputTempPassword('testTempPassword');
@@ -118,18 +118,18 @@ function clickSubmitSignIn() {
     component.find('button#submit-sign-in-button').simulate('click');
 }
 
-function mockCognitoClientNewUserLogin() {
+function mockAuthApiClientNewUserLogin() {
     // @ts-ignore
-    CognitoClient.prototype.setNewPasswordAndLogin.mockImplementationOnce(
+    AuthApiClient.prototype.setNewPasswordAndLogin.mockImplementationOnce(
         (username: string, password: string, oldPassword: string, onSuccess: () => void, onError: () => void) => {
             onSuccess();
         }
     );
 }
 
-function mockCognitoClientNewUserLoginWithError(errorMessage: string) {
+function mockAuthApiClientNewUserLoginWithError(errorMessage: string) {
     // @ts-ignore
-    CognitoClient.prototype.setNewPasswordAndLogin.mockImplementationOnce(
+    AuthApiClient.prototype.setNewPasswordAndLogin.mockImplementationOnce(
         (
             username: string,
             password: string,

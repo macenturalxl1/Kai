@@ -13,12 +13,12 @@ describe('Get All Graphs Repo', () => {
     it('should return many Graphs when api returns many', async () => {
         const apiResponse: IAllGraphsResponse = [
             {
-                graphName: 'roadTraffic',
-                currentState: 'DEPLOYED',
+                graphId: 'roadTraffic',
+                description: 'DEPLOYED',
             },
             {
-                graphName: 'basicGraph',
-                currentState: 'DELETION_QUEUED',
+                graphId: 'basicGraph',
+                description: 'DELETION_QUEUED',
             },
         ];
         mock.onGet('/graphs').reply(200, apiResponse);
@@ -32,8 +32,8 @@ describe('Get All Graphs Repo', () => {
     it('should return one Graph when api returns one', async () => {
         const apiResponse: IAllGraphsResponse = [
             {
-                graphName: 'streetTraffic',
-                currentState: 'DELETION_QUEUED',
+                graphId: 'streetTraffic',
+                description: 'DELETION_QUEUED',
             },
         ];
         mock.onGet('/graphs').reply(200, apiResponse);
