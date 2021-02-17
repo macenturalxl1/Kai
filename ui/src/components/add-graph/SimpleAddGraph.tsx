@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { AlertType, NotificationAlert } from '../alerts/notification-alert';
 import { Notifications } from '../../domain/notifications';
 import { CreateSimpleGraphRepo } from '../../rest/repositories/create-simple-graph-repo';
+
 interface IState {
     dialogIsOpen: boolean;
     graphId: string;
@@ -14,12 +15,14 @@ interface IState {
     outcomeMessage: string;
     errors: Notifications;
 }
+
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children?: React.ReactElement<any, any> },
     ref: React.Ref<unknown>
 ) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
 export default class SimpleAddGraph extends React.Component<{}, IState> {
     constructor(props: object) {
         super(props);
@@ -32,6 +35,7 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
             errors: new Notifications(),
         };
     }
+
     private async submitNewGraph() {
         const errors: Notifications = new Notifications();
         const graphId = this.state.graphId;
@@ -44,22 +48,25 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
             } catch (e) {
                 this.setState({
                     outcome: AlertType.FAILED,
-                    outcomeMessage: `Failed to Add '${graphId}' Graph: ${e.message}`,
+                    outcomeMessage: `Failed to Add '${graphId}' Graph. ${e.toString()}`,
                 });
             }
         } else {
             this.setState({ errors });
         }
     }
+
     private resetForm() {
         this.setState({
             graphId: '',
             description: '',
         });
     }
+
     private disableSubmitButton(): boolean {
         return !this.state.graphId || !this.state.description;
     }
+
     public render() {
         return (
             <main>
@@ -151,6 +158,7 @@ export default class SimpleAddGraph extends React.Component<{}, IState> {
             </main>
         );
     }
+
     private classes: any = makeStyles((theme) => ({
         root: {
             width: '100%',

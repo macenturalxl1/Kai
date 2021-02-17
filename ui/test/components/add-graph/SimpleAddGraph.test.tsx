@@ -1,9 +1,11 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import SimpleAddGraph from '../../../src/components/add-graph/SimpleAddGraph';
-import { CreateSimpleGraphRepo} from '../../../src/rest/repositories/create-simple-graph-repo';
+import { CreateSimpleGraphRepo } from '../../../src/rest/repositories/create-simple-graph-repo';
+
 jest.mock('../../../src/rest/repositories/create-simple-graph-repo');
 let wrapper: ReactWrapper;
+
 beforeEach(() => (wrapper = mount(<SimpleAddGraph />)));
 afterEach(() => wrapper.unmount());
 

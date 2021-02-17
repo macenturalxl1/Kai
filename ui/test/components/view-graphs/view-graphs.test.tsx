@@ -4,6 +4,7 @@ import ViewGraph from '../../../src/components/view-graphs/view-graphs';
 import { GetAllGraphsRepo } from '../../../src/rest/repositories/get-all-graphs-repo';
 import { Graph } from '../../../src/domain/graph';
 import { DeleteGraphRepo } from '../../../src/rest/repositories/delete-graph-repo';
+import { RestApiError } from '../../../src/rest/RestApiError';
 
 jest.mock('../../../src/rest/repositories/get-all-graphs-repo');
 jest.mock('../../../src/rest/repositories/delete-graph-repo');
@@ -18,7 +19,7 @@ describe('When ExampleTable mounts', () => {
         await component.update();
         await component.update();
 
-        expect(component.find('thead').text()).toBe('Graph NameCurrent StateActions');
+        expect(component.find('thead').text()).toBe('Graph IDDescriptionActions');
         expect(component.find('tbody').text()).toBe('testId1deployed');
         expect(component.find('caption').length).toBe(0);
     });
@@ -31,11 +32,13 @@ describe('When ExampleTable mounts', () => {
         expect(component.find('caption').text()).toBe('No Graphs.');
     });
     it('should display Error Message in AlertNotification when GetGraphs request fails', () => {
-        mockGetAllGraphsThrowsError('404 Not Found');
+        mockGetAllGraphsThrowsError(() => {
+            throw new RestApiError('Client Error', '404 Not Found');
+        });
 
         const component = mount(<ViewGraph />);
 
-        expect(component.find('div#notification-alert').text()).toBe('Failed to get all graphs: 404 Not Found');
+        expect(component.find('div#notification-alert').text()).toBe('Failed to get all graphs. Client Error: 404 Not Found');
     });
     it('should not display Error AlertNotification when GetGraphs request successful', async () => {
         mockGetGraphsToReturn([new Graph('roadTraffic', 'DEPLOYED')]);
@@ -64,10 +67,12 @@ describe('Refresh Button', () => {
         expect(component.find('tbody').text()).toBe('roadTrafficFINISHED DEPLOYMENT');
     });
     it('should reset an existing error message when refresh button is clicked', async () => {
-        mockGetAllGraphsThrowsError('500 Server Error');
+        mockGetAllGraphsThrowsError(() => {
+            throw new RestApiError('Server Error', 'Timeout exception');
+        });
 
         const component = mount(<ViewGraph />);
-        expect(component.find('div#notification-alert').text()).toBe('Failed to get all graphs: 500 Server Error');
+        expect(component.find('div#notification-alert').text()).toBe('Failed to get all graphs. Server Error: Timeout exception');
 
         mockGetGraphsToReturn([new Graph('roadTraffic', 'FINISHED DEPLOYMENT')]);
         await clickRefreshButton(component);
@@ -127,7 +132,9 @@ describe('Delete Button', () => {
         expect(component.find('tbody').text()).toBe('applesACTIVEpearsDELETION IN PROGRESS');
     });
     it('should notify error and not refresh graphs when delete request returns server error', async () => {
-        mockDeleteGraphRepoToThrowError('500 Server Error');
+        mockDeleteGraphRepoToThrowError(() => {
+            throw new RestApiError('Server Error', 'Timeout exception');
+        });
         mockGetGraphsToReturn([new Graph('bananas', 'INACTIVE')]);
 
         const component = mount(<ViewGraph />);
@@ -141,7 +148,7 @@ describe('Delete Button', () => {
         // Only call GetGraphsRepo on mount and not 2nd time when delete graph is unsuccessful
         expect(GetAllGraphsRepo).toBeCalledTimes(1);
         expect(component.find('div#notification-alert').text()).toBe(
-            'Failed to delete graph "bananas": 500 Server Error'
+            'Failed to delete graph "bananas". Server Error: Timeout exception'
         );
     });
 });
@@ -152,13 +159,11 @@ async function clickRefreshButton(component: ReactWrapper) {
     await component.update();
 }
 
-function mockDeleteGraphRepoToThrowError(errorMessage: string) {
+function mockDeleteGraphRepoToThrowError(f: () => void) {
     // @ts-ignore
     DeleteGraphRepo.mockImplementationOnce(() => {
         return {
-            delete: () => {
-                throw new Error(errorMessage);
-            },
+            delete: f,
         };
     });
 }
@@ -176,13 +181,11 @@ function mockGetGraphsToReturn(graphs: Graph[]): void {
     });
 }
 
-function mockGetAllGraphsThrowsError(errorMessage: string): void {
+function mockGetAllGraphsThrowsError(f: () => void): void {
     // @ts-ignore
     GetAllGraphsRepo.mockImplementationOnce(() => {
         return {
-            getAll: () => {
-                throw new Error(errorMessage);
-            },
+            getAll: f,
         };
     });
 }

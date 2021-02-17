@@ -8,8 +8,6 @@ export class Graph {
     }
 
     public getId(): string {
-        console.log(this.graphId);
-        
         return this.graphId;
     }
 

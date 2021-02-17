@@ -85,7 +85,7 @@ export default class AddGraph extends React.Component<{}, IState> {
             } catch (e) {
                 this.setState({
                     outcome: AlertType.FAILED,
-                    outcomeMessage: `Failed to Add '${graphName}' Graph: ${e.message}`,
+                    outcomeMessage: `Failed to Add '${graphName}' Graph. ${e.toString()}`,
                 });
             }
         } else {

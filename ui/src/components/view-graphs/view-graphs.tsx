@@ -47,7 +47,7 @@ export default class ViewGraph extends React.Component<{}, IState> {
             const graphs: Graph[] = await new GetAllGraphsRepo().getAll();
             this.setState({ graphs, errorMessage: '' });
         } catch (e) {
-            this.setState({ errorMessage: `Failed to get all graphs: ${e.message}` });
+            this.setState({ errorMessage: `Failed to get all graphs. ${e.toString()}` });
         }
     }
 
@@ -56,7 +56,7 @@ export default class ViewGraph extends React.Component<{}, IState> {
             await new DeleteGraphRepo().delete(graphName);
             await this.getGraphs();
         } catch (e) {
-            this.setState({ errorMessage: `Failed to delete graph "${graphName}": ${e.message}` });
+            this.setState({ errorMessage: `Failed to delete graph "${graphName}". ${e.toString()}` });
         }
     }
 
@@ -83,8 +83,8 @@ export default class ViewGraph extends React.Component<{}, IState> {
                             <Table size="medium" className={this.classes.table} aria-label="Graphs Table">
                                 <TableHead>
                                     <TableRow style={{ background: '#F4F2F2' }}>
-                                        <TableCell>Graph Name</TableCell>
-                                        <TableCell align="right">Current State</TableCell>
+                                        <TableCell>Graph ID</TableCell>
+                                        <TableCell align="right">Description</TableCell>
                                         <TableCell align="right">Actions</TableCell>
                                     </TableRow>
                                 </TableHead>

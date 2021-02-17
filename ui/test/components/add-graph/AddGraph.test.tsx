@@ -2,6 +2,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import AddGraph from '../../../src/components/add-graph/AddGraph';
 import { CreateGraphRepo } from '../../../src/rest/repositories/create-graph-repo';
+import { RestApiError } from '../../../src/rest/RestApiError';
 
 jest.mock('../../../src/rest/repositories/create-graph-repo');
 
@@ -9,42 +10,6 @@ let wrapper: ReactWrapper;
 beforeEach(() => (wrapper = mount(<AddGraph />)));
 afterEach(() => wrapper.unmount());
 
-const exampleJSON = {
-    elements: {
-        edges: {
-            BasicEdge: {
-                source: 'vertex',
-                destination: 'vertex',
-                directed: 'true',
-                properties: {
-                    count: 'count',
-                },
-            },
-        },
-    },
-    types: {
-        types: {
-            vertex: {
-                class: 'java.lang.String',
-            },
-            count: {
-                class: 'java.lang.Integer',
-                aggregateFunction: {
-                    class: 'uk.gov.gchq.koryphe.impl.binaryoperator.Sum',
-                },
-            },
-            true: {
-                description: 'A simple boolean that must always be true.',
-                class: 'java.lang.Boolean',
-                validateFunctions: [
-                    {
-                        class: 'uk.gov.gchq.koryphe.impl.predicate.IsTrue',
-                    },
-                ],
-            },
-        },
-    },
-};
 const elements = {
     entities: {
         Cardinality: {
@@ -210,7 +175,7 @@ describe('On Submit Request', () => {
     });
     it('should display an error message with server error in the NotificationAlert when Request fails', async () => {
         mockAddGraphRepoWithFunction(() => {
-            throw new Error('500 Server Error');
+            throw new RestApiError('Validation Error', 'Can\'t have spaces');
         });
 
         inputGraphName('Break Server');
@@ -220,7 +185,7 @@ describe('On Submit Request', () => {
         clickSubmit();
 
         expect(wrapper.find('div#notification-alert').text()).toBe(
-            "Failed to Add 'Break Server' Graph: 500 Server Error"
+            "Failed to Add 'Break Server' Graph. Validation Error: Can\'t have spaces"
         );
     });
 });

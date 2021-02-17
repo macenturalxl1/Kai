@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { RestApiError } from '../RestApiError';
 import { Config } from './../config';
 
 export class RestClient {
@@ -10,31 +11,40 @@ export class RestClient {
 
     public static async get(pathVariable?: string): Promise<IApiResponse> {
         const path = pathVariable ? `/${pathVariable}` : ``;
-        console.log(this.jwtToken);
 
-        const response: AxiosResponse<any> = await axios.get(`/graphs${path}`, {
-            baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: 'Bearer ' + this.jwtToken },
-        });
-        return this.convert(response);
+        try {
+            const response: AxiosResponse<any> = await axios.get(`/graphs${path}`, {
+                baseURL: Config.REACT_APP_KAI_REST_API_HOST,
+                headers: { Authorization: 'Bearer ' + this.jwtToken },
+            });
+            return this.convert(response);
+        } catch (e) {
+            throw new RestApiError(e.response.data.details, e.response.data.message);
+        }
     }
 
     public static async post(httpRequestBody: object): Promise<IApiResponse> {
-        console.log(this.jwtToken);
-        const response: AxiosResponse<any> = await axios.post(`/graphs`, httpRequestBody, {
-            baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: 'Bearer ' + this.jwtToken },
-        });
-        return this.convert(response);
+        try {
+            const response: AxiosResponse<any> = await axios.post(`/graphs`, httpRequestBody, {
+                baseURL: Config.REACT_APP_KAI_REST_API_HOST,
+                headers: { Authorization: 'Bearer ' + this.jwtToken },
+            });
+            return this.convert(response);
+        } catch (e) {
+            throw new RestApiError(e.response.data.details, e.response.data.message);
+        }
     }
 
     public static async delete(urlPathVariable: string): Promise<IApiResponse> {
-        console.log(this.jwtToken);
-        const response: AxiosResponse<any> = await axios.delete(`/graphs/${urlPathVariable}`, {
-            baseURL: Config.REACT_APP_KAI_REST_API_HOST,
-            headers: { Authorization: 'Bearer ' + this.jwtToken },
-        });
-        return this.convert(response);
+        try {
+            const response: AxiosResponse<any> = await axios.delete(`/graphs/${urlPathVariable}`, {
+                baseURL: Config.REACT_APP_KAI_REST_API_HOST,
+                headers: { Authorization: 'Bearer ' + this.jwtToken },
+            });
+            return this.convert(response);
+        } catch (e) {
+            throw new RestApiError(e.response.data.details, e.response.data.message);
+        }
     }
 
     private static async convert(response: AxiosResponse<any>): Promise<IApiResponse> {

@@ -36,17 +36,6 @@ spec:
             httpGet:
               path: /
               port: http
-          env:
-          - name: REACT_APP_API_PLATFORM
-            value: WefwfWF
-          - name: REACT_APP_KAI_REST_API_HOST
-            value: nbdqlbejq
-          - name: REACT_APP_COGNITO_USERPOOLID
-            value: wfewF
-          - name: REACT_APP_COGNITO_CLIENTID
-            value: WEF
-          - name: SKIP_PREFLIGHT_CHECK
-            value: "true"
           volumeMounts:
             - mountPath: /usr/share/nginx/html/{{ .Values.envConfigFile }}
               name: env-js-config
