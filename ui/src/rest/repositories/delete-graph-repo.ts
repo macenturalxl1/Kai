@@ -5,7 +5,7 @@ export class DeleteGraphRepo {
         const response: IApiResponse<undefined> = await RestClient.delete(graphId);
 
         if (response.status !== 204) {
-            throw new Error(`Expected status code 202 for Accepted Delete Graph Process but got (${response.status})`);
+            throw new Error(`Expected status code 204 for Accepted Delete Graph Process but got (${response.status})`);
         }
     }
 }
