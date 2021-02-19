@@ -8,7 +8,7 @@ image:
     #Ask about repository setting
     # repository: image-registry.openshift-image-registry.svc:5000/kai-ui-docker-5/kai:latest
     # macenturalxl1/kai-ui-image:v4
-    repository: rocky341/kai-image
+    repository: a-docker-repo/kai-image
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ''
@@ -27,6 +27,6 @@ envConfigFile: "env-config.js"
 
 envVariables:
     reactAPIPlatform: "test"
-    kaiRestAPIHost: "http://gaffer-worker-kai-helm-3.apps.ocp1.purplesky-harmony.co.uk/"
+    kaiRestAPIHost: "http://openshift.host.co.uk/"
     cognitoUserpoolID: "us-east-1_ABC1def2g"
     cognitoClientID: "apples"
